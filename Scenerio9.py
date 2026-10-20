@@ -1,13 +1,14 @@
+# Databricks notebook source
+
 from pyspark import SparkConf, SparkContext
 from pyspark.sql import SparkSession
 from pyspark.sql.types import *
 from pyspark.sql.functions import *
 from pyspark.sql.window import *
 
-conf = SparkConf().setMaster("local[*]").setAppName("Scenerio-9")
-sc = SparkContext(conf=conf)
-sc.setLogLevel("ERROR")
-spark = SparkSession.builder.getOrCreate()
+# Databricks supplies spark; create a local session only outside Databricks.
+if "spark" not in globals():
+    spark = SparkSession.builder.master("local[2]").appName("Scenerio9").getOrCreate()
 data = [
     ("a", [1, 1, 1, 3]),
     ("b", [1, 2, 3, 4]),

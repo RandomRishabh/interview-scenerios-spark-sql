@@ -1,13 +1,14 @@
+# Databricks notebook source
+
 from pyspark import SparkConf, SparkContext
 from pyspark.sql import SparkSession
 from pyspark.sql.types import *
 from pyspark.sql.functions import *
 from pyspark.sql.window import *
 
-conf = SparkConf().setMaster("local[*]").setAppName("Scenerio-5")
-sc = SparkContext(conf=conf)
-sc.setLogLevel("ERROR")
-spark = SparkSession.builder.getOrCreate()
+# Databricks supplies spark; create a local session only outside Databricks.
+if "spark" not in globals():
+    spark = SparkSession.builder.master("local[2]").appName("Scenerio5").getOrCreate()
 data1 = [
     (1, "abc", 31, "abc@gmail.com"),
     (2, "def", 23, "defyahoo.com"),
@@ -31,8 +32,10 @@ df2 = spark.createDataFrame(data2, schema=myschema2)
 df2.show()
 
 # number of partiion in df
-partcount = df1.rdd.getNumPartitions()
-print("Number of partition:- " + str(partcount))
+# Spark Connect supports this count of observed non-empty partition IDs.
+# It is not a count of all physical partitions, including empty partitions.
+partcount = df1.select(spark_partition_id().alias("partition_id")).distinct().count()
+print("Observed non-empty partitions: " + str(partcount))
 
 df3 = df1.withColumn("salary", lit(1000))
 df3.show()
@@ -46,5 +49,11 @@ rmdf = df4.filter(col("email").rlike("@"))
 rmdf.show()
 
 #Write df4 to a target location, by partitioning on salary.
-rmdf.write.format("parquet").partitionBy("salary").save("D:/BigData/Processed Datasets/interdata")
+# Optional persistence task: supply your own writable Unity Catalog volume path.
+# Example: /Volumes/workspace/default/practice/scenario5
+output_path = None
+if output_path:
+    rmdf.write.format("parquet").partitionBy("salary").save(output_path)
+else:
+    print("Parquet write skipped. Set output_path to a writable volume to practice it.")
 

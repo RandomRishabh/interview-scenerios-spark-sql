@@ -1,13 +1,14 @@
+# Databricks notebook source
+
 from pyspark import SparkConf, SparkContext
 from pyspark.sql import SparkSession
 from pyspark.sql.types import *
 from pyspark.sql.functions import *
 from pyspark.sql.window import *
 
-conf = SparkConf().setMaster("local[*]").setAppName("Scenerio12")
-sc = SparkContext(conf=conf)
-sc.setLogLevel("ERROR")
-spark = SparkSession.builder.getOrCreate()
+# Databricks supplies spark; create a local session only outside Databricks.
+if "spark" not in globals():
+    spark = SparkSession.builder.master("local[2]").appName("Scenerio12").getOrCreate()
 
 #creating UDF functions for masked data, here email[0] is it will take first letter i.e 0th index and email[8:] is it will take the string from 8th index position to end of the string
 def mask_email(email):
