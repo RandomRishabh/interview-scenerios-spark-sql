@@ -1,3 +1,5 @@
+This fork includes notebook-format and Databricks compatibility repairs. See [START_HERE.md](START_HERE.md) for setup and validation. Original scenarios and solutions: [mohankrishna02/interview-scenerios-spark-sql](https://github.com/mohankrishna02/interview-scenerios-spark-sql).
+
 ## Spark and SQL Interview Scenerio Questions
 
 ### Table of Contents
@@ -1270,8 +1272,8 @@ from
 
 ```
 #### Solution :-
-Scala-Spark :- [Click Here](https://github.com/mohankrishna02/interview-scenerios-spark-sql/blob/master/src/pack/Scenerio27.scala) <br>
-PySpark :- [Click Here](https://github.com/mohankrishna02/interview-scenerios-spark-sql/blob/master/Scenerio27.py) <br>
+Scala-Spark :- [Click Here](src/pack/Scenerio27.scala) <br>
+PySpark :- [Click Here](Scenerio27.py) <br>
 SQL :-
 ```
 select 
@@ -1325,8 +1327,8 @@ from
 +-----+------+-----------+
 ```
 #### Solution :-
-Scala-Spark :- [Click Here](https://github.com/mohankrishna02/interview-scenerios-spark-sql/blob/master/src/pack/Scenerio28.scala) <br>
-PySpark :- [Click Here](https://github.com/mohankrishna02/interview-scenerios-spark-sql/blob/master/Scenerio28.py)
+Scala-Spark :- [Click Here](src/pack/Scenerio28.scala) <br>
+PySpark :- [Click Here](Scenerio28.py)
 
 **[⬆ Back to Top](#table-of-contents)**
 
@@ -1364,8 +1366,8 @@ PySpark :- [Click Here](https://github.com/mohankrishna02/interview-scenerios-sp
 +---+
 ```
 #### Solution :-
-Scala-Spark :- [Click Here](https://github.com/mohankrishna02/interview-scenerios-spark-sql/blob/master/src/pack/Scenerio29.scala) <br>
-PySpark :- [Click Here](https://github.com/mohankrishna02/interview-scenerios-spark-sql/blob/master/Scenerio29.py)
+Scala-Spark :- [Click Here](src/pack/Scenerio29.scala) <br>
+PySpark :- [Click Here](Scenerio29.py)
 
 **[⬆ Back to Top](#table-of-contents)**
 
@@ -1403,8 +1405,8 @@ PySpark :- [Click Here](https://github.com/mohankrishna02/interview-scenerios-sp
 +------+----+---------+-------+
 ```
 #### Solution :-
-Scala-Spark :- [Click Here](https://github.com/mohankrishna02/interview-scenerios-spark-sql/blob/master/src/pack/Scenerio30.scala) <br>
-PySpark :- [Click Here](https://github.com/mohankrishna02/interview-scenerios-spark-sql/blob/master/Scenerio30.ipynb) <br>
+Scala-Spark :- [Click Here](src/pack/Scenerio30.scala) <br>
+PySpark :- [Click Here](Scenerio30.ipynb) <br>
 SQL :- 
 ```sh
 WITH jointab AS (
@@ -1439,8 +1441,8 @@ SELECT emp_id,name,dept_name,salary from jointab WHERE row_rank =2;
 +-----------+
 ```
 #### Solution :-
-Scala-Spark :- [Click Here](https://github.com/mohankrishna02/interview-scenerios-spark-sql/blob/master/src/pack/Scenerio31.scala) <br>
-PySpark :- [Click Here](https://github.com/mohankrishna02/interview-scenerios-spark-sql/blob/master/Scenerio31.ipynb) <br>
+Scala-Spark :- [Click Here](src/pack/Scenerio31.scala) <br>
+PySpark :- [Click Here](Scenerio31.ipynb) <br>
 SQL :- 
 ```sh
 select 
@@ -1503,7 +1505,7 @@ from
 ```
 #### Solution :-
 Scala-Spark :- [Click Here](https://github.com/mohankrishna02/interview-scenerios-spark-sql/blob/master/src/pack/Scenerio32%20Scala.scala) <br>
-PySpark :- [Click Here](https://github.com/mohankrishna02/interview-scenerios-spark-sql/blob/master/Scenerio32.ipynb) <br>
+PySpark :- [Click Here](Scenerio32.ipynb) <br>
 SQL :- 
 ```sh
 select 
@@ -1553,8 +1555,8 @@ order by
 +-------------+-------------------+
 ```
 #### Solution :-
-Scala-Spark :- [Click Here](https://github.com/mohankrishna02/interview-scenerios-spark-sql/blob/master/src/pack/Scenerio33.scala) <br>
-PySpark :- [Click Here](https://github.com/mohankrishna02/interview-scenerios-spark-sql/blob/master/Scenerio33.ipynb) <br>
+Scala-Spark :- [Click Here](src/pack/Scenerio33.scala) <br>
+PySpark :- [Click Here](Scenerio33.ipynb) <br>
 SQL :- 
 ```sh
 select max(number_of_countries) from (select f.name,count(*) as number_of_countries from family f inner join country c on f.family_size  between c.min_size and c.max_size group by f.name);
@@ -1589,7 +1591,7 @@ select max(number_of_countries) from (select f.name,count(*) as number_of_countr
 ```
 #### Solution :-
 Scala-Spark :- [Click Here](https://github.com/mohankrishna02/interview-scenerios-spark-sql/blob/master/src/pack/Scenerio34.scala) <br>
-PySpark :- [Click Here](https://github.com/mohankrishna02/interview-scenerios-spark-sql/blob/master/Scenerio34.ipynb) <br>
+PySpark :- [Click Here](Scenerio34.ipynb) <br>
   
 **[⬆ Back to Top](#table-of-contents)**
 
@@ -1602,8 +1604,8 @@ Question (IBM Question)
 * Fill the null values with the mean age all of students
 * Filter the students who are 18 years above and older
 #### Solution :-
-Scala-Spark :- [Click Here](https://github.com/mohankrishna02/interview-scenerios-spark-sql/blob/master/src/pack/Scenerio35.scala) <br>
-PySpark :- [Click Here](https://github.com/mohankrishna02/interview-scenerios-spark-sql/blob/master/Scenerio35.ipynb) <br>
+Scala-Spark :- [Click Here](src/pack/Scenerio35.scala) <br>
+PySpark :- [Click Here](Scenerio35.ipynb) <br>
   
 **[⬆ Back to Top](#table-of-contents)**
 
@@ -1634,8 +1636,8 @@ PySpark :- [Click Here](https://github.com/mohankrishna02/interview-scenerios-sp
 +----------+--------------------+---------+
 ```
 #### Solution :-
-Scala-Spark :- [Click Here](https://github.com/mohankrishna02/interview-scenerios-spark-sql/blob/master/src/pack/Scenerio36.scala) <br>
-PySpark :- [Click Here](https://github.com/mohankrishna02/interview-scenerios-spark-sql/blob/master/Scenerio36.ipynb) <br>
+Scala-Spark :- [Click Here](src/pack/Scenerio36.scala) <br>
+PySpark :- [Click Here](Scenerio36.ipynb) <br>
 
 SQL :- 
 ```sh
@@ -1666,7 +1668,7 @@ select sell_date,(collect_set(product)) as products,size(collect_set(product)) a
 | 103         | 4        | 2024-01-07 | 200    |
 ```
 #### Solution :-
-PySpark :- [Click Here](https://github.com/mohankrishna02/interview-scenerios-spark-sql/blob/master/Scenerio37.ipynb) <br>
+PySpark :- [Click Here](Scenerio37.ipynb) <br>
 
 SQL :- 
 ```sh
@@ -1700,7 +1702,7 @@ select order_id,customer_id,order_date,amount from (select *, row_number() over 
 
 ```
 #### Solution :-
-PySpark :- [Click Here](https://github.com/mohankrishna02/interview-scenerios-spark-sql/blob/master/Scenerio38.ipynb) <br>
+PySpark :- [Click Here](Scenerio38.ipynb) <br>
 
 SQL :- 
 ```sh
@@ -1738,7 +1740,7 @@ select emp_id,emp_name,department,salary from (select *, row_number() over(parti
 
 ```
 #### Solution :-
-PySpark :- [Click Here](https://github.com/mohankrishna02/interview-scenerios-spark-sql/blob/master/Scenerio39.ipynb) <br>
+PySpark :- [Click Here](Scenerio39.ipynb) <br>
 
 SQL :- 
 ```sh
@@ -1783,7 +1785,7 @@ FROM transactions;
 
 ```
 #### Solution :-
-PySpark :- [Click Here](https://github.com/mohankrishna02/interview-scenerios-spark-sql/blob/master/Scenerio40.ipynb) <br>
+PySpark :- [Click Here](Scenerio40.ipynb) <br>
 
 SQL :- 
 ```sh
@@ -1820,7 +1822,7 @@ select user_id from (select *, date_sub(login_date, interval rk DAY) as days fro
 
 ```
 #### Solution :-
-PySpark :- [Click Here](https://github.com/mohankrishna02/interview-scenerios-spark-sql/blob/master/Scenerio41.ipynb) <br>
+PySpark :- [Click Here](Scenerio41.ipynb) <br>
 
 SQL :- 
 ```sh
@@ -1857,7 +1859,7 @@ select customer_id,customer_name,city,updated_at from (select *, row_number() ov
 
 ```
 #### Solution :-
-PySpark :- [Click Here](https://github.com/mohankrishna02/interview-scenerios-spark-sql/blob/master/Scenerio42.ipynb) <br>
+PySpark :- [Click Here](Scenerio42.ipynb) <br>
 
 SQL :- 
 ```sh
@@ -1907,7 +1909,7 @@ customer_id	customer_name
 
 ```
 #### Solution :-
-PySpark :- [Click Here](https://github.com/mohankrishna02/interview-scenerios-spark-sql/blob/master/Scenerio43.ipynb) <br>
+PySpark :- [Click Here](Scenerio43.ipynb) <br>
 
 SQL :- 
 ```sh
