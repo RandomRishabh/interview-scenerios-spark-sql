@@ -1,4 +1,4 @@
-This fork includes notebook-format and Databricks compatibility repairs. See [START_HERE.md](START_HERE.md) for setup and validation. Original scenarios and solutions: [mohankrishna02/interview-scenerios-spark-sql](https://github.com/mohankrishna02/interview-scenerios-spark-sql).
+This fork includes notebook-format and Databricks compatibility repairs. See [START_HERE.md](../START_HERE.md) for setup and validation. Original scenarios and solutions: [mohankrishna02/interview-scenerios-spark-sql](https://github.com/mohankrishna02/interview-scenerios-spark-sql).
 
 ## Spark and SQL Interview Scenerio Questions
 
