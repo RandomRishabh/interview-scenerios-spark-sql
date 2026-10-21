@@ -78,7 +78,7 @@ This fork includes notebook-format and Databricks compatibility repairs. See [ST
 ```
 #### Solution :- 
 Scala-Spark - <https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/src/pack/Scenerio1.scala> <br>
-PySpark - <https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/Scenerio-1.py>
+PySpark - <https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/reference_solutions/Scenerio-1.py>
 
 **[⬆ Back to Top](#table-of-contents)**
 
@@ -112,7 +112,7 @@ PySpark - <https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/m
 ```
 #### Solution :- 
 Scala-Spark - <https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/src/pack/Scenerio2.scala> <br>
-PySpark - <https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/Scenerio2.py>
+PySpark - <https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/reference_solutions/Scenerio2.py>
 
 **[⬆ Back to Top](#table-of-contents)**
 
@@ -143,7 +143,7 @@ PySpark - <https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/m
 ```
 #### Solution :- 
 Scala-Spark - [Click Here](<https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/src/pack/Scenerio3.scala>) <br>
-PySpark - [Click Here](<https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/Scenerio3.py>) <br>
+PySpark - [Click Here](<https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/reference_solutions/Scenerio3.py>) <br>
 SQL - 
 ```
 SELECT sensorid,
@@ -215,7 +215,7 @@ print(df)
 ```
 #### Solution :- 
 Scala-Spark - [Click Here](<https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/src/pack/Scenerio4.scala>) <br>
-PySpark - [Click Here](<https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/Scenerio4.py>) <br>
+PySpark - [Click Here](<https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/reference_solutions/Scenerio4.py>) <br>
 SQL - 
 ```
 SELECT custid,
@@ -295,7 +295,7 @@ print(finaldf)
 ```
 #### Solution :- 
 Scala-Spark - [Click Here](<https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/src/pack/Scenerio5.scala>) <br>
-PySpark - [Click Here](<https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/Scenerio5.py>) <br>
+PySpark - [Click Here](<https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/reference_solutions/Scenerio5.py>) <br>
 Pandas - 
 ```
 import pandas as pd
@@ -371,7 +371,7 @@ print(finaldf)
 ```
 #### Solution :- 
 Scala-Spark - [Click Here](<https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/src/pack/Scenerio6.scala>) <br>
-PySpark - [Click Here](<https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/Scenerio6.py>) <br>
+PySpark - [Click Here](<https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/reference_solutions/Scenerio6.py>) <br>
 SQL -
 ```
 SELECT *,
@@ -439,7 +439,7 @@ print(df)
 ```
 #### Solution :- 
 Scala-Spark - [Click Here](<https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/src/pack/Scenerio7.scala>) <br>
-PySpark - [Click Here](<https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/Scenerio7.py>) <br>
+PySpark - [Click Here](<https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/reference_solutions/Scenerio7.py>) <br>
 SQL - 
 ```
 SELECT 
@@ -515,7 +515,7 @@ print(df)
 ```
 #### Solution :- 
 Scala-Spark - <https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/src/pack/Scenerio8.scala> <br>
-PySpark - <https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/Scenerio8.py>
+PySpark - <https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/reference_solutions/Scenerio8.py>
 
 **[⬆ Back to Top](#table-of-contents)**
 
@@ -538,7 +538,7 @@ c
 ```
 #### Solution :- 
 Scala-Spark - <https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/src/pack/Scenerio9.scala> <br>
-PySpark - <https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/Scenerio9.py>
+PySpark - <https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/reference_solutions/Scenerio9.py>
 
 **[⬆ Back to Top](#table-of-contents)**
 
@@ -566,7 +566,7 @@ PySpark - <https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/m
 ```
 #### Solution :- 
 Scala-Spark - <https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/src/pack/Scenerio10.scala> <br>
-PySpark - <https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/Scenerio10.py>
+PySpark - <https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/reference_solutions/Scenerio10.py>
 
 **[⬆ Back to Top](#table-of-contents)**
 
@@ -602,7 +602,7 @@ Grade C, write an SQL query)
 ```
 #### Solution :- 
 Scala-Spark - <https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/src/pack/Scenerio11.scala> <br>
-PySpark - <https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/Scenerio11.py>
+PySpark - <https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/reference_solutions/Scenerio11.py>
 
 **[⬆ Back to Top](#table-of-contents)**
 
@@ -627,7 +627,7 @@ PySpark - <https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/m
 ```
 #### Solution :- 
 Scala-Spark - <https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/src/pack/Scenerio12.scala> <br>
-PySpark - <https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/Scenerio12.py>
+PySpark - <https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/reference_solutions/Scenerio12.py>
 
 **[⬆ Back to Top](#table-of-contents)**
 
@@ -661,7 +661,7 @@ PySpark - <https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/m
 ```
 #### Solution :- 
 Scala-Spark - <https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/src/pack/Scenerio13.scala> <br>
-PySpark - <https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/Scenerio13.py>
+PySpark - <https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/reference_solutions/Scenerio13.py>
 
 **[⬆ Back to Top](#table-of-contents)**
 
@@ -685,7 +685,7 @@ PySpark - <https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/m
 ```
 #### Solution :- 
 Scala-Spark - [Click Here](<https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/src/pack/Scenerio14.scala>) <br>
-PySpark - [Click Here](<https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/Scenerio14.py>) <br>
+PySpark - [Click Here](<https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/reference_solutions/Scenerio14.py>) <br>
 SQL -
 ```
 select 
@@ -704,7 +704,7 @@ from
 #### (Extend and Append list in  python and scala)
 #### Solution :- 
 Scala-Spark - <https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/src/pack/Scenerio15.scala> <br>
-PySpark - <https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/Scenerio15.py>
+PySpark - <https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/reference_solutions/Scenerio15.py>
 
 **[⬆ Back to Top](#table-of-contents)**
 
@@ -733,7 +733,7 @@ PySpark - <https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/m
 ```
 #### Solution :- 
 Scala-Spark - <https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/src/pack/Scenerio16.scala> <br>
-PySpark - <https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/Scenerio16.py>
+PySpark - <https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/reference_solutions/Scenerio16.py>
 
 **[⬆ Back to Top](#table-of-contents)**
 
@@ -767,7 +767,7 @@ PySpark - <https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/m
 ```
 #### Solution :- 
 Scala-Spark - <https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/src/pack/Scenerio17.scala> <br>
-PySpark - <https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/Scenerio17.py>
+PySpark - <https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/reference_solutions/Scenerio17.py>
 
 **[⬆ Back to Top](#table-of-contents)**
 
@@ -791,7 +791,7 @@ PySpark - <https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/m
 ```
 #### Solution :- 
 Scala-Spark - <https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/src/pack/Scenerio18.scala> <br>
-PySpark - <https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/Scenerio18.py>
+PySpark - <https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/reference_solutions/Scenerio18.py>
 
 **[⬆ Back to Top](#table-of-contents)**
 
@@ -870,7 +870,7 @@ root
 #### Solution :- 
 Dataset - <https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/Datasets/scen.json> <br>
 Scala-Spark - <https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/src/pack/Scenerio19.scala> <br>
-PySpark - <https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/Scenerio19.py>
+PySpark - <https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/reference_solutions/Scenerio19.py>
 
 **[⬆ Back to Top](#table-of-contents)**
 
@@ -949,7 +949,7 @@ root
 #### Solution :- 
 Dataset - <https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/Datasets/scen20.json> <br>
 Scala-Spark - <https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/src/pack/Scenerio20.scala> <br>
-PySpark - <https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/Scenerio20.py>
+PySpark - <https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/reference_solutions/Scenerio20.py>
 
 **[⬆ Back to Top](#table-of-contents)**
 
@@ -984,7 +984,7 @@ PySpark - <https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/m
 ```
 #### Solution :- 
 Scala-Spark - [Click Here](<https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/src/pack/Scenerio21.scala>) <br>
-PySpark - [Click Here](<https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/Scenerio21.py>) <br>
+PySpark - [Click Here](<https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/reference_solutions/Scenerio21.py>) <br>
 SQL - 
 ```
 select 
@@ -1033,7 +1033,7 @@ where
 ```
 #### Solution :- 
 Scala-Spark - [Click Here](<https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/src/pack/Scenerio22.scala>) <br>
-PySpark - [Click Here](<https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/Scenerio22.py>) <br>
+PySpark - [Click Here](<https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/reference_solutions/Scenerio22.py>) <br>
 SQL - 
 ```
 select 
@@ -1087,7 +1087,7 @@ from
 ```
 #### Solution :- 
 Scala-Spark - [Click Here](<https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/src/pack/Scenerio23.scala>) <br>
-PySpark - [Click Here](<https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/Scenerio23.py>)
+PySpark - [Click Here](<https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/reference_solutions/Scenerio23.py>)
 
 **[⬆ Back to Top](#table-of-contents)**
 
@@ -1124,7 +1124,7 @@ PySpark - [Click Here](<https://github.com/RandomRishabh/interview-scenerios-spa
 ```
 #### Solution :- 
 Scala-Spark - [Click Here](<https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/src/pack/Scenerio24.scala>) <br>
-PySpark - [Click Here](<https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/Scenerio24.py>) <br>
+PySpark - [Click Here](<https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/reference_solutions/Scenerio24.py>) <br>
 SQL :- 
 ```
 select 
@@ -1167,7 +1167,7 @@ Bad Record,Description:Corrupt Record
 ```
 #### Solution :- 
 Scala-Spark - [Click Here](<https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/src/pack/Scenerio25.scala>) <br>
-PySpark - [Click Here](<https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/Scenerio25.py>)
+PySpark - [Click Here](<https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/reference_solutions/Scenerio25.py>)
 
 There are three modes available when reading a file in Spark:
 
@@ -1214,7 +1214,7 @@ You can specify the desired mode using the mode option when reading a file, such
 ```
 #### Solution :-
 Scala-Spark :- [Click Here](<https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/src/pack/Scenerio26.scala>) <br>
-PySpark :- [Click Here](<https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/Scenerio26.py>) <br>
+PySpark :- [Click Here](<https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/reference_solutions/Scenerio26.py>) <br>
 SQL :- 
 ```
 select 
@@ -1273,7 +1273,7 @@ from
 ```
 #### Solution :-
 Scala-Spark :- [Click Here](https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/src/pack/Scenerio27.scala) <br>
-PySpark :- [Click Here](https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/Scenerio27.py) <br>
+PySpark :- [Click Here](https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/reference_solutions/Scenerio27.py) <br>
 SQL :-
 ```
 select 
@@ -1328,7 +1328,7 @@ from
 ```
 #### Solution :-
 Scala-Spark :- [Click Here](https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/src/pack/Scenerio28.scala) <br>
-PySpark :- [Click Here](https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/Scenerio28.py)
+PySpark :- [Click Here](https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/reference_solutions/Scenerio28.py)
 
 **[⬆ Back to Top](#table-of-contents)**
 
@@ -1367,7 +1367,7 @@ PySpark :- [Click Here](https://github.com/RandomRishabh/interview-scenerios-spa
 ```
 #### Solution :-
 Scala-Spark :- [Click Here](https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/src/pack/Scenerio29.scala) <br>
-PySpark :- [Click Here](https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/Scenerio29.py)
+PySpark :- [Click Here](https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/reference_solutions/Scenerio29.py)
 
 **[⬆ Back to Top](#table-of-contents)**
 
@@ -1406,7 +1406,7 @@ PySpark :- [Click Here](https://github.com/RandomRishabh/interview-scenerios-spa
 ```
 #### Solution :-
 Scala-Spark :- [Click Here](https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/src/pack/Scenerio30.scala) <br>
-PySpark :- [Click Here](https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/Scenerio30.ipynb) <br>
+PySpark :- [Click Here](https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/reference_solutions/Scenerio30.ipynb) <br>
 SQL :- 
 ```sh
 WITH jointab AS (
@@ -1442,7 +1442,7 @@ SELECT emp_id,name,dept_name,salary from jointab WHERE row_rank =2;
 ```
 #### Solution :-
 Scala-Spark :- [Click Here](https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/src/pack/Scenerio31.scala) <br>
-PySpark :- [Click Here](https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/Scenerio31.ipynb) <br>
+PySpark :- [Click Here](https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/reference_solutions/Scenerio31.ipynb) <br>
 SQL :- 
 ```sh
 select 
@@ -1505,7 +1505,7 @@ from
 ```
 #### Solution :-
 Scala-Spark :- [Click Here](https://github.com/mohankrishna02/interview-scenerios-spark-sql/blob/master/src/pack/Scenerio32%20Scala.scala) <br>
-PySpark :- [Click Here](https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/Scenerio32.ipynb) <br>
+PySpark :- [Click Here](https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/reference_solutions/Scenerio32.ipynb) <br>
 SQL :- 
 ```sh
 select 
@@ -1556,7 +1556,7 @@ order by
 ```
 #### Solution :-
 Scala-Spark :- [Click Here](https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/src/pack/Scenerio33.scala) <br>
-PySpark :- [Click Here](https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/Scenerio33.ipynb) <br>
+PySpark :- [Click Here](https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/reference_solutions/Scenerio33.ipynb) <br>
 SQL :- 
 ```sh
 select max(number_of_countries) from (select f.name,count(*) as number_of_countries from family f inner join country c on f.family_size  between c.min_size and c.max_size group by f.name);
@@ -1591,7 +1591,7 @@ select max(number_of_countries) from (select f.name,count(*) as number_of_countr
 ```
 #### Solution :-
 Scala-Spark :- [Click Here](https://github.com/mohankrishna02/interview-scenerios-spark-sql/blob/master/src/pack/Scenerio34.scala) <br>
-PySpark :- [Click Here](https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/Scenerio34.ipynb) <br>
+PySpark :- [Click Here](https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/reference_solutions/Scenerio34.ipynb) <br>
   
 **[⬆ Back to Top](#table-of-contents)**
 
@@ -1605,7 +1605,7 @@ Question (IBM Question)
 * Filter the students who are 18 years above and older
 #### Solution :-
 Scala-Spark :- [Click Here](https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/src/pack/Scenerio35.scala) <br>
-PySpark :- [Click Here](https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/Scenerio35.ipynb) <br>
+PySpark :- [Click Here](https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/reference_solutions/Scenerio35.ipynb) <br>
   
 **[⬆ Back to Top](#table-of-contents)**
 
@@ -1637,7 +1637,7 @@ PySpark :- [Click Here](https://github.com/RandomRishabh/interview-scenerios-spa
 ```
 #### Solution :-
 Scala-Spark :- [Click Here](https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/src/pack/Scenerio36.scala) <br>
-PySpark :- [Click Here](https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/Scenerio36.ipynb) <br>
+PySpark :- [Click Here](https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/reference_solutions/Scenerio36.ipynb) <br>
 
 SQL :- 
 ```sh
@@ -1668,7 +1668,7 @@ select sell_date,(collect_set(product)) as products,size(collect_set(product)) a
 | 103         | 4        | 2024-01-07 | 200    |
 ```
 #### Solution :-
-PySpark :- [Click Here](https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/Scenerio37.ipynb) <br>
+PySpark :- [Click Here](https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/reference_solutions/Scenerio37.ipynb) <br>
 
 SQL :- 
 ```sh
@@ -1702,7 +1702,7 @@ select order_id,customer_id,order_date,amount from (select *, row_number() over 
 
 ```
 #### Solution :-
-PySpark :- [Click Here](https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/Scenerio38.ipynb) <br>
+PySpark :- [Click Here](https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/reference_solutions/Scenerio38.ipynb) <br>
 
 SQL :- 
 ```sh
@@ -1740,7 +1740,7 @@ select emp_id,emp_name,department,salary from (select *, row_number() over(parti
 
 ```
 #### Solution :-
-PySpark :- [Click Here](https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/Scenerio39.ipynb) <br>
+PySpark :- [Click Here](https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/reference_solutions/Scenerio39.ipynb) <br>
 
 SQL :- 
 ```sh
@@ -1785,7 +1785,7 @@ FROM transactions;
 
 ```
 #### Solution :-
-PySpark :- [Click Here](https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/Scenerio40.ipynb) <br>
+PySpark :- [Click Here](https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/reference_solutions/Scenerio40.ipynb) <br>
 
 SQL :- 
 ```sh
@@ -1822,7 +1822,7 @@ select user_id from (select *, date_sub(login_date, interval rk DAY) as days fro
 
 ```
 #### Solution :-
-PySpark :- [Click Here](https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/Scenerio41.ipynb) <br>
+PySpark :- [Click Here](https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/reference_solutions/Scenerio41.ipynb) <br>
 
 SQL :- 
 ```sh
@@ -1859,7 +1859,7 @@ select customer_id,customer_name,city,updated_at from (select *, row_number() ov
 
 ```
 #### Solution :-
-PySpark :- [Click Here](https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/Scenerio42.ipynb) <br>
+PySpark :- [Click Here](https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/reference_solutions/Scenerio42.ipynb) <br>
 
 SQL :- 
 ```sh
@@ -1909,7 +1909,7 @@ customer_id	customer_name
 
 ```
 #### Solution :-
-PySpark :- [Click Here](https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/Scenerio43.ipynb) <br>
+PySpark :- [Click Here](https://github.com/RandomRishabh/interview-scenerios-spark-sql/blob/master/reference_solutions/Scenerio43.ipynb) <br>
 
 SQL :- 
 ```sh
