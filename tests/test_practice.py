@@ -69,6 +69,22 @@ class PracticeTests(unittest.TestCase):
                 progress.progress_rows(directory=folder)
             self.assertTrue(path.exists())
 
+    def test_interrupted_progress_write_does_not_poison_history(self):
+        with tempfile.TemporaryDirectory() as folder:
+            progress.record_event("37", "passed", directory=folder)
+            def interrupted_dump(event, stream):
+                stream.write("{")
+                stream.flush()
+                # A concurrent dashboard refresh sees only the published event.
+                self.assertEqual(len(progress.read_events(directory=folder)), 1)
+                raise OSError("simulated interrupted write")
+            with patch.object(progress.json, "dump", side_effect=interrupted_dump):
+                with self.assertRaises(OSError):
+                    progress.record_event("37", "failed", directory=folder)
+            self.assertEqual(len(progress.read_events(directory=folder)), 1)
+            self.assertEqual(progress.progress_rows(directory=folder)[36]["status"], "Passed")
+            self.assertEqual(len(list(Path(folder).iterdir())), 1)
+
     def test_backup_refuses_to_overwrite(self):
         with tempfile.TemporaryDirectory() as folder, patch.dict(os.environ, {"DE_PRACTICE_PROGRESS_DIR": folder}):
             target = Path(folder).parent / (Path(folder).name + "-backup.json")
@@ -164,6 +180,19 @@ class SparkTests(unittest.TestCase):
         expected = engine.expected_value(self.spark, spec)
         self.assertFalse(engine.compare_output(expected, expected, spec))
         self.assertTrue(engine.compare_output({"adults": expected["adults"]}, expected, spec))
+
+    def test_nested_structures_materialize_and_field_order_is_relaxed(self):
+        from pyspark.sql import functions as F
+        for ident in ("19", "20"):
+            case = engine.load_exercise(ident)["cases"][0]
+            inputs = engine.case_inputs(self.spark, case)
+            self.assertGreater(inputs["input_df"].count(), 0)
+            expected = engine.expected_value(self.spark, case["expected"])
+            actual = expected.select(*reversed(expected.columns))
+            if ident == "20":
+                actual = actual.withColumn("likeDislike", F.struct(
+                    F.col("likeDislike.userAction"), F.col("likeDislike.likes"), F.col("likeDislike.dislikes")))
+            self.assertFalse(engine.compare_output(actual, expected, case["expected"]))
 
 
 if __name__ == "__main__":

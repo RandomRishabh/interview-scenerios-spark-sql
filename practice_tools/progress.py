@@ -39,10 +39,20 @@ def record_event(exercise_id, result, *, spark=None, directory=None):
     now = datetime.now(timezone.utc).isoformat(timespec="microseconds")
     event = {"version": 1, "event_id": uuid.uuid4().hex, "exercise_id": exercise["id"],
              "timestamp_utc": now, "result": result}
-    # One immutable file per event avoids read-modify-write races between notebooks.
+    # Readers only scan *.json. Publish a completed file rather than exposing a
+    # partial event if serialization/write fails or a dashboard refresh overlaps.
     path = folder / (event["event_id"] + ".json")
-    with path.open("x", encoding="utf-8") as stream:
-        json.dump(event, stream)
+    temporary = folder / ("." + event["event_id"] + ".pending")
+    try:
+        with temporary.open("x", encoding="utf-8") as stream:
+            json.dump(event, stream)
+        if path.exists():
+            raise FileExistsError(f"Progress event already exists: {path}")
+        temporary.rename(path)
+    finally:
+        # A process crash may leave a .pending file, which readers safely ignore.
+        if temporary.exists():
+            temporary.unlink()
     return event
 
 
