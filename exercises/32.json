@@ -1,0 +1,557 @@
+{
+  "id": "32",
+  "title": "Render star ratings",
+  "slug": "star_ratings",
+  "topic": "Joins and strings",
+  "difficulty": "Easy",
+  "prompt": "Inner-join foods and ratings by food_id, then add stats(out of 5) containing rating asterisks. Ratings are integers from 0 to 5; IDs are unique on each side. Return food_id, food_item, rating and stats(out of 5).",
+  "cases": [
+    {
+      "name": "sample",
+      "inputs": {
+        "foods": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "food_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "food_item",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "food_id": 1,
+              "food_item": "Veg Biryani"
+            },
+            {
+              "food_id": 2,
+              "food_item": "Veg Fried Rice"
+            },
+            {
+              "food_id": 3,
+              "food_item": "Kaju Fried Rice"
+            },
+            {
+              "food_id": 4,
+              "food_item": "Chicken Biryani"
+            },
+            {
+              "food_id": 5,
+              "food_item": "Chicken Dum Biryani"
+            },
+            {
+              "food_id": 6,
+              "food_item": "Prawns Biryani"
+            },
+            {
+              "food_id": 7,
+              "food_item": "Fish Birayani"
+            }
+          ]
+        },
+        "ratings": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "food_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "rating",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "food_id": 1,
+              "rating": 5
+            },
+            {
+              "food_id": 2,
+              "rating": 3
+            },
+            {
+              "food_id": 3,
+              "rating": 4
+            },
+            {
+              "food_id": 4,
+              "rating": 4
+            },
+            {
+              "food_id": 5,
+              "rating": 5
+            },
+            {
+              "food_id": 6,
+              "rating": 4
+            },
+            {
+              "food_id": 7,
+              "rating": 4
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "food_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "food_item",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "rating",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "stats(out of 5)",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "food_id": 1,
+            "food_item": "Veg Biryani",
+            "rating": 5,
+            "stats(out of 5)": "*****"
+          },
+          {
+            "food_id": 2,
+            "food_item": "Veg Fried Rice",
+            "rating": 3,
+            "stats(out of 5)": "***"
+          },
+          {
+            "food_id": 3,
+            "food_item": "Kaju Fried Rice",
+            "rating": 4,
+            "stats(out of 5)": "****"
+          },
+          {
+            "food_id": 4,
+            "food_item": "Chicken Biryani",
+            "rating": 4,
+            "stats(out of 5)": "****"
+          },
+          {
+            "food_id": 5,
+            "food_item": "Chicken Dum Biryani",
+            "rating": 5,
+            "stats(out of 5)": "*****"
+          },
+          {
+            "food_id": 6,
+            "food_item": "Prawns Biryani",
+            "rating": 4,
+            "stats(out of 5)": "****"
+          },
+          {
+            "food_id": 7,
+            "food_item": "Fish Birayani",
+            "rating": 4,
+            "stats(out of 5)": "****"
+          }
+        ]
+      }
+    },
+    {
+      "name": "shuffled input",
+      "inputs": {
+        "foods": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "food_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "food_item",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "food_id": 7,
+              "food_item": "Fish Birayani"
+            },
+            {
+              "food_id": 6,
+              "food_item": "Prawns Biryani"
+            },
+            {
+              "food_id": 5,
+              "food_item": "Chicken Dum Biryani"
+            },
+            {
+              "food_id": 4,
+              "food_item": "Chicken Biryani"
+            },
+            {
+              "food_id": 3,
+              "food_item": "Kaju Fried Rice"
+            },
+            {
+              "food_id": 2,
+              "food_item": "Veg Fried Rice"
+            },
+            {
+              "food_id": 1,
+              "food_item": "Veg Biryani"
+            }
+          ]
+        },
+        "ratings": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "food_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "rating",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "food_id": 7,
+              "rating": 4
+            },
+            {
+              "food_id": 6,
+              "rating": 4
+            },
+            {
+              "food_id": 5,
+              "rating": 5
+            },
+            {
+              "food_id": 4,
+              "rating": 4
+            },
+            {
+              "food_id": 3,
+              "rating": 4
+            },
+            {
+              "food_id": 2,
+              "rating": 3
+            },
+            {
+              "food_id": 1,
+              "rating": 5
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "food_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "food_item",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "rating",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "stats(out of 5)",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "food_id": 1,
+            "food_item": "Veg Biryani",
+            "rating": 5,
+            "stats(out of 5)": "*****"
+          },
+          {
+            "food_id": 2,
+            "food_item": "Veg Fried Rice",
+            "rating": 3,
+            "stats(out of 5)": "***"
+          },
+          {
+            "food_id": 3,
+            "food_item": "Kaju Fried Rice",
+            "rating": 4,
+            "stats(out of 5)": "****"
+          },
+          {
+            "food_id": 4,
+            "food_item": "Chicken Biryani",
+            "rating": 4,
+            "stats(out of 5)": "****"
+          },
+          {
+            "food_id": 5,
+            "food_item": "Chicken Dum Biryani",
+            "rating": 5,
+            "stats(out of 5)": "*****"
+          },
+          {
+            "food_id": 6,
+            "food_item": "Prawns Biryani",
+            "rating": 4,
+            "stats(out of 5)": "****"
+          },
+          {
+            "food_id": 7,
+            "food_item": "Fish Birayani",
+            "rating": 4,
+            "stats(out of 5)": "****"
+          }
+        ]
+      }
+    },
+    {
+      "name": "zero rating and unmatched IDs",
+      "inputs": {
+        "foods": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "food_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "food_item",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "food_id": 9,
+              "food_item": "New"
+            },
+            {
+              "food_id": 10,
+              "food_item": "No rating"
+            }
+          ]
+        },
+        "ratings": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "food_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "rating",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "food_id": 9,
+              "rating": 0
+            },
+            {
+              "food_id": 11,
+              "rating": 3
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "food_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "food_item",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "rating",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "stats(out of 5)",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "food_id": 9,
+            "food_item": "New",
+            "rating": 0,
+            "stats(out of 5)": ""
+          }
+        ]
+      }
+    },
+    {
+      "name": "empty input",
+      "inputs": {
+        "foods": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "food_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "food_item",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": []
+        },
+        "ratings": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "food_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "rating",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": []
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "food_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "food_item",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "rating",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "stats(out of 5)",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": []
+      }
+    }
+  ]
+}

@@ -1,0 +1,430 @@
+{
+  "id": "38",
+  "title": "Second distinct salary per department",
+  "slug": "second_salary",
+  "topic": "Ranking and ties",
+  "difficulty": "Medium",
+  "prompt": "Return department, emp_name, salary for every employee at the second-highest distinct salary within their department. Include ties. Omit departments with only one salary level. This states the intended salary-ranking rule explicitly.",
+  "cases": [
+    {
+      "name": "sample",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "emp_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "emp_name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "department",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "salary",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "emp_id": 1,
+              "emp_name": "John",
+              "department": "IT",
+              "salary": 80000
+            },
+            {
+              "emp_id": 2,
+              "emp_name": "David",
+              "department": "IT",
+              "salary": 90000
+            },
+            {
+              "emp_id": 3,
+              "emp_name": "Mike",
+              "department": "IT",
+              "salary": 75000
+            },
+            {
+              "emp_id": 4,
+              "emp_name": "Sara",
+              "department": "HR",
+              "salary": 60000
+            },
+            {
+              "emp_id": 5,
+              "emp_name": "Emma",
+              "department": "HR",
+              "salary": 65000
+            },
+            {
+              "emp_id": 6,
+              "emp_name": "Tom",
+              "department": "Sales",
+              "salary": 70000
+            },
+            {
+              "emp_id": 7,
+              "emp_name": "Chris",
+              "department": "Sales",
+              "salary": 85000
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "department",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "emp_name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "salary",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "department": "IT",
+            "emp_name": "John",
+            "salary": 80000
+          },
+          {
+            "department": "HR",
+            "emp_name": "Sara",
+            "salary": 60000
+          },
+          {
+            "department": "Sales",
+            "emp_name": "Tom",
+            "salary": 70000
+          }
+        ]
+      }
+    },
+    {
+      "name": "shuffled input",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "emp_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "emp_name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "department",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "salary",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "emp_id": 7,
+              "emp_name": "Chris",
+              "department": "Sales",
+              "salary": 85000
+            },
+            {
+              "emp_id": 6,
+              "emp_name": "Tom",
+              "department": "Sales",
+              "salary": 70000
+            },
+            {
+              "emp_id": 5,
+              "emp_name": "Emma",
+              "department": "HR",
+              "salary": 65000
+            },
+            {
+              "emp_id": 4,
+              "emp_name": "Sara",
+              "department": "HR",
+              "salary": 60000
+            },
+            {
+              "emp_id": 3,
+              "emp_name": "Mike",
+              "department": "IT",
+              "salary": 75000
+            },
+            {
+              "emp_id": 2,
+              "emp_name": "David",
+              "department": "IT",
+              "salary": 90000
+            },
+            {
+              "emp_id": 1,
+              "emp_name": "John",
+              "department": "IT",
+              "salary": 80000
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "department",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "emp_name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "salary",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "department": "IT",
+            "emp_name": "John",
+            "salary": 80000
+          },
+          {
+            "department": "HR",
+            "emp_name": "Sara",
+            "salary": 60000
+          },
+          {
+            "department": "Sales",
+            "emp_name": "Tom",
+            "salary": 70000
+          }
+        ]
+      }
+    },
+    {
+      "name": "ties and single salary level",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "emp_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "emp_name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "department",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "salary",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "emp_id": 9,
+              "emp_name": "A",
+              "department": "D",
+              "salary": 100
+            },
+            {
+              "emp_id": 10,
+              "emp_name": "B",
+              "department": "D",
+              "salary": 100
+            },
+            {
+              "emp_id": 11,
+              "emp_name": "C",
+              "department": "D",
+              "salary": 50
+            },
+            {
+              "emp_id": 12,
+              "emp_name": "E",
+              "department": "D",
+              "salary": 50
+            },
+            {
+              "emp_id": 13,
+              "emp_name": "Only",
+              "department": "X",
+              "salary": 10
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "department",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "emp_name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "salary",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "department": "D",
+            "emp_name": "C",
+            "salary": 50
+          },
+          {
+            "department": "D",
+            "emp_name": "E",
+            "salary": 50
+          }
+        ]
+      }
+    },
+    {
+      "name": "empty input",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "emp_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "emp_name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "department",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "salary",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": []
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "department",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "emp_name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "salary",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": []
+      }
+    }
+  ]
+}

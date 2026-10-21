@@ -1,0 +1,409 @@
+{
+  "id": "4",
+  "title": "Distinct addresses per customer",
+  "slug": "customer_addresses",
+  "topic": "Aggregation and arrays",
+  "difficulty": "Medium",
+  "prompt": "Return custid, custname, and address as an array of distinct addresses per customer. Ignore null addresses. Address array order does not matter. Despite the original prose mentioning counts, this contract matches its array output.",
+  "cases": [
+    {
+      "name": "sample",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "custid",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "custname",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "address",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "custid": 1,
+              "custname": "Mark Ray",
+              "address": "AB"
+            },
+            {
+              "custid": 2,
+              "custname": "Peter Smith",
+              "address": "CD"
+            },
+            {
+              "custid": 1,
+              "custname": "Mark Ray",
+              "address": "EF"
+            },
+            {
+              "custid": 2,
+              "custname": "Peter Smith",
+              "address": "GH"
+            },
+            {
+              "custid": 2,
+              "custname": "Peter Smith",
+              "address": "CD"
+            },
+            {
+              "custid": 3,
+              "custname": "Kate",
+              "address": "IJ"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "custid",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "custname",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "address",
+              "type": {
+                "type": "array",
+                "elementType": "string",
+                "containsNull": true
+              },
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "custid": 1,
+            "custname": "Mark Ray",
+            "address": [
+              "AB",
+              "EF"
+            ]
+          },
+          {
+            "custid": 2,
+            "custname": "Peter Smith",
+            "address": [
+              "CD",
+              "GH"
+            ]
+          },
+          {
+            "custid": 3,
+            "custname": "Kate",
+            "address": [
+              "IJ"
+            ]
+          }
+        ],
+        "unordered_arrays": [
+          "address"
+        ]
+      }
+    },
+    {
+      "name": "shuffled input",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "custid",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "custname",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "address",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "custid": 3,
+              "custname": "Kate",
+              "address": "IJ"
+            },
+            {
+              "custid": 2,
+              "custname": "Peter Smith",
+              "address": "CD"
+            },
+            {
+              "custid": 2,
+              "custname": "Peter Smith",
+              "address": "GH"
+            },
+            {
+              "custid": 1,
+              "custname": "Mark Ray",
+              "address": "EF"
+            },
+            {
+              "custid": 2,
+              "custname": "Peter Smith",
+              "address": "CD"
+            },
+            {
+              "custid": 1,
+              "custname": "Mark Ray",
+              "address": "AB"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "custid",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "custname",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "address",
+              "type": {
+                "type": "array",
+                "elementType": "string",
+                "containsNull": true
+              },
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "custid": 1,
+            "custname": "Mark Ray",
+            "address": [
+              "AB",
+              "EF"
+            ]
+          },
+          {
+            "custid": 2,
+            "custname": "Peter Smith",
+            "address": [
+              "CD",
+              "GH"
+            ]
+          },
+          {
+            "custid": 3,
+            "custname": "Kate",
+            "address": [
+              "IJ"
+            ]
+          }
+        ],
+        "unordered_arrays": [
+          "address"
+        ]
+      }
+    },
+    {
+      "name": "duplicate addresses",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "custid",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "custname",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "address",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "custid": 9,
+              "custname": "New Name",
+              "address": "Z"
+            },
+            {
+              "custid": 9,
+              "custname": "New Name",
+              "address": "Z"
+            },
+            {
+              "custid": 9,
+              "custname": "New Name",
+              "address": "A"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "custid",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "custname",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "address",
+              "type": {
+                "type": "array",
+                "elementType": "string",
+                "containsNull": true
+              },
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "custid": 9,
+            "custname": "New Name",
+            "address": [
+              "A",
+              "Z"
+            ]
+          }
+        ],
+        "unordered_arrays": [
+          "address"
+        ]
+      }
+    },
+    {
+      "name": "empty input",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "custid",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "custname",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "address",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": []
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "custid",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "custname",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "address",
+              "type": {
+                "type": "array",
+                "elementType": "string",
+                "containsNull": true
+              },
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [],
+        "unordered_arrays": [
+          "address"
+        ]
+      }
+    }
+  ]
+}

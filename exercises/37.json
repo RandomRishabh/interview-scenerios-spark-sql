@@ -1,0 +1,438 @@
+{
+  "id": "37",
+  "title": "Latest order per customer",
+  "slug": "latest_order",
+  "topic": "Deduplication and windows",
+  "difficulty": "Medium",
+  "prompt": "Return exactly one latest order per customer_id by order_date (ISO yyyy-MM-dd strings). If two orders share the latest date, choose the higher order_id. order_id is unique and dates are non-null. Keep order_id, customer_id, order_date, amount. The tie rule makes the original exercise deterministic.",
+  "cases": [
+    {
+      "name": "sample",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "order_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "customer_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "order_date",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "amount",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "order_id": 1,
+              "customer_id": 101,
+              "order_date": "2024-01-01",
+              "amount": 500
+            },
+            {
+              "order_id": 2,
+              "customer_id": 102,
+              "order_date": "2024-01-01",
+              "amount": 300
+            },
+            {
+              "order_id": 3,
+              "customer_id": 101,
+              "order_date": "2024-01-05",
+              "amount": 700
+            },
+            {
+              "order_id": 4,
+              "customer_id": 103,
+              "order_date": "2024-01-07",
+              "amount": 200
+            },
+            {
+              "order_id": 5,
+              "customer_id": 102,
+              "order_date": "2024-01-08",
+              "amount": 100
+            },
+            {
+              "order_id": 6,
+              "customer_id": 101,
+              "order_date": "2024-01-09",
+              "amount": 900
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "order_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "customer_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "order_date",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "amount",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "order_id": 6,
+            "customer_id": 101,
+            "order_date": "2024-01-09",
+            "amount": 900
+          },
+          {
+            "order_id": 5,
+            "customer_id": 102,
+            "order_date": "2024-01-08",
+            "amount": 100
+          },
+          {
+            "order_id": 4,
+            "customer_id": 103,
+            "order_date": "2024-01-07",
+            "amount": 200
+          }
+        ]
+      }
+    },
+    {
+      "name": "shuffled input",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "order_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "customer_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "order_date",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "amount",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "order_id": 6,
+              "customer_id": 101,
+              "order_date": "2024-01-09",
+              "amount": 900
+            },
+            {
+              "order_id": 5,
+              "customer_id": 102,
+              "order_date": "2024-01-08",
+              "amount": 100
+            },
+            {
+              "order_id": 4,
+              "customer_id": 103,
+              "order_date": "2024-01-07",
+              "amount": 200
+            },
+            {
+              "order_id": 3,
+              "customer_id": 101,
+              "order_date": "2024-01-05",
+              "amount": 700
+            },
+            {
+              "order_id": 2,
+              "customer_id": 102,
+              "order_date": "2024-01-01",
+              "amount": 300
+            },
+            {
+              "order_id": 1,
+              "customer_id": 101,
+              "order_date": "2024-01-01",
+              "amount": 500
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "order_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "customer_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "order_date",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "amount",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "order_id": 6,
+            "customer_id": 101,
+            "order_date": "2024-01-09",
+            "amount": 900
+          },
+          {
+            "order_id": 5,
+            "customer_id": 102,
+            "order_date": "2024-01-08",
+            "amount": 100
+          },
+          {
+            "order_id": 4,
+            "customer_id": 103,
+            "order_date": "2024-01-07",
+            "amount": 200
+          }
+        ]
+      }
+    },
+    {
+      "name": "new IDs and equal-date tie",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "order_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "customer_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "order_date",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "amount",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "order_id": 90,
+              "customer_id": 9,
+              "order_date": "2025-01-01",
+              "amount": 1
+            },
+            {
+              "order_id": 91,
+              "customer_id": 9,
+              "order_date": "2025-01-01",
+              "amount": 2
+            },
+            {
+              "order_id": 92,
+              "customer_id": 8,
+              "order_date": "2024-12-31",
+              "amount": 3
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "order_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "customer_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "order_date",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "amount",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "order_id": 91,
+            "customer_id": 9,
+            "order_date": "2025-01-01",
+            "amount": 2
+          },
+          {
+            "order_id": 92,
+            "customer_id": 8,
+            "order_date": "2024-12-31",
+            "amount": 3
+          }
+        ]
+      }
+    },
+    {
+      "name": "empty input",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "order_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "customer_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "order_date",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "amount",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": []
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "order_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "customer_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "order_date",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "amount",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": []
+      }
+    }
+  ]
+}

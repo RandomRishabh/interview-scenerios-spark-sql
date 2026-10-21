@@ -1,0 +1,485 @@
+{
+  "id": "27",
+  "title": "Salary change from previous observation",
+  "slug": "salary_changes",
+  "topic": "Windows",
+  "difficulty": "Medium",
+  "prompt": "Within empid, order by year and add incresalary (original spelling): current salary minus previous observed salary, or 0 for the first observation. Years are unique per employee; gaps are allowed and decreases must stay negative.",
+  "cases": [
+    {
+      "name": "sample",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "empid",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "salary",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "year",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "empid": 1,
+              "salary": 60000,
+              "year": 2018
+            },
+            {
+              "empid": 1,
+              "salary": 70000,
+              "year": 2019
+            },
+            {
+              "empid": 1,
+              "salary": 80000,
+              "year": 2020
+            },
+            {
+              "empid": 2,
+              "salary": 60000,
+              "year": 2018
+            },
+            {
+              "empid": 2,
+              "salary": 65000,
+              "year": 2019
+            },
+            {
+              "empid": 2,
+              "salary": 65000,
+              "year": 2020
+            },
+            {
+              "empid": 3,
+              "salary": 60000,
+              "year": 2018
+            },
+            {
+              "empid": 3,
+              "salary": 65000,
+              "year": 2019
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "empid",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "salary",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "year",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "incresalary",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "empid": 1,
+            "salary": 60000,
+            "year": 2018,
+            "incresalary": 0
+          },
+          {
+            "empid": 1,
+            "salary": 70000,
+            "year": 2019,
+            "incresalary": 10000
+          },
+          {
+            "empid": 1,
+            "salary": 80000,
+            "year": 2020,
+            "incresalary": 10000
+          },
+          {
+            "empid": 2,
+            "salary": 60000,
+            "year": 2018,
+            "incresalary": 0
+          },
+          {
+            "empid": 2,
+            "salary": 65000,
+            "year": 2019,
+            "incresalary": 5000
+          },
+          {
+            "empid": 2,
+            "salary": 65000,
+            "year": 2020,
+            "incresalary": 0
+          },
+          {
+            "empid": 3,
+            "salary": 60000,
+            "year": 2018,
+            "incresalary": 0
+          },
+          {
+            "empid": 3,
+            "salary": 65000,
+            "year": 2019,
+            "incresalary": 5000
+          }
+        ]
+      }
+    },
+    {
+      "name": "shuffled input",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "empid",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "salary",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "year",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "empid": 3,
+              "salary": 65000,
+              "year": 2019
+            },
+            {
+              "empid": 3,
+              "salary": 60000,
+              "year": 2018
+            },
+            {
+              "empid": 2,
+              "salary": 65000,
+              "year": 2020
+            },
+            {
+              "empid": 2,
+              "salary": 65000,
+              "year": 2019
+            },
+            {
+              "empid": 2,
+              "salary": 60000,
+              "year": 2018
+            },
+            {
+              "empid": 1,
+              "salary": 80000,
+              "year": 2020
+            },
+            {
+              "empid": 1,
+              "salary": 70000,
+              "year": 2019
+            },
+            {
+              "empid": 1,
+              "salary": 60000,
+              "year": 2018
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "empid",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "salary",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "year",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "incresalary",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "empid": 1,
+            "salary": 60000,
+            "year": 2018,
+            "incresalary": 0
+          },
+          {
+            "empid": 1,
+            "salary": 70000,
+            "year": 2019,
+            "incresalary": 10000
+          },
+          {
+            "empid": 1,
+            "salary": 80000,
+            "year": 2020,
+            "incresalary": 10000
+          },
+          {
+            "empid": 2,
+            "salary": 60000,
+            "year": 2018,
+            "incresalary": 0
+          },
+          {
+            "empid": 2,
+            "salary": 65000,
+            "year": 2019,
+            "incresalary": 5000
+          },
+          {
+            "empid": 2,
+            "salary": 65000,
+            "year": 2020,
+            "incresalary": 0
+          },
+          {
+            "empid": 3,
+            "salary": 60000,
+            "year": 2018,
+            "incresalary": 0
+          },
+          {
+            "empid": 3,
+            "salary": 65000,
+            "year": 2019,
+            "incresalary": 5000
+          }
+        ]
+      }
+    },
+    {
+      "name": "year gaps and a decrease",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "empid",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "salary",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "year",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "empid": 8,
+              "salary": 90,
+              "year": 2026
+            },
+            {
+              "empid": 8,
+              "salary": 100,
+              "year": 2024
+            },
+            {
+              "empid": 9,
+              "salary": 30,
+              "year": 2025
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "empid",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "salary",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "year",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "incresalary",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "empid": 8,
+            "salary": 90,
+            "year": 2026,
+            "incresalary": -10
+          },
+          {
+            "empid": 8,
+            "salary": 100,
+            "year": 2024,
+            "incresalary": 0
+          },
+          {
+            "empid": 9,
+            "salary": 30,
+            "year": 2025,
+            "incresalary": 0
+          }
+        ]
+      }
+    },
+    {
+      "name": "empty input",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "empid",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "salary",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "year",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": []
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "empid",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "salary",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "year",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "incresalary",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": []
+      }
+    }
+  ]
+}

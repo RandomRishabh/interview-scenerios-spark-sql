@@ -1,0 +1,117 @@
+{
+  "id": "15",
+  "title": "Python append versus extend",
+  "slug": "append_extend",
+  "topic": "Python collections",
+  "difficulty": "Easy",
+  "prompt": "This original scenario is a Python-list task, so its inputs and expected output are native Python objects. Using separate copies of l1, return a dict with appended (l2 added as one element) and extended (l2 elements added individually). The two operations must start from the same original l1, not run sequentially on the same list.",
+  "cases": [
+    {
+      "name": "sample",
+      "inputs": {
+        "l1": {
+          "kind": "python",
+          "value": [
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        "l2": {
+          "kind": "python",
+          "value": [
+            6,
+            7,
+            8,
+            9
+          ]
+        }
+      },
+      "expected": {
+        "kind": "python",
+        "value": {
+          "appended": [
+            2,
+            3,
+            4,
+            5,
+            [
+              6,
+              7,
+              8,
+              9
+            ]
+          ],
+          "extended": [
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9
+          ]
+        }
+      }
+    },
+    {
+      "name": "different lists",
+      "inputs": {
+        "l1": {
+          "kind": "python",
+          "value": [
+            9
+          ]
+        },
+        "l2": {
+          "kind": "python",
+          "value": [
+            1,
+            2
+          ]
+        }
+      },
+      "expected": {
+        "kind": "python",
+        "value": {
+          "appended": [
+            9,
+            [
+              1,
+              2
+            ]
+          ],
+          "extended": [
+            9,
+            1,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "name": "empty lists",
+      "inputs": {
+        "l1": {
+          "kind": "python",
+          "value": []
+        },
+        "l2": {
+          "kind": "python",
+          "value": []
+        }
+      },
+      "expected": {
+        "kind": "python",
+        "value": {
+          "appended": [
+            []
+          ],
+          "extended": []
+        }
+      }
+    }
+  ]
+}

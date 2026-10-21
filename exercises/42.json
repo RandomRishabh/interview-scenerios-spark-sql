@@ -1,0 +1,386 @@
+{
+  "id": "42",
+  "title": "Duplicate transaction counts",
+  "slug": "duplicate_transactions",
+  "topic": "Data quality and aggregation",
+  "difficulty": "Easy",
+  "prompt": "Return transaction_id and occurrence_count for IDs appearing more than once. IDs are non-null. Count input rows, including exact repeats. Use the correctly spelled occurrence_count.",
+  "cases": [
+    {
+      "name": "sample",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "transaction_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "customer_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "amount",
+                "type": "double",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "transaction_date",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "transaction_id": 1001,
+              "customer_id": 101,
+              "amount": 500.0,
+              "transaction_date": "2024-01-01"
+            },
+            {
+              "transaction_id": 1002,
+              "customer_id": 102,
+              "amount": 300.0,
+              "transaction_date": "2024-01-02"
+            },
+            {
+              "transaction_id": 1001,
+              "customer_id": 101,
+              "amount": 500.0,
+              "transaction_date": "2024-01-01"
+            },
+            {
+              "transaction_id": 1003,
+              "customer_id": 103,
+              "amount": 700.0,
+              "transaction_date": "2024-01-03"
+            },
+            {
+              "transaction_id": 1004,
+              "customer_id": 104,
+              "amount": 200.0,
+              "transaction_date": "2024-01-04"
+            },
+            {
+              "transaction_id": 1002,
+              "customer_id": 102,
+              "amount": 300.0,
+              "transaction_date": "2024-01-02"
+            },
+            {
+              "transaction_id": 1002,
+              "customer_id": 102,
+              "amount": 300.0,
+              "transaction_date": "2024-01-02"
+            },
+            {
+              "transaction_id": 1005,
+              "customer_id": 105,
+              "amount": 900.0,
+              "transaction_date": "2024-01-05"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "transaction_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "occurrence_count",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "transaction_id": 1001,
+            "occurrence_count": 2
+          },
+          {
+            "transaction_id": 1002,
+            "occurrence_count": 3
+          }
+        ]
+      }
+    },
+    {
+      "name": "shuffled input",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "transaction_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "customer_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "amount",
+                "type": "double",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "transaction_date",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "transaction_id": 1005,
+              "customer_id": 105,
+              "amount": 900.0,
+              "transaction_date": "2024-01-05"
+            },
+            {
+              "transaction_id": 1002,
+              "customer_id": 102,
+              "amount": 300.0,
+              "transaction_date": "2024-01-02"
+            },
+            {
+              "transaction_id": 1002,
+              "customer_id": 102,
+              "amount": 300.0,
+              "transaction_date": "2024-01-02"
+            },
+            {
+              "transaction_id": 1004,
+              "customer_id": 104,
+              "amount": 200.0,
+              "transaction_date": "2024-01-04"
+            },
+            {
+              "transaction_id": 1003,
+              "customer_id": 103,
+              "amount": 700.0,
+              "transaction_date": "2024-01-03"
+            },
+            {
+              "transaction_id": 1001,
+              "customer_id": 101,
+              "amount": 500.0,
+              "transaction_date": "2024-01-01"
+            },
+            {
+              "transaction_id": 1002,
+              "customer_id": 102,
+              "amount": 300.0,
+              "transaction_date": "2024-01-02"
+            },
+            {
+              "transaction_id": 1001,
+              "customer_id": 101,
+              "amount": 500.0,
+              "transaction_date": "2024-01-01"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "transaction_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "occurrence_count",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "transaction_id": 1001,
+            "occurrence_count": 2
+          },
+          {
+            "transaction_id": 1002,
+            "occurrence_count": 3
+          }
+        ]
+      }
+    },
+    {
+      "name": "different duplicated ID",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "transaction_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "customer_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "amount",
+                "type": "double",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "transaction_date",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "transaction_id": 8,
+              "customer_id": 101,
+              "amount": 500.0,
+              "transaction_date": "2024-01-01"
+            },
+            {
+              "transaction_id": 8,
+              "customer_id": 101,
+              "amount": 500.0,
+              "transaction_date": "2024-01-01"
+            },
+            {
+              "transaction_id": 9,
+              "customer_id": 102,
+              "amount": 300.0,
+              "transaction_date": "2024-01-02"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "transaction_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "occurrence_count",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "transaction_id": 8,
+            "occurrence_count": 2
+          }
+        ]
+      }
+    },
+    {
+      "name": "empty input",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "transaction_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "customer_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "amount",
+                "type": "double",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "transaction_date",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": []
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "transaction_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "occurrence_count",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": []
+      }
+    }
+  ]
+}

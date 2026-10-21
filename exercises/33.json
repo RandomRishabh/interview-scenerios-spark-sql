@@ -1,0 +1,528 @@
+{
+  "id": "33",
+  "title": "Families with most eligible destinations",
+  "slug": "eligible_destinations",
+  "topic": "Range joins and aggregation",
+  "difficulty": "Hard",
+  "prompt": "A family qualifies for a country when family_size is between min_size and max_size inclusive. Return name and number_of_countries for all families tied for the largest positive number of eligible countries. Family names are unique. If no family qualifies anywhere, return empty.",
+  "cases": [
+    {
+      "name": "sample",
+      "inputs": {
+        "families": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "id",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "family_size",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "id": "c00dac11bde74750b4d207b9c182a85f",
+              "name": "Alex Thomas",
+              "family_size": 9
+            },
+            {
+              "id": "eb6f2d3426694667ae3e79d6274114a4",
+              "name": "Chris Gray",
+              "family_size": 2
+            },
+            {
+              "id": "3f7b5b8e835d4e1c8b3e12e964a741f3",
+              "name": "Emily Johnson",
+              "family_size": 4
+            },
+            {
+              "id": "9a345b079d9f4d3cafb2d4c11d20f8ce",
+              "name": "Michael Brown",
+              "family_size": 6
+            },
+            {
+              "id": "e0a5f57516024de2a231d09de2cbe9d1",
+              "name": "Jessica Wilson",
+              "family_size": 3
+            }
+          ]
+        },
+        "countries": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "id",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "min_size",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "max_size",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "id": "023fd23615bd4ff4b2ae0a13ed7efec9",
+              "name": "Bolivia",
+              "min_size": 2,
+              "max_size": 4
+            },
+            {
+              "id": "be247f73de0f4b2d810367cb26941fb9",
+              "name": "Cook Islands",
+              "min_size": 4,
+              "max_size": 8
+            },
+            {
+              "id": "3e85ab80a6f84ef3b9068b21dbcc54b3",
+              "name": "Brazil",
+              "min_size": 4,
+              "max_size": 7
+            },
+            {
+              "id": "e571e164152c4f7c8413e2734f67b146",
+              "name": "Australia",
+              "min_size": 5,
+              "max_size": 9
+            },
+            {
+              "id": "f35a7bb7d44342f7a8a42a53115294a8",
+              "name": "Canada",
+              "min_size": 3,
+              "max_size": 5
+            },
+            {
+              "id": "a1b5a4b5fc5f46f891d9040566a78f27",
+              "name": "Japan",
+              "min_size": 10,
+              "max_size": 12
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "number_of_countries",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "name": "Emily Johnson",
+            "number_of_countries": 4
+          }
+        ]
+      }
+    },
+    {
+      "name": "shuffled input",
+      "inputs": {
+        "families": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "id",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "family_size",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "id": "e0a5f57516024de2a231d09de2cbe9d1",
+              "name": "Jessica Wilson",
+              "family_size": 3
+            },
+            {
+              "id": "9a345b079d9f4d3cafb2d4c11d20f8ce",
+              "name": "Michael Brown",
+              "family_size": 6
+            },
+            {
+              "id": "3f7b5b8e835d4e1c8b3e12e964a741f3",
+              "name": "Emily Johnson",
+              "family_size": 4
+            },
+            {
+              "id": "eb6f2d3426694667ae3e79d6274114a4",
+              "name": "Chris Gray",
+              "family_size": 2
+            },
+            {
+              "id": "c00dac11bde74750b4d207b9c182a85f",
+              "name": "Alex Thomas",
+              "family_size": 9
+            }
+          ]
+        },
+        "countries": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "id",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "min_size",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "max_size",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "id": "a1b5a4b5fc5f46f891d9040566a78f27",
+              "name": "Japan",
+              "min_size": 10,
+              "max_size": 12
+            },
+            {
+              "id": "f35a7bb7d44342f7a8a42a53115294a8",
+              "name": "Canada",
+              "min_size": 3,
+              "max_size": 5
+            },
+            {
+              "id": "e571e164152c4f7c8413e2734f67b146",
+              "name": "Australia",
+              "min_size": 5,
+              "max_size": 9
+            },
+            {
+              "id": "3e85ab80a6f84ef3b9068b21dbcc54b3",
+              "name": "Brazil",
+              "min_size": 4,
+              "max_size": 7
+            },
+            {
+              "id": "be247f73de0f4b2d810367cb26941fb9",
+              "name": "Cook Islands",
+              "min_size": 4,
+              "max_size": 8
+            },
+            {
+              "id": "023fd23615bd4ff4b2ae0a13ed7efec9",
+              "name": "Bolivia",
+              "min_size": 2,
+              "max_size": 4
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "number_of_countries",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "name": "Emily Johnson",
+            "number_of_countries": 4
+          }
+        ]
+      }
+    },
+    {
+      "name": "inclusive range boundaries and ties",
+      "inputs": {
+        "families": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "id",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "family_size",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "id": "a",
+              "name": "X",
+              "family_size": 4
+            },
+            {
+              "id": "b",
+              "name": "Y",
+              "family_size": 4
+            },
+            {
+              "id": "c",
+              "name": "Z",
+              "family_size": 99
+            }
+          ]
+        },
+        "countries": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "id",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "min_size",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "max_size",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "id": "q",
+              "name": "C",
+              "min_size": 4,
+              "max_size": 4
+            },
+            {
+              "id": "r",
+              "name": "D",
+              "min_size": 2,
+              "max_size": 5
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "number_of_countries",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "name": "X",
+            "number_of_countries": 2
+          },
+          {
+            "name": "Y",
+            "number_of_countries": 2
+          }
+        ]
+      }
+    },
+    {
+      "name": "empty input",
+      "inputs": {
+        "families": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "id",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "family_size",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": []
+        },
+        "countries": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "id",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "min_size",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "max_size",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": []
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "number_of_countries",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": []
+      }
+    }
+  ]
+}

@@ -1,0 +1,342 @@
+{
+  "id": "10",
+  "title": "Latest commission by calendar date",
+  "slug": "latest_commission",
+  "topic": "Dates and windows",
+  "difficulty": "Medium",
+  "prompt": "Return each employee latest commission by parsing monthlastdate as dd-MMM-yyyy. Keep the original string in the output. Dates are unique per employee. Corrected from the upstream sample: December is later than October; string max is not chronological max.",
+  "cases": [
+    {
+      "name": "sample",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "empid",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "commissionamt",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "monthlastdate",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "empid": 1,
+              "commissionamt": 300,
+              "monthlastdate": "31-Jan-2021"
+            },
+            {
+              "empid": 1,
+              "commissionamt": 400,
+              "monthlastdate": "28-Feb-2021"
+            },
+            {
+              "empid": 1,
+              "commissionamt": 200,
+              "monthlastdate": "31-Mar-2021"
+            },
+            {
+              "empid": 2,
+              "commissionamt": 1000,
+              "monthlastdate": "31-Oct-2021"
+            },
+            {
+              "empid": 2,
+              "commissionamt": 900,
+              "monthlastdate": "31-Dec-2021"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "empid",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "commissionamt",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "monthlastdate",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "empid": 1,
+            "commissionamt": 200,
+            "monthlastdate": "31-Mar-2021"
+          },
+          {
+            "empid": 2,
+            "commissionamt": 900,
+            "monthlastdate": "31-Dec-2021"
+          }
+        ]
+      }
+    },
+    {
+      "name": "shuffled input",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "empid",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "commissionamt",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "monthlastdate",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "empid": 2,
+              "commissionamt": 900,
+              "monthlastdate": "31-Dec-2021"
+            },
+            {
+              "empid": 2,
+              "commissionamt": 1000,
+              "monthlastdate": "31-Oct-2021"
+            },
+            {
+              "empid": 1,
+              "commissionamt": 200,
+              "monthlastdate": "31-Mar-2021"
+            },
+            {
+              "empid": 1,
+              "commissionamt": 400,
+              "monthlastdate": "28-Feb-2021"
+            },
+            {
+              "empid": 1,
+              "commissionamt": 300,
+              "monthlastdate": "31-Jan-2021"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "empid",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "commissionamt",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "monthlastdate",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "empid": 1,
+            "commissionamt": 200,
+            "monthlastdate": "31-Mar-2021"
+          },
+          {
+            "empid": 2,
+            "commissionamt": 900,
+            "monthlastdate": "31-Dec-2021"
+          }
+        ]
+      }
+    },
+    {
+      "name": "cross-year calendar ordering",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "empid",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "commissionamt",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "monthlastdate",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "empid": 9,
+              "commissionamt": 10,
+              "monthlastdate": "31-Jan-2025"
+            },
+            {
+              "empid": 9,
+              "commissionamt": 20,
+              "monthlastdate": "28-Feb-2025"
+            },
+            {
+              "empid": 9,
+              "commissionamt": 30,
+              "monthlastdate": "31-Dec-2024"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "empid",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "commissionamt",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "monthlastdate",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "empid": 9,
+            "commissionamt": 20,
+            "monthlastdate": "28-Feb-2025"
+          }
+        ]
+      }
+    },
+    {
+      "name": "empty input",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "empid",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "commissionamt",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "monthlastdate",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": []
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "empid",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "commissionamt",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "monthlastdate",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": []
+      }
+    }
+  ]
+}

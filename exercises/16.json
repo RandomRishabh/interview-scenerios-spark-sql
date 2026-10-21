@@ -1,0 +1,414 @@
+{
+  "id": "16",
+  "title": "Deterministic deduplication by name",
+  "slug": "deduplicate_names",
+  "topic": "Deduplication and windows",
+  "difficulty": "Medium",
+  "prompt": "Keep exactly one row per name: the row with the smallest id. IDs are unique. Keep all input columns. This makes the original dropDuplicates example deterministic.",
+  "cases": [
+    {
+      "name": "sample",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "dept",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "salary",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "id": 1,
+              "name": "Jhon",
+              "dept": "Testing",
+              "salary": 5000
+            },
+            {
+              "id": 2,
+              "name": "Tim",
+              "dept": "Development",
+              "salary": 6000
+            },
+            {
+              "id": 3,
+              "name": "Jhon",
+              "dept": "Development",
+              "salary": 5000
+            },
+            {
+              "id": 4,
+              "name": "Sky",
+              "dept": "Prodcution",
+              "salary": 8000
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "dept",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "salary",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "id": 1,
+            "name": "Jhon",
+            "dept": "Testing",
+            "salary": 5000
+          },
+          {
+            "id": 2,
+            "name": "Tim",
+            "dept": "Development",
+            "salary": 6000
+          },
+          {
+            "id": 4,
+            "name": "Sky",
+            "dept": "Prodcution",
+            "salary": 8000
+          }
+        ]
+      }
+    },
+    {
+      "name": "shuffled input",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "dept",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "salary",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "id": 4,
+              "name": "Sky",
+              "dept": "Prodcution",
+              "salary": 8000
+            },
+            {
+              "id": 3,
+              "name": "Jhon",
+              "dept": "Development",
+              "salary": 5000
+            },
+            {
+              "id": 2,
+              "name": "Tim",
+              "dept": "Development",
+              "salary": 6000
+            },
+            {
+              "id": 1,
+              "name": "Jhon",
+              "dept": "Testing",
+              "salary": 5000
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "dept",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "salary",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "id": 1,
+            "name": "Jhon",
+            "dept": "Testing",
+            "salary": 5000
+          },
+          {
+            "id": 2,
+            "name": "Tim",
+            "dept": "Development",
+            "salary": 6000
+          },
+          {
+            "id": 4,
+            "name": "Sky",
+            "dept": "Prodcution",
+            "salary": 8000
+          }
+        ]
+      }
+    },
+    {
+      "name": "smallest id does not occur first",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "dept",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "salary",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "id": 9,
+              "name": "A",
+              "dept": "x",
+              "salary": 1
+            },
+            {
+              "id": 4,
+              "name": "A",
+              "dept": "y",
+              "salary": 2
+            },
+            {
+              "id": 7,
+              "name": "B",
+              "dept": "z",
+              "salary": 3
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "dept",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "salary",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "id": 4,
+            "name": "A",
+            "dept": "y",
+            "salary": 2
+          },
+          {
+            "id": 7,
+            "name": "B",
+            "dept": "z",
+            "salary": 3
+          }
+        ]
+      }
+    },
+    {
+      "name": "empty input",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "dept",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "salary",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": []
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "dept",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "salary",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": []
+      }
+    }
+  ]
+}

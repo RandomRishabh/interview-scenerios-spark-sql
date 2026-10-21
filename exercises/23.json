@@ -1,0 +1,423 @@
+{
+  "id": "23",
+  "title": "Customers buying every required product",
+  "slug": "all_required_products",
+  "topic": "Relational division",
+  "difficulty": "Hard",
+  "prompt": "Return each customer_id who purchased every distinct product_key in products. Ignore repeated purchases and purchases outside the required catalog. If products is empty, every distinct customer in purchases qualifies. Use the data, never hard-code customer IDs.",
+  "cases": [
+    {
+      "name": "sample",
+      "inputs": {
+        "purchases": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "customer_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "product_key",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "customer_id": 1,
+              "product_key": 5
+            },
+            {
+              "customer_id": 2,
+              "product_key": 6
+            },
+            {
+              "customer_id": 3,
+              "product_key": 5
+            },
+            {
+              "customer_id": 3,
+              "product_key": 6
+            },
+            {
+              "customer_id": 1,
+              "product_key": 6
+            }
+          ]
+        },
+        "products": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "product_key",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "product_key": 5
+            },
+            {
+              "product_key": 6
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "customer_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "customer_id": 1
+          },
+          {
+            "customer_id": 3
+          }
+        ]
+      }
+    },
+    {
+      "name": "shuffled input",
+      "inputs": {
+        "purchases": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "customer_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "product_key",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "customer_id": 1,
+              "product_key": 6
+            },
+            {
+              "customer_id": 3,
+              "product_key": 6
+            },
+            {
+              "customer_id": 3,
+              "product_key": 5
+            },
+            {
+              "customer_id": 2,
+              "product_key": 6
+            },
+            {
+              "customer_id": 1,
+              "product_key": 5
+            }
+          ]
+        },
+        "products": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "product_key",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "product_key": 6
+            },
+            {
+              "product_key": 5
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "customer_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "customer_id": 1
+          },
+          {
+            "customer_id": 3
+          }
+        ]
+      }
+    },
+    {
+      "name": "duplicate and irrelevant purchases",
+      "inputs": {
+        "purchases": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "customer_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "product_key",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "customer_id": 9,
+              "product_key": 5
+            },
+            {
+              "customer_id": 9,
+              "product_key": 6
+            },
+            {
+              "customer_id": 9,
+              "product_key": 6
+            },
+            {
+              "customer_id": 8,
+              "product_key": 5
+            },
+            {
+              "customer_id": 7,
+              "product_key": 99
+            }
+          ]
+        },
+        "products": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "product_key",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "product_key": 5
+            },
+            {
+              "product_key": 6
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "customer_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "customer_id": 9
+          }
+        ]
+      }
+    },
+    {
+      "name": "empty product catalog",
+      "inputs": {
+        "purchases": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "customer_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "product_key",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "customer_id": 1,
+              "product_key": 5
+            },
+            {
+              "customer_id": 2,
+              "product_key": 6
+            },
+            {
+              "customer_id": 3,
+              "product_key": 5
+            },
+            {
+              "customer_id": 3,
+              "product_key": 6
+            },
+            {
+              "customer_id": 1,
+              "product_key": 6
+            }
+          ]
+        },
+        "products": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "product_key",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": []
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "customer_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "customer_id": 1
+          },
+          {
+            "customer_id": 2
+          },
+          {
+            "customer_id": 3
+          }
+        ]
+      }
+    },
+    {
+      "name": "empty input",
+      "inputs": {
+        "purchases": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "customer_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "product_key",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": []
+        },
+        "products": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "product_key",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": []
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "customer_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": []
+      }
+    }
+  ]
+}

@@ -1,0 +1,380 @@
+{
+  "id": "36",
+  "title": "Distinct daily product sales",
+  "slug": "daily_product_sales",
+  "topic": "Aggregation and arrays",
+  "difficulty": "Medium",
+  "prompt": "Return sell_date, products (array of distinct non-null product names), and null_sell (original output spelling, meaning the count of distinct products). Product array order does not matter.",
+  "cases": [
+    {
+      "name": "sample",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "sell_date",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "product",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "sell_date": "2020-05-30",
+              "product": "Headphone"
+            },
+            {
+              "sell_date": "2020-06-01",
+              "product": "Pencil"
+            },
+            {
+              "sell_date": "2020-06-02",
+              "product": "Mask"
+            },
+            {
+              "sell_date": "2020-05-30",
+              "product": "Basketball"
+            },
+            {
+              "sell_date": "2020-06-01",
+              "product": "Book"
+            },
+            {
+              "sell_date": "2020-06-02",
+              "product": "Mask"
+            },
+            {
+              "sell_date": "2020-05-30",
+              "product": "T-Shirt"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "sell_date",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "products",
+              "type": {
+                "type": "array",
+                "elementType": "string",
+                "containsNull": true
+              },
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "null_sell",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "sell_date": "2020-05-30",
+            "products": [
+              "Headphone",
+              "Basketball",
+              "T-Shirt"
+            ],
+            "null_sell": 3
+          },
+          {
+            "sell_date": "2020-06-01",
+            "products": [
+              "Pencil",
+              "Book"
+            ],
+            "null_sell": 2
+          },
+          {
+            "sell_date": "2020-06-02",
+            "products": [
+              "Mask"
+            ],
+            "null_sell": 1
+          }
+        ],
+        "unordered_arrays": [
+          "products"
+        ]
+      }
+    },
+    {
+      "name": "shuffled input",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "sell_date",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "product",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "sell_date": "2020-05-30",
+              "product": "T-Shirt"
+            },
+            {
+              "sell_date": "2020-06-02",
+              "product": "Mask"
+            },
+            {
+              "sell_date": "2020-06-01",
+              "product": "Book"
+            },
+            {
+              "sell_date": "2020-05-30",
+              "product": "Basketball"
+            },
+            {
+              "sell_date": "2020-06-02",
+              "product": "Mask"
+            },
+            {
+              "sell_date": "2020-06-01",
+              "product": "Pencil"
+            },
+            {
+              "sell_date": "2020-05-30",
+              "product": "Headphone"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "sell_date",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "products",
+              "type": {
+                "type": "array",
+                "elementType": "string",
+                "containsNull": true
+              },
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "null_sell",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "sell_date": "2020-05-30",
+            "products": [
+              "Headphone",
+              "Basketball",
+              "T-Shirt"
+            ],
+            "null_sell": 3
+          },
+          {
+            "sell_date": "2020-06-01",
+            "products": [
+              "Pencil",
+              "Book"
+            ],
+            "null_sell": 2
+          },
+          {
+            "sell_date": "2020-06-02",
+            "products": [
+              "Mask"
+            ],
+            "null_sell": 1
+          }
+        ],
+        "unordered_arrays": [
+          "products"
+        ]
+      }
+    },
+    {
+      "name": "repeated sales",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "sell_date",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "product",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "sell_date": "2025-01-01",
+              "product": "A"
+            },
+            {
+              "sell_date": "2025-01-01",
+              "product": "A"
+            },
+            {
+              "sell_date": "2025-01-01",
+              "product": "B"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "sell_date",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "products",
+              "type": {
+                "type": "array",
+                "elementType": "string",
+                "containsNull": true
+              },
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "null_sell",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "sell_date": "2025-01-01",
+            "products": [
+              "A",
+              "B"
+            ],
+            "null_sell": 2
+          }
+        ],
+        "unordered_arrays": [
+          "products"
+        ]
+      }
+    },
+    {
+      "name": "empty input",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "sell_date",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "product",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": []
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "sell_date",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "products",
+              "type": {
+                "type": "array",
+                "elementType": "string",
+                "containsNull": true
+              },
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "null_sell",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [],
+        "unordered_arrays": [
+          "products"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,579 @@
+{
+  "id": "7",
+  "title": "Highest quantity sales per year",
+  "slug": "top_sales_by_year",
+  "topic": "Windows and ties",
+  "difficulty": "Medium",
+  "prompt": "Return all sales with the maximum quantity within their year. Include ties and keep the input columns.",
+  "cases": [
+    {
+      "name": "sample",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "sale_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "product_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "year",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "quantity",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "price",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "sale_id": 1,
+              "product_id": 100,
+              "year": 2010,
+              "quantity": 25,
+              "price": 5000
+            },
+            {
+              "sale_id": 2,
+              "product_id": 100,
+              "year": 2011,
+              "quantity": 16,
+              "price": 5000
+            },
+            {
+              "sale_id": 3,
+              "product_id": 100,
+              "year": 2012,
+              "quantity": 8,
+              "price": 5000
+            },
+            {
+              "sale_id": 4,
+              "product_id": 200,
+              "year": 2010,
+              "quantity": 10,
+              "price": 9000
+            },
+            {
+              "sale_id": 5,
+              "product_id": 200,
+              "year": 2011,
+              "quantity": 15,
+              "price": 9000
+            },
+            {
+              "sale_id": 6,
+              "product_id": 200,
+              "year": 2012,
+              "quantity": 20,
+              "price": 7000
+            },
+            {
+              "sale_id": 7,
+              "product_id": 300,
+              "year": 2010,
+              "quantity": 20,
+              "price": 7000
+            },
+            {
+              "sale_id": 8,
+              "product_id": 300,
+              "year": 2011,
+              "quantity": 18,
+              "price": 7000
+            },
+            {
+              "sale_id": 9,
+              "product_id": 300,
+              "year": 2012,
+              "quantity": 20,
+              "price": 7000
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "sale_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "product_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "year",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "quantity",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "price",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "sale_id": 1,
+            "product_id": 100,
+            "year": 2010,
+            "quantity": 25,
+            "price": 5000
+          },
+          {
+            "sale_id": 8,
+            "product_id": 300,
+            "year": 2011,
+            "quantity": 18,
+            "price": 7000
+          },
+          {
+            "sale_id": 6,
+            "product_id": 200,
+            "year": 2012,
+            "quantity": 20,
+            "price": 7000
+          },
+          {
+            "sale_id": 9,
+            "product_id": 300,
+            "year": 2012,
+            "quantity": 20,
+            "price": 7000
+          }
+        ]
+      }
+    },
+    {
+      "name": "shuffled input",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "sale_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "product_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "year",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "quantity",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "price",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "sale_id": 9,
+              "product_id": 300,
+              "year": 2012,
+              "quantity": 20,
+              "price": 7000
+            },
+            {
+              "sale_id": 8,
+              "product_id": 300,
+              "year": 2011,
+              "quantity": 18,
+              "price": 7000
+            },
+            {
+              "sale_id": 7,
+              "product_id": 300,
+              "year": 2010,
+              "quantity": 20,
+              "price": 7000
+            },
+            {
+              "sale_id": 6,
+              "product_id": 200,
+              "year": 2012,
+              "quantity": 20,
+              "price": 7000
+            },
+            {
+              "sale_id": 5,
+              "product_id": 200,
+              "year": 2011,
+              "quantity": 15,
+              "price": 9000
+            },
+            {
+              "sale_id": 4,
+              "product_id": 200,
+              "year": 2010,
+              "quantity": 10,
+              "price": 9000
+            },
+            {
+              "sale_id": 3,
+              "product_id": 100,
+              "year": 2012,
+              "quantity": 8,
+              "price": 5000
+            },
+            {
+              "sale_id": 2,
+              "product_id": 100,
+              "year": 2011,
+              "quantity": 16,
+              "price": 5000
+            },
+            {
+              "sale_id": 1,
+              "product_id": 100,
+              "year": 2010,
+              "quantity": 25,
+              "price": 5000
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "sale_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "product_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "year",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "quantity",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "price",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "sale_id": 1,
+            "product_id": 100,
+            "year": 2010,
+            "quantity": 25,
+            "price": 5000
+          },
+          {
+            "sale_id": 8,
+            "product_id": 300,
+            "year": 2011,
+            "quantity": 18,
+            "price": 7000
+          },
+          {
+            "sale_id": 6,
+            "product_id": 200,
+            "year": 2012,
+            "quantity": 20,
+            "price": 7000
+          },
+          {
+            "sale_id": 9,
+            "product_id": 300,
+            "year": 2012,
+            "quantity": 20,
+            "price": 7000
+          }
+        ]
+      }
+    },
+    {
+      "name": "ties and another year",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "sale_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "product_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "year",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "quantity",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "price",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "sale_id": 11,
+              "product_id": 1,
+              "year": 2025,
+              "quantity": 3,
+              "price": 8
+            },
+            {
+              "sale_id": 12,
+              "product_id": 2,
+              "year": 2025,
+              "quantity": 3,
+              "price": 9
+            },
+            {
+              "sale_id": 13,
+              "product_id": 3,
+              "year": 2025,
+              "quantity": 1,
+              "price": 7
+            },
+            {
+              "sale_id": 14,
+              "product_id": 1,
+              "year": 2026,
+              "quantity": 0,
+              "price": 5
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "sale_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "product_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "year",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "quantity",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "price",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "sale_id": 11,
+            "product_id": 1,
+            "year": 2025,
+            "quantity": 3,
+            "price": 8
+          },
+          {
+            "sale_id": 12,
+            "product_id": 2,
+            "year": 2025,
+            "quantity": 3,
+            "price": 9
+          },
+          {
+            "sale_id": 14,
+            "product_id": 1,
+            "year": 2026,
+            "quantity": 0,
+            "price": 5
+          }
+        ]
+      }
+    },
+    {
+      "name": "empty input",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "sale_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "product_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "year",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "quantity",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "price",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": []
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "sale_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "product_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "year",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "quantity",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "price",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": []
+      }
+    }
+  ]
+}

@@ -1,0 +1,252 @@
+{
+  "id": "12",
+  "title": "Mask contact details",
+  "slug": "mask_contacts",
+  "topic": "String transformations",
+  "difficulty": "Medium",
+  "prompt": "Mask each non-null email as its first character + exactly ten asterisks + the substring starting at zero-based index 8. Mask mobile as its first two characters + exactly five asterisks + its last three characters. Preserve nulls. These positional rules intentionally match the original exercise; they are not a production masking policy.",
+  "cases": [
+    {
+      "name": "sample",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "email",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "mobile",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "email": "Renuka1992@gmail.com",
+              "mobile": "9856765434"
+            },
+            {
+              "email": "anbu.arasu@gmail.com",
+              "mobile": "9844567788"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "email",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "mobile",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "email": "R**********92@gmail.com",
+            "mobile": "98*****434"
+          },
+          {
+            "email": "a**********su@gmail.com",
+            "mobile": "98*****788"
+          }
+        ]
+      }
+    },
+    {
+      "name": "shuffled input",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "email",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "mobile",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "email": "anbu.arasu@gmail.com",
+              "mobile": "9844567788"
+            },
+            {
+              "email": "Renuka1992@gmail.com",
+              "mobile": "9856765434"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "email",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "mobile",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "email": "R**********92@gmail.com",
+            "mobile": "98*****434"
+          },
+          {
+            "email": "a**********su@gmail.com",
+            "mobile": "98*****788"
+          }
+        ]
+      }
+    },
+    {
+      "name": "positional masking and nulls",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "email",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "mobile",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "email": "abcdefghXYZ@q",
+              "mobile": "1234567890"
+            },
+            {
+              "email": null,
+              "mobile": null
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "email",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "mobile",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "email": "a**********XYZ@q",
+            "mobile": "12*****890"
+          },
+          {
+            "email": null,
+            "mobile": null
+          }
+        ]
+      }
+    },
+    {
+      "name": "empty input",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "email",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "mobile",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": []
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "email",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "mobile",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": []
+      }
+    }
+  ]
+}

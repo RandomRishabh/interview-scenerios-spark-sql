@@ -1,0 +1,332 @@
+{
+  "id": "28",
+  "title": "Child parent grandparent chains",
+  "slug": "hierarchy_chains",
+  "topic": "Hierarchical self joins",
+  "difficulty": "Medium",
+  "prompt": "Return child, parent, grandparent for every two-edge chain in input_df(child,parent). Omit children whose parent has no parent row. Input edges are unique.",
+  "cases": [
+    {
+      "name": "sample",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "child",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "parent",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "child": "A",
+              "parent": "AA"
+            },
+            {
+              "child": "B",
+              "parent": "BB"
+            },
+            {
+              "child": "C",
+              "parent": "CC"
+            },
+            {
+              "child": "AA",
+              "parent": "AAA"
+            },
+            {
+              "child": "BB",
+              "parent": "BBB"
+            },
+            {
+              "child": "CC",
+              "parent": "CCC"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "child",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "parent",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "grandparent",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "child": "A",
+            "parent": "AA",
+            "grandparent": "AAA"
+          },
+          {
+            "child": "B",
+            "parent": "BB",
+            "grandparent": "BBB"
+          },
+          {
+            "child": "C",
+            "parent": "CC",
+            "grandparent": "CCC"
+          }
+        ]
+      }
+    },
+    {
+      "name": "shuffled input",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "child",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "parent",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "child": "CC",
+              "parent": "CCC"
+            },
+            {
+              "child": "BB",
+              "parent": "BBB"
+            },
+            {
+              "child": "AA",
+              "parent": "AAA"
+            },
+            {
+              "child": "C",
+              "parent": "CC"
+            },
+            {
+              "child": "B",
+              "parent": "BB"
+            },
+            {
+              "child": "A",
+              "parent": "AA"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "child",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "parent",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "grandparent",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "child": "A",
+            "parent": "AA",
+            "grandparent": "AAA"
+          },
+          {
+            "child": "B",
+            "parent": "BB",
+            "grandparent": "BBB"
+          },
+          {
+            "child": "C",
+            "parent": "CC",
+            "grandparent": "CCC"
+          }
+        ]
+      }
+    },
+    {
+      "name": "longer chain and dangling parent",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "child",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "parent",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "child": "x",
+              "parent": "y"
+            },
+            {
+              "child": "y",
+              "parent": "z"
+            },
+            {
+              "child": "z",
+              "parent": "w"
+            },
+            {
+              "child": "alone",
+              "parent": "missing"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "child",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "parent",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "grandparent",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "child": "x",
+            "parent": "y",
+            "grandparent": "z"
+          },
+          {
+            "child": "y",
+            "parent": "z",
+            "grandparent": "w"
+          }
+        ]
+      }
+    },
+    {
+      "name": "empty input",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "child",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "parent",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": []
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "child",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "parent",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "grandparent",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": []
+      }
+    }
+  ]
+}

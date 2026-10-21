@@ -1,0 +1,426 @@
+{
+  "id": "41",
+  "title": "Latest customer record after CDC",
+  "slug": "latest_customer_record",
+  "topic": "CDC and deduplication",
+  "difficulty": "Medium",
+  "prompt": "Keep one latest row per customer_id by updated_at, supplied as sortable ISO timestamp strings. For an equal timestamp choose city ascending, then customer_name ascending; these fields are non-null. Exact duplicate input rows still produce one output row. Keep the four input columns. Input fixtures use customer records, correcting the upstream README copied login table.",
+  "cases": [
+    {
+      "name": "sample",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "customer_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "customer_name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "city",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "updated_at",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "customer_id": 101,
+              "customer_name": "John",
+              "city": "Dallas",
+              "updated_at": "2024-01-01 10:00:00"
+            },
+            {
+              "customer_id": 101,
+              "customer_name": "John",
+              "city": "Austin",
+              "updated_at": "2024-01-05 09:00:00"
+            },
+            {
+              "customer_id": 102,
+              "customer_name": "David",
+              "city": "Chicago",
+              "updated_at": "2024-01-02 11:00:00"
+            },
+            {
+              "customer_id": 102,
+              "customer_name": "David",
+              "city": "Boston",
+              "updated_at": "2024-01-06 15:00:00"
+            },
+            {
+              "customer_id": 103,
+              "customer_name": "Emma",
+              "city": "Seattle",
+              "updated_at": "2024-01-03 08:00:00"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "customer_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "customer_name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "city",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "updated_at",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "customer_id": 101,
+            "customer_name": "John",
+            "city": "Austin",
+            "updated_at": "2024-01-05 09:00:00"
+          },
+          {
+            "customer_id": 102,
+            "customer_name": "David",
+            "city": "Boston",
+            "updated_at": "2024-01-06 15:00:00"
+          },
+          {
+            "customer_id": 103,
+            "customer_name": "Emma",
+            "city": "Seattle",
+            "updated_at": "2024-01-03 08:00:00"
+          }
+        ]
+      }
+    },
+    {
+      "name": "shuffled input",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "customer_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "customer_name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "city",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "updated_at",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "customer_id": 103,
+              "customer_name": "Emma",
+              "city": "Seattle",
+              "updated_at": "2024-01-03 08:00:00"
+            },
+            {
+              "customer_id": 102,
+              "customer_name": "David",
+              "city": "Boston",
+              "updated_at": "2024-01-06 15:00:00"
+            },
+            {
+              "customer_id": 102,
+              "customer_name": "David",
+              "city": "Chicago",
+              "updated_at": "2024-01-02 11:00:00"
+            },
+            {
+              "customer_id": 101,
+              "customer_name": "John",
+              "city": "Austin",
+              "updated_at": "2024-01-05 09:00:00"
+            },
+            {
+              "customer_id": 101,
+              "customer_name": "John",
+              "city": "Dallas",
+              "updated_at": "2024-01-01 10:00:00"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "customer_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "customer_name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "city",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "updated_at",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "customer_id": 101,
+            "customer_name": "John",
+            "city": "Austin",
+            "updated_at": "2024-01-05 09:00:00"
+          },
+          {
+            "customer_id": 102,
+            "customer_name": "David",
+            "city": "Boston",
+            "updated_at": "2024-01-06 15:00:00"
+          },
+          {
+            "customer_id": 103,
+            "customer_name": "Emma",
+            "city": "Seattle",
+            "updated_at": "2024-01-03 08:00:00"
+          }
+        ]
+      }
+    },
+    {
+      "name": "timestamp tie with deterministic city",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "customer_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "customer_name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "city",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "updated_at",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "customer_id": 8,
+              "customer_name": "A",
+              "city": "Z",
+              "updated_at": "2025-01-01 10:00:00"
+            },
+            {
+              "customer_id": 8,
+              "customer_name": "A",
+              "city": "A",
+              "updated_at": "2025-01-01 10:00:00"
+            },
+            {
+              "customer_id": 9,
+              "customer_name": "B",
+              "city": "Q",
+              "updated_at": "2024-01-01 00:00:00"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "customer_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "customer_name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "city",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "updated_at",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "customer_id": 8,
+            "customer_name": "A",
+            "city": "A",
+            "updated_at": "2025-01-01 10:00:00"
+          },
+          {
+            "customer_id": 9,
+            "customer_name": "B",
+            "city": "Q",
+            "updated_at": "2024-01-01 00:00:00"
+          }
+        ]
+      }
+    },
+    {
+      "name": "empty input",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "customer_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "customer_name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "city",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "updated_at",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": []
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "customer_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "customer_name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "city",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "updated_at",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": []
+      }
+    }
+  ]
+}
