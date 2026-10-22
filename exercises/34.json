@@ -1,0 +1,430 @@
+{
+  "id": "34",
+  "title": "Customer age distribution",
+  "slug": "age_distribution",
+  "topic": "Conditional aggregation",
+  "difficulty": "Easy",
+  "prompt": "Group ages into 19-35 inclusive, 36-50 inclusive, 51+ (age >=51), and Other (under 19 or null). Return age_group, count. Corrected boundary: 51 belongs to 51+.",
+  "cases": [
+    {
+      "name": "sample",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "customer_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "age",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "gender",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "customer_id": 1,
+              "name": "Alice",
+              "age": 25,
+              "gender": "F"
+            },
+            {
+              "customer_id": 2,
+              "name": "Bob",
+              "age": 40,
+              "gender": "M"
+            },
+            {
+              "customer_id": 3,
+              "name": "Raj",
+              "age": 46,
+              "gender": "M"
+            },
+            {
+              "customer_id": 4,
+              "name": "Sekar",
+              "age": 66,
+              "gender": "M"
+            },
+            {
+              "customer_id": 5,
+              "name": "Jhon",
+              "age": 47,
+              "gender": "M"
+            },
+            {
+              "customer_id": 6,
+              "name": "Timoty",
+              "age": 28,
+              "gender": "M"
+            },
+            {
+              "customer_id": 7,
+              "name": "Brad",
+              "age": 90,
+              "gender": "M"
+            },
+            {
+              "customer_id": 8,
+              "name": "Rita",
+              "age": 34,
+              "gender": "F"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "age_group",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "count",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "age_group": "19-35",
+            "count": 3
+          },
+          {
+            "age_group": "36-50",
+            "count": 3
+          },
+          {
+            "age_group": "51+",
+            "count": 2
+          }
+        ]
+      }
+    },
+    {
+      "name": "shuffled input",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "customer_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "age",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "gender",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "customer_id": 8,
+              "name": "Rita",
+              "age": 34,
+              "gender": "F"
+            },
+            {
+              "customer_id": 7,
+              "name": "Brad",
+              "age": 90,
+              "gender": "M"
+            },
+            {
+              "customer_id": 6,
+              "name": "Timoty",
+              "age": 28,
+              "gender": "M"
+            },
+            {
+              "customer_id": 5,
+              "name": "Jhon",
+              "age": 47,
+              "gender": "M"
+            },
+            {
+              "customer_id": 4,
+              "name": "Sekar",
+              "age": 66,
+              "gender": "M"
+            },
+            {
+              "customer_id": 3,
+              "name": "Raj",
+              "age": 46,
+              "gender": "M"
+            },
+            {
+              "customer_id": 2,
+              "name": "Bob",
+              "age": 40,
+              "gender": "M"
+            },
+            {
+              "customer_id": 1,
+              "name": "Alice",
+              "age": 25,
+              "gender": "F"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "age_group",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "count",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "age_group": "19-35",
+            "count": 3
+          },
+          {
+            "age_group": "36-50",
+            "count": 3
+          },
+          {
+            "age_group": "51+",
+            "count": 2
+          }
+        ]
+      }
+    },
+    {
+      "name": "age boundaries and null",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "customer_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "age",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "gender",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "customer_id": 9,
+              "name": "a",
+              "age": 18,
+              "gender": "M"
+            },
+            {
+              "customer_id": 10,
+              "name": "b",
+              "age": 19,
+              "gender": "F"
+            },
+            {
+              "customer_id": 11,
+              "name": "c",
+              "age": 35,
+              "gender": "F"
+            },
+            {
+              "customer_id": 12,
+              "name": "d",
+              "age": 36,
+              "gender": "M"
+            },
+            {
+              "customer_id": 13,
+              "name": "e",
+              "age": 50,
+              "gender": "M"
+            },
+            {
+              "customer_id": 14,
+              "name": "f",
+              "age": 51,
+              "gender": "M"
+            },
+            {
+              "customer_id": 15,
+              "name": "g",
+              "age": null,
+              "gender": "F"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "age_group",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "count",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "age_group": "Other",
+            "count": 2
+          },
+          {
+            "age_group": "19-35",
+            "count": 2
+          },
+          {
+            "age_group": "36-50",
+            "count": 2
+          },
+          {
+            "age_group": "51+",
+            "count": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "empty input",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "customer_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "age",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "gender",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": []
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "age_group",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "count",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": []
+      }
+    }
+  ]
+}

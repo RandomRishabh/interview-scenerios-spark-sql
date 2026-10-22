@@ -1,0 +1,573 @@
+{
+  "id": "30",
+  "title": "Second distinct salary with department lookup",
+  "slug": "second_salary_lookup",
+  "topic": "Joins and ranking",
+  "difficulty": "Hard",
+  "prompt": "Join employees.dept_id to departments.dept_id1. Return every employee with the second-highest distinct salary in their department, including salary ties. Departments with fewer than two salary levels yield no rows. Return emp_id, name, dept_name, salary.",
+  "cases": [
+    {
+      "name": "sample",
+      "inputs": {
+        "employees": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "emp_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "dept_id",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "salary",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "emp_id": 1,
+              "name": "A",
+              "dept_id": "A",
+              "salary": 1000000
+            },
+            {
+              "emp_id": 2,
+              "name": "B",
+              "dept_id": "A",
+              "salary": 2500000
+            },
+            {
+              "emp_id": 3,
+              "name": "C",
+              "dept_id": "G",
+              "salary": 500000
+            },
+            {
+              "emp_id": 4,
+              "name": "D",
+              "dept_id": "G",
+              "salary": 800000
+            },
+            {
+              "emp_id": 5,
+              "name": "E",
+              "dept_id": "W",
+              "salary": 9000000
+            },
+            {
+              "emp_id": 6,
+              "name": "F",
+              "dept_id": "W",
+              "salary": 2000000
+            }
+          ]
+        },
+        "departments": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "dept_id1",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "dept_name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "dept_id1": "A",
+              "dept_name": "AZURE"
+            },
+            {
+              "dept_id1": "G",
+              "dept_name": "GCP"
+            },
+            {
+              "dept_id1": "W",
+              "dept_name": "AWS"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "emp_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "dept_name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "salary",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "emp_id": 1,
+            "name": "A",
+            "dept_name": "AZURE",
+            "salary": 1000000
+          },
+          {
+            "emp_id": 3,
+            "name": "C",
+            "dept_name": "GCP",
+            "salary": 500000
+          },
+          {
+            "emp_id": 6,
+            "name": "F",
+            "dept_name": "AWS",
+            "salary": 2000000
+          }
+        ]
+      }
+    },
+    {
+      "name": "shuffled input",
+      "inputs": {
+        "employees": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "emp_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "dept_id",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "salary",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "emp_id": 6,
+              "name": "F",
+              "dept_id": "W",
+              "salary": 2000000
+            },
+            {
+              "emp_id": 5,
+              "name": "E",
+              "dept_id": "W",
+              "salary": 9000000
+            },
+            {
+              "emp_id": 4,
+              "name": "D",
+              "dept_id": "G",
+              "salary": 800000
+            },
+            {
+              "emp_id": 3,
+              "name": "C",
+              "dept_id": "G",
+              "salary": 500000
+            },
+            {
+              "emp_id": 2,
+              "name": "B",
+              "dept_id": "A",
+              "salary": 2500000
+            },
+            {
+              "emp_id": 1,
+              "name": "A",
+              "dept_id": "A",
+              "salary": 1000000
+            }
+          ]
+        },
+        "departments": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "dept_id1",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "dept_name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "dept_id1": "W",
+              "dept_name": "AWS"
+            },
+            {
+              "dept_id1": "G",
+              "dept_name": "GCP"
+            },
+            {
+              "dept_id1": "A",
+              "dept_name": "AZURE"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "emp_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "dept_name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "salary",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "emp_id": 1,
+            "name": "A",
+            "dept_name": "AZURE",
+            "salary": 1000000
+          },
+          {
+            "emp_id": 3,
+            "name": "C",
+            "dept_name": "GCP",
+            "salary": 500000
+          },
+          {
+            "emp_id": 6,
+            "name": "F",
+            "dept_name": "AWS",
+            "salary": 2000000
+          }
+        ]
+      }
+    },
+    {
+      "name": "salary ties and single-level department",
+      "inputs": {
+        "employees": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "emp_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "dept_id",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "salary",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "emp_id": 9,
+              "name": "X",
+              "dept_id": "A",
+              "salary": 100
+            },
+            {
+              "emp_id": 10,
+              "name": "Y",
+              "dept_id": "A",
+              "salary": 100
+            },
+            {
+              "emp_id": 11,
+              "name": "Z",
+              "dept_id": "A",
+              "salary": 50
+            },
+            {
+              "emp_id": 12,
+              "name": "Q",
+              "dept_id": "A",
+              "salary": 50
+            },
+            {
+              "emp_id": 13,
+              "name": "Only",
+              "dept_id": "G",
+              "salary": 30
+            }
+          ]
+        },
+        "departments": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "dept_id1",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "dept_name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "dept_id1": "A",
+              "dept_name": "AZURE"
+            },
+            {
+              "dept_id1": "G",
+              "dept_name": "GCP"
+            },
+            {
+              "dept_id1": "W",
+              "dept_name": "AWS"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "emp_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "dept_name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "salary",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "emp_id": 11,
+            "name": "Z",
+            "dept_name": "AZURE",
+            "salary": 50
+          },
+          {
+            "emp_id": 12,
+            "name": "Q",
+            "dept_name": "AZURE",
+            "salary": 50
+          }
+        ]
+      }
+    },
+    {
+      "name": "empty input",
+      "inputs": {
+        "employees": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "emp_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "dept_id",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "salary",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": []
+        },
+        "departments": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "dept_id1",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "dept_name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": []
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "emp_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "dept_name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "salary",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": []
+      }
+    }
+  ]
+}

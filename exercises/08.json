@@ -1,0 +1,222 @@
+{
+  "id": "8",
+  "title": "Unique team matchups",
+  "slug": "team_matchups",
+  "topic": "Self joins",
+  "difficulty": "Medium",
+  "prompt": "Return one matches string per unordered pair of distinct teams, formatted smaller-name Vs larger-name using lexical order. Input team names are unique.",
+  "cases": [
+    {
+      "name": "sample",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "teams",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "teams": "India"
+            },
+            {
+              "teams": "Pakistan"
+            },
+            {
+              "teams": "SriLanka"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "matches",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "matches": "India Vs Pakistan"
+          },
+          {
+            "matches": "India Vs SriLanka"
+          },
+          {
+            "matches": "Pakistan Vs SriLanka"
+          }
+        ]
+      }
+    },
+    {
+      "name": "shuffled input",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "teams",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "teams": "SriLanka"
+            },
+            {
+              "teams": "Pakistan"
+            },
+            {
+              "teams": "India"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "matches",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "matches": "India Vs Pakistan"
+          },
+          {
+            "matches": "India Vs SriLanka"
+          },
+          {
+            "matches": "Pakistan Vs SriLanka"
+          }
+        ]
+      }
+    },
+    {
+      "name": "four new teams",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "teams",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "teams": "B"
+            },
+            {
+              "teams": "A"
+            },
+            {
+              "teams": "C"
+            },
+            {
+              "teams": "D"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "matches",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "matches": "A Vs B"
+          },
+          {
+            "matches": "A Vs C"
+          },
+          {
+            "matches": "A Vs D"
+          },
+          {
+            "matches": "B Vs C"
+          },
+          {
+            "matches": "B Vs D"
+          },
+          {
+            "matches": "C Vs D"
+          }
+        ]
+      }
+    },
+    {
+      "name": "empty input",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "teams",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": []
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "matches",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": []
+      }
+    }
+  ]
+}

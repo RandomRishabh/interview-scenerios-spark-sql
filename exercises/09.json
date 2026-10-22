@@ -1,0 +1,354 @@
+{
+  "id": "9",
+  "title": "Participants with the most first places",
+  "slug": "most_first_places",
+  "topic": "Arrays and aggregation",
+  "difficulty": "Medium",
+  "prompt": "Count rank=1 occurrences for each participant and return the name column for every participant tied for the largest positive count. If nobody has a first place, return an empty DataFrame. Return a DataFrame even though the reference prints a scalar.",
+  "cases": [
+    {
+      "name": "sample",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "rank",
+                "type": {
+                  "type": "array",
+                  "elementType": "long",
+                  "containsNull": true
+                },
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "name": "a",
+              "rank": [
+                1,
+                1,
+                1,
+                3
+              ]
+            },
+            {
+              "name": "b",
+              "rank": [
+                1,
+                2,
+                3,
+                4
+              ]
+            },
+            {
+              "name": "c",
+              "rank": [
+                1,
+                1,
+                1,
+                1,
+                4
+              ]
+            },
+            {
+              "name": "d",
+              "rank": [
+                3
+              ]
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "name": "c"
+          }
+        ]
+      }
+    },
+    {
+      "name": "shuffled input",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "rank",
+                "type": {
+                  "type": "array",
+                  "elementType": "long",
+                  "containsNull": true
+                },
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "name": "d",
+              "rank": [
+                3
+              ]
+            },
+            {
+              "name": "c",
+              "rank": [
+                1,
+                1,
+                1,
+                1,
+                4
+              ]
+            },
+            {
+              "name": "b",
+              "rank": [
+                1,
+                2,
+                3,
+                4
+              ]
+            },
+            {
+              "name": "a",
+              "rank": [
+                1,
+                1,
+                1,
+                3
+              ]
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "name": "c"
+          }
+        ]
+      }
+    },
+    {
+      "name": "tied winners and empty array",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "rank",
+                "type": {
+                  "type": "array",
+                  "elementType": "long",
+                  "containsNull": true
+                },
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "name": "x",
+              "rank": [
+                1,
+                1
+              ]
+            },
+            {
+              "name": "y",
+              "rank": [
+                1,
+                1,
+                3
+              ]
+            },
+            {
+              "name": "z",
+              "rank": [
+                3
+              ]
+            },
+            {
+              "name": "empty",
+              "rank": []
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "name": "x"
+          },
+          {
+            "name": "y"
+          }
+        ]
+      }
+    },
+    {
+      "name": "no first places",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "rank",
+                "type": {
+                  "type": "array",
+                  "elementType": "long",
+                  "containsNull": true
+                },
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "name": "x",
+              "rank": [
+                2,
+                3
+              ]
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": []
+      }
+    },
+    {
+      "name": "empty input",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "rank",
+                "type": {
+                  "type": "array",
+                  "elementType": "long",
+                  "containsNull": true
+                },
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": []
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": []
+      }
+    }
+  ]
+}

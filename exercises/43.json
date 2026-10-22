@@ -1,0 +1,585 @@
+{
+  "id": "43",
+  "title": "Registered customers without orders",
+  "slug": "customers_without_orders",
+  "topic": "Anti joins",
+  "difficulty": "Medium",
+  "prompt": "Return customer_id, customer_name for customers with no matching orders.customer_id. Customer IDs are unique and non-null; orders may contain null/unknown customer IDs and repeated customer orders. Ignore orders that do not match a registered customer.",
+  "cases": [
+    {
+      "name": "sample",
+      "inputs": {
+        "customers": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "customer_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "customer_name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "customer_id": 101,
+              "customer_name": "John"
+            },
+            {
+              "customer_id": 102,
+              "customer_name": "David"
+            },
+            {
+              "customer_id": 103,
+              "customer_name": "Emma"
+            },
+            {
+              "customer_id": 104,
+              "customer_name": "Sara"
+            },
+            {
+              "customer_id": 105,
+              "customer_name": "Mike"
+            },
+            {
+              "customer_id": 106,
+              "customer_name": "Chris"
+            }
+          ]
+        },
+        "orders": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "order_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "customer_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "order_amount",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "order_id": 1,
+              "customer_id": 101,
+              "order_amount": 500
+            },
+            {
+              "order_id": 2,
+              "customer_id": 102,
+              "order_amount": 300
+            },
+            {
+              "order_id": 3,
+              "customer_id": 101,
+              "order_amount": 700
+            },
+            {
+              "order_id": 4,
+              "customer_id": 104,
+              "order_amount": 200
+            },
+            {
+              "order_id": 5,
+              "customer_id": 106,
+              "order_amount": 900
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "customer_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "customer_name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "customer_id": 103,
+            "customer_name": "Emma"
+          },
+          {
+            "customer_id": 105,
+            "customer_name": "Mike"
+          }
+        ]
+      }
+    },
+    {
+      "name": "shuffled input",
+      "inputs": {
+        "customers": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "customer_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "customer_name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "customer_id": 106,
+              "customer_name": "Chris"
+            },
+            {
+              "customer_id": 105,
+              "customer_name": "Mike"
+            },
+            {
+              "customer_id": 104,
+              "customer_name": "Sara"
+            },
+            {
+              "customer_id": 103,
+              "customer_name": "Emma"
+            },
+            {
+              "customer_id": 102,
+              "customer_name": "David"
+            },
+            {
+              "customer_id": 101,
+              "customer_name": "John"
+            }
+          ]
+        },
+        "orders": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "order_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "customer_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "order_amount",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "order_id": 5,
+              "customer_id": 106,
+              "order_amount": 900
+            },
+            {
+              "order_id": 4,
+              "customer_id": 104,
+              "order_amount": 200
+            },
+            {
+              "order_id": 3,
+              "customer_id": 101,
+              "order_amount": 700
+            },
+            {
+              "order_id": 2,
+              "customer_id": 102,
+              "order_amount": 300
+            },
+            {
+              "order_id": 1,
+              "customer_id": 101,
+              "order_amount": 500
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "customer_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "customer_name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "customer_id": 103,
+            "customer_name": "Emma"
+          },
+          {
+            "customer_id": 105,
+            "customer_name": "Mike"
+          }
+        ]
+      }
+    },
+    {
+      "name": "null and unknown order customers",
+      "inputs": {
+        "customers": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "customer_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "customer_name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "customer_id": 9,
+              "customer_name": "A"
+            },
+            {
+              "customer_id": 10,
+              "customer_name": "B"
+            }
+          ]
+        },
+        "orders": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "order_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "customer_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "order_amount",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "order_id": 1,
+              "customer_id": null,
+              "order_amount": 5
+            },
+            {
+              "order_id": 2,
+              "customer_id": 9,
+              "order_amount": 6
+            },
+            {
+              "order_id": 3,
+              "customer_id": 9,
+              "order_amount": 7
+            },
+            {
+              "order_id": 4,
+              "customer_id": 99,
+              "order_amount": 2
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "customer_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "customer_name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "customer_id": 10,
+            "customer_name": "B"
+          }
+        ]
+      }
+    },
+    {
+      "name": "no orders",
+      "inputs": {
+        "customers": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "customer_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "customer_name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "customer_id": 101,
+              "customer_name": "John"
+            },
+            {
+              "customer_id": 102,
+              "customer_name": "David"
+            },
+            {
+              "customer_id": 103,
+              "customer_name": "Emma"
+            },
+            {
+              "customer_id": 104,
+              "customer_name": "Sara"
+            },
+            {
+              "customer_id": 105,
+              "customer_name": "Mike"
+            },
+            {
+              "customer_id": 106,
+              "customer_name": "Chris"
+            }
+          ]
+        },
+        "orders": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "order_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "customer_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "order_amount",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": []
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "customer_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "customer_name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "customer_id": 101,
+            "customer_name": "John"
+          },
+          {
+            "customer_id": 102,
+            "customer_name": "David"
+          },
+          {
+            "customer_id": 103,
+            "customer_name": "Emma"
+          },
+          {
+            "customer_id": 104,
+            "customer_name": "Sara"
+          },
+          {
+            "customer_id": 105,
+            "customer_name": "Mike"
+          },
+          {
+            "customer_id": 106,
+            "customer_name": "Chris"
+          }
+        ]
+      }
+    },
+    {
+      "name": "empty input",
+      "inputs": {
+        "customers": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "customer_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "customer_name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": []
+        },
+        "orders": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "order_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "customer_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "order_amount",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": []
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "customer_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "customer_name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": []
+      }
+    }
+  ]
+}

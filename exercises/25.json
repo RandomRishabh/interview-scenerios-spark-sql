@@ -1,0 +1,309 @@
+{
+  "id": "25",
+  "title": "Parse and quarantine malformed CSV records",
+  "slug": "malformed_csv",
+  "topic": "Parsing and data quality",
+  "difficulty": "Hard",
+  "prompt": "raw_lines contains CSV records, including a header row that can occur anywhere. Parse standard CSV quoting, skip the header, and return emp_no, emp_name, dep as strings. Reject records with a field count other than three. Preserve quoted commas. This portable fixture checks output correctness; discuss ingestion-time rejection separately rather than writing to DBFS.",
+  "cases": [
+    {
+      "name": "sample",
+      "inputs": {
+        "raw_lines": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "raw_line",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "raw_line": "emp_no,emp_name,dep"
+            },
+            {
+              "raw_line": "101,Murugan,HealthCare"
+            },
+            {
+              "raw_line": "Invalid Entry,Description: Bad Record Entry"
+            },
+            {
+              "raw_line": "102,Kannan,Finance"
+            },
+            {
+              "raw_line": "103,Mani,IT"
+            },
+            {
+              "raw_line": "Connection lost,Description: Poor Connection"
+            },
+            {
+              "raw_line": "104,Pavan,HR"
+            },
+            {
+              "raw_line": "Bad Record,Description:Corrupt Record"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "emp_no",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "emp_name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "dep",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "emp_no": "101",
+            "emp_name": "Murugan",
+            "dep": "HealthCare"
+          },
+          {
+            "emp_no": "102",
+            "emp_name": "Kannan",
+            "dep": "Finance"
+          },
+          {
+            "emp_no": "103",
+            "emp_name": "Mani",
+            "dep": "IT"
+          },
+          {
+            "emp_no": "104",
+            "emp_name": "Pavan",
+            "dep": "HR"
+          }
+        ]
+      }
+    },
+    {
+      "name": "shuffled input",
+      "inputs": {
+        "raw_lines": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "raw_line",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "raw_line": "Bad Record,Description:Corrupt Record"
+            },
+            {
+              "raw_line": "104,Pavan,HR"
+            },
+            {
+              "raw_line": "Connection lost,Description: Poor Connection"
+            },
+            {
+              "raw_line": "103,Mani,IT"
+            },
+            {
+              "raw_line": "102,Kannan,Finance"
+            },
+            {
+              "raw_line": "Invalid Entry,Description: Bad Record Entry"
+            },
+            {
+              "raw_line": "101,Murugan,HealthCare"
+            },
+            {
+              "raw_line": "emp_no,emp_name,dep"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "emp_no",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "emp_name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "dep",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "emp_no": "101",
+            "emp_name": "Murugan",
+            "dep": "HealthCare"
+          },
+          {
+            "emp_no": "102",
+            "emp_name": "Kannan",
+            "dep": "Finance"
+          },
+          {
+            "emp_no": "103",
+            "emp_name": "Mani",
+            "dep": "IT"
+          },
+          {
+            "emp_no": "104",
+            "emp_name": "Pavan",
+            "dep": "HR"
+          }
+        ]
+      }
+    },
+    {
+      "name": "quoted comma and wrong field counts",
+      "inputs": {
+        "raw_lines": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "raw_line",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "raw_line": "emp_no,emp_name,dep"
+            },
+            {
+              "raw_line": "999,\"Last, First\",IT"
+            },
+            {
+              "raw_line": "bad,two"
+            },
+            {
+              "raw_line": "1,a,b,extra"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "emp_no",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "emp_name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "dep",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "emp_no": "999",
+            "emp_name": "Last, First",
+            "dep": "IT"
+          }
+        ]
+      }
+    },
+    {
+      "name": "empty input",
+      "inputs": {
+        "raw_lines": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "raw_line",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": []
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "emp_no",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "emp_name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "dep",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": []
+      }
+    }
+  ]
+}

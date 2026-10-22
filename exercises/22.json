@@ -1,0 +1,441 @@
+{
+  "id": "22",
+  "title": "Cumulative purchase totals",
+  "slug": "cumulative_prices",
+  "topic": "Dates and windows",
+  "difficulty": "Medium",
+  "prompt": "Within each pid, calculate a row-by-row cumulative sum of price ordered by date chronologically. Dates use d-MMM and all belong to 2024; dates are unique per pid. Keep input columns and add new_price. This explicitly uses calendar order rather than the reference ordering by price.",
+  "cases": [
+    {
+      "name": "sample",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "pid",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "date",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "price",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "pid": 1,
+              "date": "26-May",
+              "price": 100
+            },
+            {
+              "pid": 1,
+              "date": "27-May",
+              "price": 200
+            },
+            {
+              "pid": 1,
+              "date": "28-May",
+              "price": 300
+            },
+            {
+              "pid": 2,
+              "date": "29-May",
+              "price": 400
+            },
+            {
+              "pid": 3,
+              "date": "30-May",
+              "price": 500
+            },
+            {
+              "pid": 3,
+              "date": "31-May",
+              "price": 600
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "pid",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "date",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "price",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "new_price",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "pid": 1,
+            "date": "26-May",
+            "price": 100,
+            "new_price": 100
+          },
+          {
+            "pid": 1,
+            "date": "27-May",
+            "price": 200,
+            "new_price": 300
+          },
+          {
+            "pid": 1,
+            "date": "28-May",
+            "price": 300,
+            "new_price": 600
+          },
+          {
+            "pid": 2,
+            "date": "29-May",
+            "price": 400,
+            "new_price": 400
+          },
+          {
+            "pid": 3,
+            "date": "30-May",
+            "price": 500,
+            "new_price": 500
+          },
+          {
+            "pid": 3,
+            "date": "31-May",
+            "price": 600,
+            "new_price": 1100
+          }
+        ]
+      }
+    },
+    {
+      "name": "shuffled input",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "pid",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "date",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "price",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "pid": 3,
+              "date": "31-May",
+              "price": 600
+            },
+            {
+              "pid": 3,
+              "date": "30-May",
+              "price": 500
+            },
+            {
+              "pid": 2,
+              "date": "29-May",
+              "price": 400
+            },
+            {
+              "pid": 1,
+              "date": "28-May",
+              "price": 300
+            },
+            {
+              "pid": 1,
+              "date": "27-May",
+              "price": 200
+            },
+            {
+              "pid": 1,
+              "date": "26-May",
+              "price": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "pid",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "date",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "price",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "new_price",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "pid": 1,
+            "date": "26-May",
+            "price": 100,
+            "new_price": 100
+          },
+          {
+            "pid": 1,
+            "date": "27-May",
+            "price": 200,
+            "new_price": 300
+          },
+          {
+            "pid": 1,
+            "date": "28-May",
+            "price": 300,
+            "new_price": 600
+          },
+          {
+            "pid": 2,
+            "date": "29-May",
+            "price": 400,
+            "new_price": 400
+          },
+          {
+            "pid": 3,
+            "date": "30-May",
+            "price": 500,
+            "new_price": 500
+          },
+          {
+            "pid": 3,
+            "date": "31-May",
+            "price": 600,
+            "new_price": 1100
+          }
+        ]
+      }
+    },
+    {
+      "name": "month boundary and decreasing prices",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "pid",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "date",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "price",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "pid": 1,
+              "date": "1-Jun",
+              "price": 90
+            },
+            {
+              "pid": 1,
+              "date": "31-May",
+              "price": 10
+            },
+            {
+              "pid": 1,
+              "date": "2-Jun",
+              "price": -5
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "pid",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "date",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "price",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "new_price",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "pid": 1,
+            "date": "1-Jun",
+            "price": 90,
+            "new_price": 100
+          },
+          {
+            "pid": 1,
+            "date": "31-May",
+            "price": 10,
+            "new_price": 10
+          },
+          {
+            "pid": 1,
+            "date": "2-Jun",
+            "price": -5,
+            "new_price": 95
+          }
+        ]
+      }
+    },
+    {
+      "name": "empty input",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "pid",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "date",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "price",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": []
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "pid",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "date",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "price",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "new_price",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": []
+      }
+    }
+  ]
+}

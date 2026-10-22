@@ -1,0 +1,1043 @@
+{
+  "id": "35",
+  "title": "Profile quarantine and impute student ages",
+  "slug": "student_data_quality",
+  "topic": "Data quality pipeline",
+  "difficulty": "Hard",
+  "prompt": "Return a dictionary of three DataFrames: null_counts (one row counting nulls in each original students column; empty input gives zeros), quarantined (original student rows whose age is null), and adults. To form adults, inner-join all students to cities by unique id, fill null age using the mean of non-null ages from the original students input rounded to nearest integer with .5 rounded up, then retain age >=18. If every age is null, leave nulls unfilled. adults columns: id,name,age,city,code. Quarantined rows remain eligible for imputation.",
+  "cases": [
+    {
+      "name": "sample",
+      "inputs": {
+        "students": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "age",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "id": 1,
+              "name": "Jhon",
+              "age": 17
+            },
+            {
+              "id": 2,
+              "name": "Maria",
+              "age": 20
+            },
+            {
+              "id": 3,
+              "name": "Raj",
+              "age": null
+            },
+            {
+              "id": 4,
+              "name": "Rachel",
+              "age": 18
+            }
+          ]
+        },
+        "cities": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "city",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "code",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "id": 1,
+              "city": "seatle",
+              "code": 82
+            },
+            {
+              "id": 2,
+              "city": "london",
+              "code": 75
+            },
+            {
+              "id": 3,
+              "city": "banglore",
+              "code": 60
+            },
+            {
+              "id": 4,
+              "city": "boston",
+              "code": 90
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "outputs",
+        "values": {
+          "null_counts": {
+            "kind": "dataframe",
+            "schema": {
+              "type": "struct",
+              "fields": [
+                {
+                  "name": "id",
+                  "type": "long",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "name",
+                  "type": "long",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "age",
+                  "type": "long",
+                  "nullable": true,
+                  "metadata": {}
+                }
+              ]
+            },
+            "rows": [
+              {
+                "id": 0,
+                "name": 0,
+                "age": 1
+              }
+            ]
+          },
+          "quarantined": {
+            "kind": "dataframe",
+            "schema": {
+              "type": "struct",
+              "fields": [
+                {
+                  "name": "id",
+                  "type": "long",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "name",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "age",
+                  "type": "long",
+                  "nullable": true,
+                  "metadata": {}
+                }
+              ]
+            },
+            "rows": [
+              {
+                "id": 3,
+                "name": "Raj",
+                "age": null
+              }
+            ]
+          },
+          "adults": {
+            "kind": "dataframe",
+            "schema": {
+              "type": "struct",
+              "fields": [
+                {
+                  "name": "id",
+                  "type": "long",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "name",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "age",
+                  "type": "long",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "city",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "code",
+                  "type": "long",
+                  "nullable": true,
+                  "metadata": {}
+                }
+              ]
+            },
+            "rows": [
+              {
+                "id": 2,
+                "name": "Maria",
+                "age": 20,
+                "city": "london",
+                "code": 75
+              },
+              {
+                "id": 3,
+                "name": "Raj",
+                "age": 18,
+                "city": "banglore",
+                "code": 60
+              },
+              {
+                "id": 4,
+                "name": "Rachel",
+                "age": 18,
+                "city": "boston",
+                "code": 90
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "shuffled input",
+      "inputs": {
+        "students": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "age",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "id": 4,
+              "name": "Rachel",
+              "age": 18
+            },
+            {
+              "id": 3,
+              "name": "Raj",
+              "age": null
+            },
+            {
+              "id": 2,
+              "name": "Maria",
+              "age": 20
+            },
+            {
+              "id": 1,
+              "name": "Jhon",
+              "age": 17
+            }
+          ]
+        },
+        "cities": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "city",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "code",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "id": 4,
+              "city": "boston",
+              "code": 90
+            },
+            {
+              "id": 3,
+              "city": "banglore",
+              "code": 60
+            },
+            {
+              "id": 2,
+              "city": "london",
+              "code": 75
+            },
+            {
+              "id": 1,
+              "city": "seatle",
+              "code": 82
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "outputs",
+        "values": {
+          "null_counts": {
+            "kind": "dataframe",
+            "schema": {
+              "type": "struct",
+              "fields": [
+                {
+                  "name": "id",
+                  "type": "long",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "name",
+                  "type": "long",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "age",
+                  "type": "long",
+                  "nullable": true,
+                  "metadata": {}
+                }
+              ]
+            },
+            "rows": [
+              {
+                "id": 0,
+                "name": 0,
+                "age": 1
+              }
+            ]
+          },
+          "quarantined": {
+            "kind": "dataframe",
+            "schema": {
+              "type": "struct",
+              "fields": [
+                {
+                  "name": "id",
+                  "type": "long",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "name",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "age",
+                  "type": "long",
+                  "nullable": true,
+                  "metadata": {}
+                }
+              ]
+            },
+            "rows": [
+              {
+                "id": 3,
+                "name": "Raj",
+                "age": null
+              }
+            ]
+          },
+          "adults": {
+            "kind": "dataframe",
+            "schema": {
+              "type": "struct",
+              "fields": [
+                {
+                  "name": "id",
+                  "type": "long",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "name",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "age",
+                  "type": "long",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "city",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "code",
+                  "type": "long",
+                  "nullable": true,
+                  "metadata": {}
+                }
+              ]
+            },
+            "rows": [
+              {
+                "id": 2,
+                "name": "Maria",
+                "age": 20,
+                "city": "london",
+                "code": 75
+              },
+              {
+                "id": 3,
+                "name": "Raj",
+                "age": 18,
+                "city": "banglore",
+                "code": 60
+              },
+              {
+                "id": 4,
+                "name": "Rachel",
+                "age": 18,
+                "city": "boston",
+                "code": 90
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "mean rounds half up",
+      "inputs": {
+        "students": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "age",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "id": 8,
+              "name": "a",
+              "age": 20
+            },
+            {
+              "id": 9,
+              "name": "b",
+              "age": 21
+            },
+            {
+              "id": 10,
+              "name": "c",
+              "age": null
+            }
+          ]
+        },
+        "cities": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "city",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "code",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "id": 8,
+              "city": "X",
+              "code": 1
+            },
+            {
+              "id": 9,
+              "city": "Y",
+              "code": 2
+            },
+            {
+              "id": 10,
+              "city": "Z",
+              "code": 3
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "outputs",
+        "values": {
+          "null_counts": {
+            "kind": "dataframe",
+            "schema": {
+              "type": "struct",
+              "fields": [
+                {
+                  "name": "id",
+                  "type": "long",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "name",
+                  "type": "long",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "age",
+                  "type": "long",
+                  "nullable": true,
+                  "metadata": {}
+                }
+              ]
+            },
+            "rows": [
+              {
+                "id": 0,
+                "name": 0,
+                "age": 1
+              }
+            ]
+          },
+          "quarantined": {
+            "kind": "dataframe",
+            "schema": {
+              "type": "struct",
+              "fields": [
+                {
+                  "name": "id",
+                  "type": "long",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "name",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "age",
+                  "type": "long",
+                  "nullable": true,
+                  "metadata": {}
+                }
+              ]
+            },
+            "rows": [
+              {
+                "id": 10,
+                "name": "c",
+                "age": null
+              }
+            ]
+          },
+          "adults": {
+            "kind": "dataframe",
+            "schema": {
+              "type": "struct",
+              "fields": [
+                {
+                  "name": "id",
+                  "type": "long",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "name",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "age",
+                  "type": "long",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "city",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "code",
+                  "type": "long",
+                  "nullable": true,
+                  "metadata": {}
+                }
+              ]
+            },
+            "rows": [
+              {
+                "id": 8,
+                "name": "a",
+                "age": 20,
+                "city": "X",
+                "code": 1
+              },
+              {
+                "id": 9,
+                "name": "b",
+                "age": 21,
+                "city": "Y",
+                "code": 2
+              },
+              {
+                "id": 10,
+                "name": "c",
+                "age": 21,
+                "city": "Z",
+                "code": 3
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "all ages null",
+      "inputs": {
+        "students": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "age",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "id": 1,
+              "name": "a",
+              "age": null
+            }
+          ]
+        },
+        "cities": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "city",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "code",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "id": 1,
+              "city": "X",
+              "code": 1
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "outputs",
+        "values": {
+          "null_counts": {
+            "kind": "dataframe",
+            "schema": {
+              "type": "struct",
+              "fields": [
+                {
+                  "name": "id",
+                  "type": "long",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "name",
+                  "type": "long",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "age",
+                  "type": "long",
+                  "nullable": true,
+                  "metadata": {}
+                }
+              ]
+            },
+            "rows": [
+              {
+                "id": 0,
+                "name": 0,
+                "age": 1
+              }
+            ]
+          },
+          "quarantined": {
+            "kind": "dataframe",
+            "schema": {
+              "type": "struct",
+              "fields": [
+                {
+                  "name": "id",
+                  "type": "long",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "name",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "age",
+                  "type": "long",
+                  "nullable": true,
+                  "metadata": {}
+                }
+              ]
+            },
+            "rows": [
+              {
+                "id": 1,
+                "name": "a",
+                "age": null
+              }
+            ]
+          },
+          "adults": {
+            "kind": "dataframe",
+            "schema": {
+              "type": "struct",
+              "fields": [
+                {
+                  "name": "id",
+                  "type": "long",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "name",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "age",
+                  "type": "long",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "city",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "code",
+                  "type": "long",
+                  "nullable": true,
+                  "metadata": {}
+                }
+              ]
+            },
+            "rows": []
+          }
+        }
+      }
+    },
+    {
+      "name": "empty input",
+      "inputs": {
+        "students": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "age",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": []
+        },
+        "cities": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "city",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "code",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": []
+        }
+      },
+      "expected": {
+        "kind": "outputs",
+        "values": {
+          "null_counts": {
+            "kind": "dataframe",
+            "schema": {
+              "type": "struct",
+              "fields": [
+                {
+                  "name": "id",
+                  "type": "long",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "name",
+                  "type": "long",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "age",
+                  "type": "long",
+                  "nullable": true,
+                  "metadata": {}
+                }
+              ]
+            },
+            "rows": [
+              {
+                "id": 0,
+                "name": 0,
+                "age": 0
+              }
+            ]
+          },
+          "quarantined": {
+            "kind": "dataframe",
+            "schema": {
+              "type": "struct",
+              "fields": [
+                {
+                  "name": "id",
+                  "type": "long",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "name",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "age",
+                  "type": "long",
+                  "nullable": true,
+                  "metadata": {}
+                }
+              ]
+            },
+            "rows": []
+          },
+          "adults": {
+            "kind": "dataframe",
+            "schema": {
+              "type": "struct",
+              "fields": [
+                {
+                  "name": "id",
+                  "type": "long",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "name",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "age",
+                  "type": "long",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "city",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "code",
+                  "type": "long",
+                  "nullable": true,
+                  "metadata": {}
+                }
+              ]
+            },
+            "rows": []
+          }
+        }
+      }
+    }
+  ]
+}

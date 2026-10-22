@@ -1,0 +1,430 @@
+{
+  "id": "6",
+  "title": "Assign employee designations",
+  "slug": "employee_designations",
+  "topic": "Conditional transformations",
+  "difficulty": "Easy",
+  "prompt": "Keep all input columns and add Designation: Manager for a numeric salary greater than 10000, otherwise Employee. salary is supplied as a string; preserve its output type. Use the correctly spelled output name Designation.",
+  "cases": [
+    {
+      "name": "sample",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "empid",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "salary",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "empid": "1",
+              "name": "a",
+              "salary": "10000"
+            },
+            {
+              "empid": "2",
+              "name": "b",
+              "salary": "5000"
+            },
+            {
+              "empid": "3",
+              "name": "c",
+              "salary": "15000"
+            },
+            {
+              "empid": "4",
+              "name": "d",
+              "salary": "25000"
+            },
+            {
+              "empid": "5",
+              "name": "e",
+              "salary": "50000"
+            },
+            {
+              "empid": "6",
+              "name": "f",
+              "salary": "7000"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "empid",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "salary",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "Designation",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "empid": "1",
+            "name": "a",
+            "salary": "10000",
+            "Designation": "Employee"
+          },
+          {
+            "empid": "2",
+            "name": "b",
+            "salary": "5000",
+            "Designation": "Employee"
+          },
+          {
+            "empid": "3",
+            "name": "c",
+            "salary": "15000",
+            "Designation": "Manager"
+          },
+          {
+            "empid": "4",
+            "name": "d",
+            "salary": "25000",
+            "Designation": "Manager"
+          },
+          {
+            "empid": "5",
+            "name": "e",
+            "salary": "50000",
+            "Designation": "Manager"
+          },
+          {
+            "empid": "6",
+            "name": "f",
+            "salary": "7000",
+            "Designation": "Employee"
+          }
+        ]
+      }
+    },
+    {
+      "name": "shuffled input",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "empid",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "salary",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "empid": "6",
+              "name": "f",
+              "salary": "7000"
+            },
+            {
+              "empid": "5",
+              "name": "e",
+              "salary": "50000"
+            },
+            {
+              "empid": "4",
+              "name": "d",
+              "salary": "25000"
+            },
+            {
+              "empid": "3",
+              "name": "c",
+              "salary": "15000"
+            },
+            {
+              "empid": "2",
+              "name": "b",
+              "salary": "5000"
+            },
+            {
+              "empid": "1",
+              "name": "a",
+              "salary": "10000"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "empid",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "salary",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "Designation",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "empid": "1",
+            "name": "a",
+            "salary": "10000",
+            "Designation": "Employee"
+          },
+          {
+            "empid": "2",
+            "name": "b",
+            "salary": "5000",
+            "Designation": "Employee"
+          },
+          {
+            "empid": "3",
+            "name": "c",
+            "salary": "15000",
+            "Designation": "Manager"
+          },
+          {
+            "empid": "4",
+            "name": "d",
+            "salary": "25000",
+            "Designation": "Manager"
+          },
+          {
+            "empid": "5",
+            "name": "e",
+            "salary": "50000",
+            "Designation": "Manager"
+          },
+          {
+            "empid": "6",
+            "name": "f",
+            "salary": "7000",
+            "Designation": "Employee"
+          }
+        ]
+      }
+    },
+    {
+      "name": "salary boundary",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "empid",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "salary",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "empid": "99",
+              "name": "new",
+              "salary": "10001"
+            },
+            {
+              "empid": "100",
+              "name": "edge",
+              "salary": "10000"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "empid",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "salary",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "Designation",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "empid": "99",
+            "name": "new",
+            "salary": "10001",
+            "Designation": "Manager"
+          },
+          {
+            "empid": "100",
+            "name": "edge",
+            "salary": "10000",
+            "Designation": "Employee"
+          }
+        ]
+      }
+    },
+    {
+      "name": "empty input",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "empid",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "salary",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": []
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "empid",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "salary",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "Designation",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": []
+      }
+    }
+  ]
+}

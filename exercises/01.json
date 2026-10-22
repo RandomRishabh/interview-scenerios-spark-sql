@@ -1,0 +1,596 @@
+{
+  "id": "1",
+  "title": "Employees sharing a salary",
+  "slug": "shared_salary",
+  "topic": "Joins",
+  "difficulty": "Medium",
+  "prompt": "Return each worker whose salary is shared by another worker. Return a worker once even when three or more workers share that salary. Keep all input columns.",
+  "cases": [
+    {
+      "name": "sample",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "workerid",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "firstname",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "lastname",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "salary",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "joiningdate",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "depart",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "workerid": "001",
+              "firstname": "Monika",
+              "lastname": "Arora",
+              "salary": 100000,
+              "joiningdate": "2014-02-20 09:00:00",
+              "depart": "HR"
+            },
+            {
+              "workerid": "002",
+              "firstname": "Niharika",
+              "lastname": "Verma",
+              "salary": 300000,
+              "joiningdate": "2014-06-11 09:00:00",
+              "depart": "Admin"
+            },
+            {
+              "workerid": "003",
+              "firstname": "Vishal",
+              "lastname": "Singhal",
+              "salary": 300000,
+              "joiningdate": "2014-02-20 09:00:00",
+              "depart": "HR"
+            },
+            {
+              "workerid": "004",
+              "firstname": "Amitabh",
+              "lastname": "Singh",
+              "salary": 500000,
+              "joiningdate": "2014-02-20 09:00:00",
+              "depart": "Admin"
+            },
+            {
+              "workerid": "005",
+              "firstname": "Vivek",
+              "lastname": "Bhati",
+              "salary": 500000,
+              "joiningdate": "2014-06-11 09:00:00",
+              "depart": "Admin"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "workerid",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "firstname",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "lastname",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "salary",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "joiningdate",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "depart",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "workerid": "002",
+            "firstname": "Niharika",
+            "lastname": "Verma",
+            "salary": 300000,
+            "joiningdate": "2014-06-11 09:00:00",
+            "depart": "Admin"
+          },
+          {
+            "workerid": "003",
+            "firstname": "Vishal",
+            "lastname": "Singhal",
+            "salary": 300000,
+            "joiningdate": "2014-02-20 09:00:00",
+            "depart": "HR"
+          },
+          {
+            "workerid": "004",
+            "firstname": "Amitabh",
+            "lastname": "Singh",
+            "salary": 500000,
+            "joiningdate": "2014-02-20 09:00:00",
+            "depart": "Admin"
+          },
+          {
+            "workerid": "005",
+            "firstname": "Vivek",
+            "lastname": "Bhati",
+            "salary": 500000,
+            "joiningdate": "2014-06-11 09:00:00",
+            "depart": "Admin"
+          }
+        ]
+      }
+    },
+    {
+      "name": "shuffled input",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "workerid",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "firstname",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "lastname",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "salary",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "joiningdate",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "depart",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "workerid": "005",
+              "firstname": "Vivek",
+              "lastname": "Bhati",
+              "salary": 500000,
+              "joiningdate": "2014-06-11 09:00:00",
+              "depart": "Admin"
+            },
+            {
+              "workerid": "004",
+              "firstname": "Amitabh",
+              "lastname": "Singh",
+              "salary": 500000,
+              "joiningdate": "2014-02-20 09:00:00",
+              "depart": "Admin"
+            },
+            {
+              "workerid": "003",
+              "firstname": "Vishal",
+              "lastname": "Singhal",
+              "salary": 300000,
+              "joiningdate": "2014-02-20 09:00:00",
+              "depart": "HR"
+            },
+            {
+              "workerid": "002",
+              "firstname": "Niharika",
+              "lastname": "Verma",
+              "salary": 300000,
+              "joiningdate": "2014-06-11 09:00:00",
+              "depart": "Admin"
+            },
+            {
+              "workerid": "001",
+              "firstname": "Monika",
+              "lastname": "Arora",
+              "salary": 100000,
+              "joiningdate": "2014-02-20 09:00:00",
+              "depart": "HR"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "workerid",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "firstname",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "lastname",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "salary",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "joiningdate",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "depart",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "workerid": "002",
+            "firstname": "Niharika",
+            "lastname": "Verma",
+            "salary": 300000,
+            "joiningdate": "2014-06-11 09:00:00",
+            "depart": "Admin"
+          },
+          {
+            "workerid": "003",
+            "firstname": "Vishal",
+            "lastname": "Singhal",
+            "salary": 300000,
+            "joiningdate": "2014-02-20 09:00:00",
+            "depart": "HR"
+          },
+          {
+            "workerid": "004",
+            "firstname": "Amitabh",
+            "lastname": "Singh",
+            "salary": 500000,
+            "joiningdate": "2014-02-20 09:00:00",
+            "depart": "Admin"
+          },
+          {
+            "workerid": "005",
+            "firstname": "Vivek",
+            "lastname": "Bhati",
+            "salary": 500000,
+            "joiningdate": "2014-06-11 09:00:00",
+            "depart": "Admin"
+          }
+        ]
+      }
+    },
+    {
+      "name": "three workers sharing a salary",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "workerid",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "firstname",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "lastname",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "salary",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "joiningdate",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "depart",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "workerid": "001",
+              "firstname": "Monika",
+              "lastname": "Arora",
+              "salary": 100000,
+              "joiningdate": "2014-02-20 09:00:00",
+              "depart": "HR"
+            },
+            {
+              "workerid": "002",
+              "firstname": "Niharika",
+              "lastname": "Verma",
+              "salary": 300000,
+              "joiningdate": "2014-06-11 09:00:00",
+              "depart": "Admin"
+            },
+            {
+              "workerid": "003",
+              "firstname": "Vishal",
+              "lastname": "Singhal",
+              "salary": 300000,
+              "joiningdate": "2014-02-20 09:00:00",
+              "depart": "HR"
+            },
+            {
+              "workerid": "004",
+              "firstname": "Amitabh",
+              "lastname": "Singh",
+              "salary": 300000,
+              "joiningdate": "2014-02-20 09:00:00",
+              "depart": "Admin"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "workerid",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "firstname",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "lastname",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "salary",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "joiningdate",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "depart",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "workerid": "002",
+            "firstname": "Niharika",
+            "lastname": "Verma",
+            "salary": 300000,
+            "joiningdate": "2014-06-11 09:00:00",
+            "depart": "Admin"
+          },
+          {
+            "workerid": "003",
+            "firstname": "Vishal",
+            "lastname": "Singhal",
+            "salary": 300000,
+            "joiningdate": "2014-02-20 09:00:00",
+            "depart": "HR"
+          },
+          {
+            "workerid": "004",
+            "firstname": "Amitabh",
+            "lastname": "Singh",
+            "salary": 300000,
+            "joiningdate": "2014-02-20 09:00:00",
+            "depart": "Admin"
+          }
+        ]
+      }
+    },
+    {
+      "name": "empty input",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "workerid",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "firstname",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "lastname",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "salary",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "joiningdate",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "depart",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": []
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "workerid",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "firstname",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "lastname",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "salary",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "joiningdate",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "depart",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": []
+      }
+    }
+  ]
+}

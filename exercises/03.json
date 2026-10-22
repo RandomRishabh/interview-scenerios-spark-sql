@@ -1,0 +1,372 @@
+{
+  "id": "3",
+  "title": "Differences between consecutive sensor values",
+  "slug": "sensor_differences",
+  "topic": "Windows",
+  "difficulty": "Medium",
+  "prompt": "Within each sensorid, order rows by values ascending (values are distinct within a sensor). Replace values with next value minus current value. Keep the current row timestamp and omit the final row per sensor. Input timestamp is a label, not the sort key in this exercise.",
+  "cases": [
+    {
+      "name": "sample",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "sensorid",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "timestamp",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "values",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "sensorid": 1111,
+              "timestamp": "2021-01-15",
+              "values": 10
+            },
+            {
+              "sensorid": 1111,
+              "timestamp": "2021-01-16",
+              "values": 15
+            },
+            {
+              "sensorid": 1111,
+              "timestamp": "2021-01-17",
+              "values": 30
+            },
+            {
+              "sensorid": 1112,
+              "timestamp": "2021-01-15",
+              "values": 10
+            },
+            {
+              "sensorid": 1112,
+              "timestamp": "2021-01-15",
+              "values": 20
+            },
+            {
+              "sensorid": 1112,
+              "timestamp": "2021-01-15",
+              "values": 30
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "sensorid",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "timestamp",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "values",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "sensorid": 1111,
+            "timestamp": "2021-01-15",
+            "values": 5
+          },
+          {
+            "sensorid": 1111,
+            "timestamp": "2021-01-16",
+            "values": 15
+          },
+          {
+            "sensorid": 1112,
+            "timestamp": "2021-01-15",
+            "values": 10
+          },
+          {
+            "sensorid": 1112,
+            "timestamp": "2021-01-15",
+            "values": 10
+          }
+        ]
+      }
+    },
+    {
+      "name": "shuffled input",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "sensorid",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "timestamp",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "values",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "sensorid": 1112,
+              "timestamp": "2021-01-15",
+              "values": 30
+            },
+            {
+              "sensorid": 1112,
+              "timestamp": "2021-01-15",
+              "values": 20
+            },
+            {
+              "sensorid": 1112,
+              "timestamp": "2021-01-15",
+              "values": 10
+            },
+            {
+              "sensorid": 1111,
+              "timestamp": "2021-01-17",
+              "values": 30
+            },
+            {
+              "sensorid": 1111,
+              "timestamp": "2021-01-16",
+              "values": 15
+            },
+            {
+              "sensorid": 1111,
+              "timestamp": "2021-01-15",
+              "values": 10
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "sensorid",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "timestamp",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "values",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "sensorid": 1111,
+            "timestamp": "2021-01-15",
+            "values": 5
+          },
+          {
+            "sensorid": 1111,
+            "timestamp": "2021-01-16",
+            "values": 15
+          },
+          {
+            "sensorid": 1112,
+            "timestamp": "2021-01-15",
+            "values": 10
+          },
+          {
+            "sensorid": 1112,
+            "timestamp": "2021-01-15",
+            "values": 10
+          }
+        ]
+      }
+    },
+    {
+      "name": "unsorted values and singleton sensor",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "sensorid",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "timestamp",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "values",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "sensorid": 8,
+              "timestamp": "2025-01-01",
+              "values": 9
+            },
+            {
+              "sensorid": 8,
+              "timestamp": "2025-01-02",
+              "values": 4
+            },
+            {
+              "sensorid": 9,
+              "timestamp": "2025-01-01",
+              "values": 7
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "sensorid",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "timestamp",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "values",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "sensorid": 8,
+            "timestamp": "2025-01-02",
+            "values": 5
+          }
+        ]
+      }
+    },
+    {
+      "name": "empty input",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "sensorid",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "timestamp",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "values",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": []
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "sensorid",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "timestamp",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "values",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": []
+      }
+    }
+  ]
+}

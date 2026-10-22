@@ -1,0 +1,730 @@
+{
+  "id": "5",
+  "title": "Union and validate employee records",
+  "slug": "union_email_validation",
+  "topic": "ETL and schema alignment",
+  "difficulty": "Medium",
+  "prompt": "Add salary=1000 to df1, append df2, and retain rows whose non-null email contains @. Return id, name, age, email, salary. Optional ungraded Spark tasks: inspect observed partition IDs; explain partitionBy(salary) when writing. No filesystem writes are required for the checked task.",
+  "cases": [
+    {
+      "name": "sample",
+      "inputs": {
+        "df1": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "age",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "email",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "id": 1,
+              "name": "abc",
+              "age": 31,
+              "email": "abc@gmail.com"
+            },
+            {
+              "id": 2,
+              "name": "def",
+              "age": 23,
+              "email": "defyahoo.com"
+            },
+            {
+              "id": 3,
+              "name": "xyz",
+              "age": 26,
+              "email": "xyz@gmail.com"
+            },
+            {
+              "id": 4,
+              "name": "qwe",
+              "age": 34,
+              "email": "qwegmail.com"
+            },
+            {
+              "id": 5,
+              "name": "iop",
+              "age": 24,
+              "email": "iop@gmail.com"
+            }
+          ]
+        },
+        "df2": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "age",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "email",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "salary",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "id": 11,
+              "name": "jkl",
+              "age": 22,
+              "email": "abc@gmail.com",
+              "salary": 1000
+            },
+            {
+              "id": 12,
+              "name": "vbn",
+              "age": 33,
+              "email": "vbn@yahoo.com",
+              "salary": 3000
+            },
+            {
+              "id": 13,
+              "name": "wer",
+              "age": 27,
+              "email": "wer",
+              "salary": 2000
+            },
+            {
+              "id": 14,
+              "name": "zxc",
+              "age": 30,
+              "email": "zxc.com",
+              "salary": 2000
+            },
+            {
+              "id": 15,
+              "name": "lkj",
+              "age": 29,
+              "email": "lkj@outlook.com",
+              "salary": 2000
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "age",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "email",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "salary",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "id": 1,
+            "name": "abc",
+            "age": 31,
+            "email": "abc@gmail.com",
+            "salary": 1000
+          },
+          {
+            "id": 3,
+            "name": "xyz",
+            "age": 26,
+            "email": "xyz@gmail.com",
+            "salary": 1000
+          },
+          {
+            "id": 5,
+            "name": "iop",
+            "age": 24,
+            "email": "iop@gmail.com",
+            "salary": 1000
+          },
+          {
+            "id": 11,
+            "name": "jkl",
+            "age": 22,
+            "email": "abc@gmail.com",
+            "salary": 1000
+          },
+          {
+            "id": 12,
+            "name": "vbn",
+            "age": 33,
+            "email": "vbn@yahoo.com",
+            "salary": 3000
+          },
+          {
+            "id": 15,
+            "name": "lkj",
+            "age": 29,
+            "email": "lkj@outlook.com",
+            "salary": 2000
+          }
+        ]
+      }
+    },
+    {
+      "name": "shuffled input",
+      "inputs": {
+        "df1": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "age",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "email",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "id": 5,
+              "name": "iop",
+              "age": 24,
+              "email": "iop@gmail.com"
+            },
+            {
+              "id": 4,
+              "name": "qwe",
+              "age": 34,
+              "email": "qwegmail.com"
+            },
+            {
+              "id": 3,
+              "name": "xyz",
+              "age": 26,
+              "email": "xyz@gmail.com"
+            },
+            {
+              "id": 2,
+              "name": "def",
+              "age": 23,
+              "email": "defyahoo.com"
+            },
+            {
+              "id": 1,
+              "name": "abc",
+              "age": 31,
+              "email": "abc@gmail.com"
+            }
+          ]
+        },
+        "df2": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "age",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "email",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "salary",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "id": 15,
+              "name": "lkj",
+              "age": 29,
+              "email": "lkj@outlook.com",
+              "salary": 2000
+            },
+            {
+              "id": 14,
+              "name": "zxc",
+              "age": 30,
+              "email": "zxc.com",
+              "salary": 2000
+            },
+            {
+              "id": 13,
+              "name": "wer",
+              "age": 27,
+              "email": "wer",
+              "salary": 2000
+            },
+            {
+              "id": 12,
+              "name": "vbn",
+              "age": 33,
+              "email": "vbn@yahoo.com",
+              "salary": 3000
+            },
+            {
+              "id": 11,
+              "name": "jkl",
+              "age": 22,
+              "email": "abc@gmail.com",
+              "salary": 1000
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "age",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "email",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "salary",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "id": 1,
+            "name": "abc",
+            "age": 31,
+            "email": "abc@gmail.com",
+            "salary": 1000
+          },
+          {
+            "id": 3,
+            "name": "xyz",
+            "age": 26,
+            "email": "xyz@gmail.com",
+            "salary": 1000
+          },
+          {
+            "id": 5,
+            "name": "iop",
+            "age": 24,
+            "email": "iop@gmail.com",
+            "salary": 1000
+          },
+          {
+            "id": 11,
+            "name": "jkl",
+            "age": 22,
+            "email": "abc@gmail.com",
+            "salary": 1000
+          },
+          {
+            "id": 12,
+            "name": "vbn",
+            "age": 33,
+            "email": "vbn@yahoo.com",
+            "salary": 3000
+          },
+          {
+            "id": 15,
+            "name": "lkj",
+            "age": 29,
+            "email": "lkj@outlook.com",
+            "salary": 2000
+          }
+        ]
+      }
+    },
+    {
+      "name": "null email and new salaries",
+      "inputs": {
+        "df1": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "age",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "email",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "id": 90,
+              "name": "x",
+              "age": 20,
+              "email": "x@y"
+            },
+            {
+              "id": 91,
+              "name": "bad",
+              "age": 30,
+              "email": null
+            }
+          ]
+        },
+        "df2": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "age",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "email",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "salary",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "id": 92,
+              "name": "y",
+              "age": 40,
+              "email": "y@z",
+              "salary": 2500
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "age",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "email",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "salary",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "id": 90,
+            "name": "x",
+            "age": 20,
+            "email": "x@y",
+            "salary": 1000
+          },
+          {
+            "id": 92,
+            "name": "y",
+            "age": 40,
+            "email": "y@z",
+            "salary": 2500
+          }
+        ]
+      }
+    },
+    {
+      "name": "empty input",
+      "inputs": {
+        "df1": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "age",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "email",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": []
+        },
+        "df2": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "age",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "email",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "salary",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": []
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "age",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "email",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "salary",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": []
+      }
+    }
+  ]
+}

@@ -1,0 +1,545 @@
+{
+  "id": "39",
+  "title": "Running transaction balance",
+  "slug": "running_balance",
+  "topic": "Windows",
+  "difficulty": "Medium",
+  "prompt": "Keep input columns and add running_total: row-by-row cumulative amount per customer_id ordered by transaction_date, then transaction_id ascending. transaction_id is unique. Include refunds (negative amounts). The upstream heading was copied from the previous scenario; this task is a running balance.",
+  "cases": [
+    {
+      "name": "sample",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "transaction_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "customer_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "transaction_date",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "amount",
+                "type": "double",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "transaction_id": 1,
+              "customer_id": 101,
+              "transaction_date": "2024-01-01",
+              "amount": 100.0
+            },
+            {
+              "transaction_id": 2,
+              "customer_id": 101,
+              "transaction_date": "2024-01-03",
+              "amount": 200.0
+            },
+            {
+              "transaction_id": 3,
+              "customer_id": 101,
+              "transaction_date": "2024-01-05",
+              "amount": 300.0
+            },
+            {
+              "transaction_id": 4,
+              "customer_id": 102,
+              "transaction_date": "2024-01-02",
+              "amount": 150.0
+            },
+            {
+              "transaction_id": 5,
+              "customer_id": 102,
+              "transaction_date": "2024-01-06",
+              "amount": 250.0
+            },
+            {
+              "transaction_id": 6,
+              "customer_id": 103,
+              "transaction_date": "2024-01-04",
+              "amount": 500.0
+            },
+            {
+              "transaction_id": 7,
+              "customer_id": 103,
+              "transaction_date": "2024-01-08",
+              "amount": 100.0
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "transaction_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "customer_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "transaction_date",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "amount",
+              "type": "double",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "running_total",
+              "type": "double",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "transaction_id": 1,
+            "customer_id": 101,
+            "transaction_date": "2024-01-01",
+            "amount": 100.0,
+            "running_total": 100.0
+          },
+          {
+            "transaction_id": 2,
+            "customer_id": 101,
+            "transaction_date": "2024-01-03",
+            "amount": 200.0,
+            "running_total": 300.0
+          },
+          {
+            "transaction_id": 3,
+            "customer_id": 101,
+            "transaction_date": "2024-01-05",
+            "amount": 300.0,
+            "running_total": 600.0
+          },
+          {
+            "transaction_id": 4,
+            "customer_id": 102,
+            "transaction_date": "2024-01-02",
+            "amount": 150.0,
+            "running_total": 150.0
+          },
+          {
+            "transaction_id": 5,
+            "customer_id": 102,
+            "transaction_date": "2024-01-06",
+            "amount": 250.0,
+            "running_total": 400.0
+          },
+          {
+            "transaction_id": 6,
+            "customer_id": 103,
+            "transaction_date": "2024-01-04",
+            "amount": 500.0,
+            "running_total": 500.0
+          },
+          {
+            "transaction_id": 7,
+            "customer_id": 103,
+            "transaction_date": "2024-01-08",
+            "amount": 100.0,
+            "running_total": 600.0
+          }
+        ]
+      }
+    },
+    {
+      "name": "shuffled input",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "transaction_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "customer_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "transaction_date",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "amount",
+                "type": "double",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "transaction_id": 7,
+              "customer_id": 103,
+              "transaction_date": "2024-01-08",
+              "amount": 100.0
+            },
+            {
+              "transaction_id": 6,
+              "customer_id": 103,
+              "transaction_date": "2024-01-04",
+              "amount": 500.0
+            },
+            {
+              "transaction_id": 5,
+              "customer_id": 102,
+              "transaction_date": "2024-01-06",
+              "amount": 250.0
+            },
+            {
+              "transaction_id": 4,
+              "customer_id": 102,
+              "transaction_date": "2024-01-02",
+              "amount": 150.0
+            },
+            {
+              "transaction_id": 3,
+              "customer_id": 101,
+              "transaction_date": "2024-01-05",
+              "amount": 300.0
+            },
+            {
+              "transaction_id": 2,
+              "customer_id": 101,
+              "transaction_date": "2024-01-03",
+              "amount": 200.0
+            },
+            {
+              "transaction_id": 1,
+              "customer_id": 101,
+              "transaction_date": "2024-01-01",
+              "amount": 100.0
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "transaction_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "customer_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "transaction_date",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "amount",
+              "type": "double",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "running_total",
+              "type": "double",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "transaction_id": 1,
+            "customer_id": 101,
+            "transaction_date": "2024-01-01",
+            "amount": 100.0,
+            "running_total": 100.0
+          },
+          {
+            "transaction_id": 2,
+            "customer_id": 101,
+            "transaction_date": "2024-01-03",
+            "amount": 200.0,
+            "running_total": 300.0
+          },
+          {
+            "transaction_id": 3,
+            "customer_id": 101,
+            "transaction_date": "2024-01-05",
+            "amount": 300.0,
+            "running_total": 600.0
+          },
+          {
+            "transaction_id": 4,
+            "customer_id": 102,
+            "transaction_date": "2024-01-02",
+            "amount": 150.0,
+            "running_total": 150.0
+          },
+          {
+            "transaction_id": 5,
+            "customer_id": 102,
+            "transaction_date": "2024-01-06",
+            "amount": 250.0,
+            "running_total": 400.0
+          },
+          {
+            "transaction_id": 6,
+            "customer_id": 103,
+            "transaction_date": "2024-01-04",
+            "amount": 500.0,
+            "running_total": 500.0
+          },
+          {
+            "transaction_id": 7,
+            "customer_id": 103,
+            "transaction_date": "2024-01-08",
+            "amount": 100.0,
+            "running_total": 600.0
+          }
+        ]
+      }
+    },
+    {
+      "name": "same-date transactions and refund",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "transaction_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "customer_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "transaction_date",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "amount",
+                "type": "double",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "transaction_id": 9,
+              "customer_id": 8,
+              "transaction_date": "2025-01-01",
+              "amount": 5.0
+            },
+            {
+              "transaction_id": 7,
+              "customer_id": 8,
+              "transaction_date": "2025-01-01",
+              "amount": 2.0
+            },
+            {
+              "transaction_id": 10,
+              "customer_id": 8,
+              "transaction_date": "2025-01-02",
+              "amount": -1.0
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "transaction_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "customer_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "transaction_date",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "amount",
+              "type": "double",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "running_total",
+              "type": "double",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "transaction_id": 9,
+            "customer_id": 8,
+            "transaction_date": "2025-01-01",
+            "amount": 5.0,
+            "running_total": 7.0
+          },
+          {
+            "transaction_id": 7,
+            "customer_id": 8,
+            "transaction_date": "2025-01-01",
+            "amount": 2.0,
+            "running_total": 2.0
+          },
+          {
+            "transaction_id": 10,
+            "customer_id": 8,
+            "transaction_date": "2025-01-02",
+            "amount": -1.0,
+            "running_total": 6.0
+          }
+        ]
+      }
+    },
+    {
+      "name": "empty input",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "transaction_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "customer_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "transaction_date",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "amount",
+                "type": "double",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": []
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "transaction_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "customer_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "transaction_date",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "amount",
+              "type": "double",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "running_total",
+              "type": "double",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": []
+      }
+    }
+  ]
+}

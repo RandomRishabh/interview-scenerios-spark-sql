@@ -1,0 +1,415 @@
+{
+  "id": "26",
+  "title": "Reconcile source and target records",
+  "slug": "source_target_reconciliation",
+  "topic": "Reconciliation and nulls",
+  "difficulty": "Hard",
+  "prompt": "Compare source_df(id,name) and target_df(id1,name1) by unique non-null ID. Omit equal rows, treating two null names as equal. Return id and comment: new in source for a missing target ID; new in target for a missing source ID; mismatch for different names including null versus non-null. Detect missing IDs, not missing names.",
+  "cases": [
+    {
+      "name": "sample",
+      "inputs": {
+        "source_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "id": 1,
+              "name": "A"
+            },
+            {
+              "id": 2,
+              "name": "B"
+            },
+            {
+              "id": 3,
+              "name": "C"
+            },
+            {
+              "id": 4,
+              "name": "D"
+            }
+          ]
+        },
+        "target_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "id1",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "name1",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "id1": 1,
+              "name1": "A"
+            },
+            {
+              "id1": 2,
+              "name1": "B"
+            },
+            {
+              "id1": 4,
+              "name1": "X"
+            },
+            {
+              "id1": 5,
+              "name1": "F"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "comment",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "id": 3,
+            "comment": "new in source"
+          },
+          {
+            "id": 4,
+            "comment": "mismatch"
+          },
+          {
+            "id": 5,
+            "comment": "new in target"
+          }
+        ]
+      }
+    },
+    {
+      "name": "shuffled input",
+      "inputs": {
+        "source_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "id": 4,
+              "name": "D"
+            },
+            {
+              "id": 3,
+              "name": "C"
+            },
+            {
+              "id": 2,
+              "name": "B"
+            },
+            {
+              "id": 1,
+              "name": "A"
+            }
+          ]
+        },
+        "target_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "id1",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "name1",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "id1": 5,
+              "name1": "F"
+            },
+            {
+              "id1": 4,
+              "name1": "X"
+            },
+            {
+              "id1": 2,
+              "name1": "B"
+            },
+            {
+              "id1": 1,
+              "name1": "A"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "comment",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "id": 3,
+            "comment": "new in source"
+          },
+          {
+            "id": 4,
+            "comment": "mismatch"
+          },
+          {
+            "id": 5,
+            "comment": "new in target"
+          }
+        ]
+      }
+    },
+    {
+      "name": "null-safe comparison and missing IDs",
+      "inputs": {
+        "source_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "id": 8,
+              "name": null
+            },
+            {
+              "id": 9,
+              "name": "A"
+            },
+            {
+              "id": 10,
+              "name": null
+            }
+          ]
+        },
+        "target_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "id1",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "name1",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "id1": 8,
+              "name1": null
+            },
+            {
+              "id1": 9,
+              "name1": null
+            },
+            {
+              "id1": 11,
+              "name1": "B"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "comment",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "id": 9,
+            "comment": "mismatch"
+          },
+          {
+            "id": 10,
+            "comment": "new in source"
+          },
+          {
+            "id": 11,
+            "comment": "new in target"
+          }
+        ]
+      }
+    },
+    {
+      "name": "empty input",
+      "inputs": {
+        "source_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": []
+        },
+        "target_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "id1",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "name1",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": []
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "comment",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": []
+      }
+    }
+  ]
+}

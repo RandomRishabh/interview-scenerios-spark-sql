@@ -1,0 +1,419 @@
+{
+  "id": "24",
+  "title": "Ordered navigation paths",
+  "slug": "navigation_paths",
+  "topic": "Ordered arrays",
+  "difficulty": "Medium",
+  "prompt": "Return userid and pages, an array of every page visit ordered by event_seq ascending within the user. Retain repeated pages. event_seq is explicitly supplied because Spark DataFrames have no inherent input order; it is unique per user.",
+  "cases": [
+    {
+      "name": "sample",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "userid",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "page",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "event_seq",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "userid": 1,
+              "page": "home",
+              "event_seq": 1
+            },
+            {
+              "userid": 1,
+              "page": "products",
+              "event_seq": 2
+            },
+            {
+              "userid": 1,
+              "page": "checkout",
+              "event_seq": 3
+            },
+            {
+              "userid": 1,
+              "page": "confirmation",
+              "event_seq": 4
+            },
+            {
+              "userid": 2,
+              "page": "home",
+              "event_seq": 5
+            },
+            {
+              "userid": 2,
+              "page": "products",
+              "event_seq": 6
+            },
+            {
+              "userid": 2,
+              "page": "cart",
+              "event_seq": 7
+            },
+            {
+              "userid": 2,
+              "page": "checkout",
+              "event_seq": 8
+            },
+            {
+              "userid": 2,
+              "page": "confirmation",
+              "event_seq": 9
+            },
+            {
+              "userid": 2,
+              "page": "home",
+              "event_seq": 10
+            },
+            {
+              "userid": 2,
+              "page": "products",
+              "event_seq": 11
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "userid",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "pages",
+              "type": {
+                "type": "array",
+                "elementType": "string",
+                "containsNull": true
+              },
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "userid": 1,
+            "pages": [
+              "home",
+              "products",
+              "checkout",
+              "confirmation"
+            ]
+          },
+          {
+            "userid": 2,
+            "pages": [
+              "home",
+              "products",
+              "cart",
+              "checkout",
+              "confirmation",
+              "home",
+              "products"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "shuffled input",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "userid",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "page",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "event_seq",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "userid": 2,
+              "page": "products",
+              "event_seq": 11
+            },
+            {
+              "userid": 2,
+              "page": "home",
+              "event_seq": 10
+            },
+            {
+              "userid": 2,
+              "page": "confirmation",
+              "event_seq": 9
+            },
+            {
+              "userid": 2,
+              "page": "checkout",
+              "event_seq": 8
+            },
+            {
+              "userid": 2,
+              "page": "cart",
+              "event_seq": 7
+            },
+            {
+              "userid": 2,
+              "page": "products",
+              "event_seq": 6
+            },
+            {
+              "userid": 2,
+              "page": "home",
+              "event_seq": 5
+            },
+            {
+              "userid": 1,
+              "page": "confirmation",
+              "event_seq": 4
+            },
+            {
+              "userid": 1,
+              "page": "checkout",
+              "event_seq": 3
+            },
+            {
+              "userid": 1,
+              "page": "products",
+              "event_seq": 2
+            },
+            {
+              "userid": 1,
+              "page": "home",
+              "event_seq": 1
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "userid",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "pages",
+              "type": {
+                "type": "array",
+                "elementType": "string",
+                "containsNull": true
+              },
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "userid": 1,
+            "pages": [
+              "home",
+              "products",
+              "checkout",
+              "confirmation"
+            ]
+          },
+          {
+            "userid": 2,
+            "pages": [
+              "home",
+              "products",
+              "cart",
+              "checkout",
+              "confirmation",
+              "home",
+              "products"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "unordered events and repeated pages",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "userid",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "page",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "event_seq",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "userid": 9,
+              "page": "end",
+              "event_seq": 3
+            },
+            {
+              "userid": 9,
+              "page": "start",
+              "event_seq": 1
+            },
+            {
+              "userid": 9,
+              "page": "start",
+              "event_seq": 2
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "userid",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "pages",
+              "type": {
+                "type": "array",
+                "elementType": "string",
+                "containsNull": true
+              },
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "userid": 9,
+            "pages": [
+              "start",
+              "start",
+              "end"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "empty input",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "userid",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "page",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "event_seq",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": []
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "userid",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "pages",
+              "type": {
+                "type": "array",
+                "elementType": "string",
+                "containsNull": true
+              },
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": []
+      }
+    }
+  ]
+}

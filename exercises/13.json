@@ -1,0 +1,365 @@
+{
+  "id": "13",
+  "title": "Employees per department",
+  "slug": "department_counts",
+  "topic": "Aggregation",
+  "difficulty": "Easy",
+  "prompt": "Count rows per dept and return dept, total.",
+  "cases": [
+    {
+      "name": "sample",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "emp_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "emp_name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "dept",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "emp_id": 1,
+              "emp_name": "Jhon",
+              "dept": "Development"
+            },
+            {
+              "emp_id": 2,
+              "emp_name": "Tim",
+              "dept": "Development"
+            },
+            {
+              "emp_id": 3,
+              "emp_name": "David",
+              "dept": "Testing"
+            },
+            {
+              "emp_id": 4,
+              "emp_name": "Sam",
+              "dept": "Testing"
+            },
+            {
+              "emp_id": 5,
+              "emp_name": "Green",
+              "dept": "Testing"
+            },
+            {
+              "emp_id": 6,
+              "emp_name": "Miller",
+              "dept": "Production"
+            },
+            {
+              "emp_id": 7,
+              "emp_name": "Brevis",
+              "dept": "Production"
+            },
+            {
+              "emp_id": 8,
+              "emp_name": "Warner",
+              "dept": "Production"
+            },
+            {
+              "emp_id": 9,
+              "emp_name": "Salt",
+              "dept": "Production"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "dept",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "total",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "dept": "Development",
+            "total": 2
+          },
+          {
+            "dept": "Testing",
+            "total": 3
+          },
+          {
+            "dept": "Production",
+            "total": 4
+          }
+        ]
+      }
+    },
+    {
+      "name": "shuffled input",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "emp_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "emp_name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "dept",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "emp_id": 9,
+              "emp_name": "Salt",
+              "dept": "Production"
+            },
+            {
+              "emp_id": 8,
+              "emp_name": "Warner",
+              "dept": "Production"
+            },
+            {
+              "emp_id": 7,
+              "emp_name": "Brevis",
+              "dept": "Production"
+            },
+            {
+              "emp_id": 6,
+              "emp_name": "Miller",
+              "dept": "Production"
+            },
+            {
+              "emp_id": 5,
+              "emp_name": "Green",
+              "dept": "Testing"
+            },
+            {
+              "emp_id": 4,
+              "emp_name": "Sam",
+              "dept": "Testing"
+            },
+            {
+              "emp_id": 3,
+              "emp_name": "David",
+              "dept": "Testing"
+            },
+            {
+              "emp_id": 2,
+              "emp_name": "Tim",
+              "dept": "Development"
+            },
+            {
+              "emp_id": 1,
+              "emp_name": "Jhon",
+              "dept": "Development"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "dept",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "total",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "dept": "Development",
+            "total": 2
+          },
+          {
+            "dept": "Testing",
+            "total": 3
+          },
+          {
+            "dept": "Production",
+            "total": 4
+          }
+        ]
+      }
+    },
+    {
+      "name": "new department groups",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "emp_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "emp_name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "dept",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "emp_id": 1,
+              "emp_name": "x",
+              "dept": "A"
+            },
+            {
+              "emp_id": 2,
+              "emp_name": "y",
+              "dept": "A"
+            },
+            {
+              "emp_id": 3,
+              "emp_name": "z",
+              "dept": "B"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "dept",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "total",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "dept": "A",
+            "total": 2
+          },
+          {
+            "dept": "B",
+            "total": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "empty input",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "emp_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "emp_name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "dept",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": []
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "dept",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "total",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": []
+      }
+    }
+  ]
+}

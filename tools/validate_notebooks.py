@@ -9,8 +9,9 @@ import nbformat
 
 def main():
     root = Path(__file__).resolve().parents[1]
-    notebooks = sorted(root.glob('Scenerio*.ipynb'))
-    scripts = sorted(root.glob('Scenerio*.py'))
+    notebooks = sorted((root / 'reference_solutions').glob('Scenerio*.ipynb'))
+    notebooks += sorted((root / 'practice').glob('*.ipynb'))
+    scripts = sorted((root / 'reference_solutions').glob('Scenerio*.py'))
     errors = []
     code_cells = 0
     for path in notebooks:

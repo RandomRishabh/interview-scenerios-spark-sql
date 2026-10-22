@@ -1,0 +1,364 @@
+{
+  "id": "40",
+  "title": "Users with three consecutive login days",
+  "slug": "consecutive_login_days",
+  "topic": "Gaps and islands",
+  "difficulty": "Hard",
+  "prompt": "Return each user_id once when they have any streak of at least three distinct consecutive calendar dates. Repeated logins on one date do not extend a streak. Handle month/year boundaries and multiple qualifying streaks.",
+  "cases": [
+    {
+      "name": "sample",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "login_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "user_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "login_date",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "login_id": 1,
+              "user_id": 101,
+              "login_date": "2024-01-01"
+            },
+            {
+              "login_id": 2,
+              "user_id": 101,
+              "login_date": "2024-01-02"
+            },
+            {
+              "login_id": 3,
+              "user_id": 101,
+              "login_date": "2024-01-03"
+            },
+            {
+              "login_id": 4,
+              "user_id": 101,
+              "login_date": "2024-01-05"
+            },
+            {
+              "login_id": 5,
+              "user_id": 102,
+              "login_date": "2024-01-01"
+            },
+            {
+              "login_id": 6,
+              "user_id": 102,
+              "login_date": "2024-01-03"
+            },
+            {
+              "login_id": 7,
+              "user_id": 102,
+              "login_date": "2024-01-04"
+            },
+            {
+              "login_id": 8,
+              "user_id": 103,
+              "login_date": "2024-01-06"
+            },
+            {
+              "login_id": 9,
+              "user_id": 103,
+              "login_date": "2024-01-07"
+            },
+            {
+              "login_id": 10,
+              "user_id": 103,
+              "login_date": "2024-01-08"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "user_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "user_id": 101
+          },
+          {
+            "user_id": 103
+          }
+        ]
+      }
+    },
+    {
+      "name": "shuffled input",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "login_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "user_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "login_date",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "login_id": 10,
+              "user_id": 103,
+              "login_date": "2024-01-08"
+            },
+            {
+              "login_id": 9,
+              "user_id": 103,
+              "login_date": "2024-01-07"
+            },
+            {
+              "login_id": 8,
+              "user_id": 103,
+              "login_date": "2024-01-06"
+            },
+            {
+              "login_id": 7,
+              "user_id": 102,
+              "login_date": "2024-01-04"
+            },
+            {
+              "login_id": 6,
+              "user_id": 102,
+              "login_date": "2024-01-03"
+            },
+            {
+              "login_id": 5,
+              "user_id": 102,
+              "login_date": "2024-01-01"
+            },
+            {
+              "login_id": 4,
+              "user_id": 101,
+              "login_date": "2024-01-05"
+            },
+            {
+              "login_id": 3,
+              "user_id": 101,
+              "login_date": "2024-01-03"
+            },
+            {
+              "login_id": 2,
+              "user_id": 101,
+              "login_date": "2024-01-02"
+            },
+            {
+              "login_id": 1,
+              "user_id": 101,
+              "login_date": "2024-01-01"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "user_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "user_id": 101
+          },
+          {
+            "user_id": 103
+          }
+        ]
+      }
+    },
+    {
+      "name": "duplicate days and multiple streaks",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "login_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "user_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "login_date",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "login_id": 1,
+              "user_id": 9,
+              "login_date": "2025-01-01"
+            },
+            {
+              "login_id": 2,
+              "user_id": 9,
+              "login_date": "2025-01-01"
+            },
+            {
+              "login_id": 3,
+              "user_id": 9,
+              "login_date": "2025-01-02"
+            },
+            {
+              "login_id": 4,
+              "user_id": 8,
+              "login_date": "2024-12-30"
+            },
+            {
+              "login_id": 5,
+              "user_id": 8,
+              "login_date": "2024-12-31"
+            },
+            {
+              "login_id": 6,
+              "user_id": 8,
+              "login_date": "2025-01-01"
+            },
+            {
+              "login_id": 7,
+              "user_id": 8,
+              "login_date": "2025-02-01"
+            },
+            {
+              "login_id": 8,
+              "user_id": 8,
+              "login_date": "2025-02-02"
+            },
+            {
+              "login_id": 9,
+              "user_id": 8,
+              "login_date": "2025-02-03"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "user_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "user_id": 8
+          }
+        ]
+      }
+    },
+    {
+      "name": "empty input",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "login_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "user_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "login_date",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": []
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "user_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": []
+      }
+    }
+  ]
+}

@@ -1,0 +1,402 @@
+{
+  "id": "2",
+  "title": "Dispatch records for ordered customers",
+  "slug": "dispatch_records",
+  "topic": "Filtering and joins",
+  "difficulty": "Easy",
+  "prompt": "Return every row with status exactly dispatched whose orderid has an Ordered row anywhere in this input. Match statuses case-sensitively. This follows the original sample: consecutive dispatched rows are all returned; this is not a first-transition-only task.",
+  "cases": [
+    {
+      "name": "sample",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "orderid",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "statusdate",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "status",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "orderid": 1,
+              "statusdate": "1-Jan",
+              "status": "Ordered"
+            },
+            {
+              "orderid": 1,
+              "statusdate": "2-Jan",
+              "status": "dispatched"
+            },
+            {
+              "orderid": 1,
+              "statusdate": "3-Jan",
+              "status": "dispatched"
+            },
+            {
+              "orderid": 1,
+              "statusdate": "4-Jan",
+              "status": "Shipped"
+            },
+            {
+              "orderid": 1,
+              "statusdate": "5-Jan",
+              "status": "Shipped"
+            },
+            {
+              "orderid": 1,
+              "statusdate": "6-Jan",
+              "status": "Delivered"
+            },
+            {
+              "orderid": 2,
+              "statusdate": "1-Jan",
+              "status": "Ordered"
+            },
+            {
+              "orderid": 2,
+              "statusdate": "2-Jan",
+              "status": "dispatched"
+            },
+            {
+              "orderid": 2,
+              "statusdate": "3-Jan",
+              "status": "shipped"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "orderid",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "statusdate",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "status",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "orderid": 1,
+            "statusdate": "2-Jan",
+            "status": "dispatched"
+          },
+          {
+            "orderid": 1,
+            "statusdate": "3-Jan",
+            "status": "dispatched"
+          },
+          {
+            "orderid": 2,
+            "statusdate": "2-Jan",
+            "status": "dispatched"
+          }
+        ]
+      }
+    },
+    {
+      "name": "shuffled input",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "orderid",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "statusdate",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "status",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "orderid": 2,
+              "statusdate": "3-Jan",
+              "status": "shipped"
+            },
+            {
+              "orderid": 2,
+              "statusdate": "2-Jan",
+              "status": "dispatched"
+            },
+            {
+              "orderid": 2,
+              "statusdate": "1-Jan",
+              "status": "Ordered"
+            },
+            {
+              "orderid": 1,
+              "statusdate": "6-Jan",
+              "status": "Delivered"
+            },
+            {
+              "orderid": 1,
+              "statusdate": "5-Jan",
+              "status": "Shipped"
+            },
+            {
+              "orderid": 1,
+              "statusdate": "4-Jan",
+              "status": "Shipped"
+            },
+            {
+              "orderid": 1,
+              "statusdate": "3-Jan",
+              "status": "dispatched"
+            },
+            {
+              "orderid": 1,
+              "statusdate": "2-Jan",
+              "status": "dispatched"
+            },
+            {
+              "orderid": 1,
+              "statusdate": "1-Jan",
+              "status": "Ordered"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "orderid",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "statusdate",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "status",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "orderid": 1,
+            "statusdate": "2-Jan",
+            "status": "dispatched"
+          },
+          {
+            "orderid": 1,
+            "statusdate": "3-Jan",
+            "status": "dispatched"
+          },
+          {
+            "orderid": 2,
+            "statusdate": "2-Jan",
+            "status": "dispatched"
+          }
+        ]
+      }
+    },
+    {
+      "name": "dispatch without an ordered record",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "orderid",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "statusdate",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "status",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "orderid": 7,
+              "statusdate": "1-Jan",
+              "status": "dispatched"
+            },
+            {
+              "orderid": 8,
+              "statusdate": "1-Jan",
+              "status": "Ordered"
+            },
+            {
+              "orderid": 8,
+              "statusdate": "2-Jan",
+              "status": "dispatched"
+            },
+            {
+              "orderid": 8,
+              "statusdate": "3-Jan",
+              "status": "dispatched"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "orderid",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "statusdate",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "status",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "orderid": 8,
+            "statusdate": "2-Jan",
+            "status": "dispatched"
+          },
+          {
+            "orderid": 8,
+            "statusdate": "3-Jan",
+            "status": "dispatched"
+          }
+        ]
+      }
+    },
+    {
+      "name": "empty input",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "orderid",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "statusdate",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "status",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": []
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "orderid",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "statusdate",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "status",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": []
+      }
+    }
+  ]
+}

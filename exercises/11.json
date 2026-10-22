@@ -1,0 +1,452 @@
+{
+  "id": "11",
+  "title": "Salary grades",
+  "slug": "salary_grades",
+  "topic": "Conditional transformations",
+  "difficulty": "Easy",
+  "prompt": "Add grade C below 5000, B from 5000 through 10000 inclusive, and A above 10000. Keep all input columns.",
+  "cases": [
+    {
+      "name": "sample",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "emp_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "emp_name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "salary",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "emp_id": 1,
+              "emp_name": "Jhon",
+              "salary": 4000
+            },
+            {
+              "emp_id": 2,
+              "emp_name": "Tim David",
+              "salary": 12000
+            },
+            {
+              "emp_id": 3,
+              "emp_name": "Json Bhrendroff",
+              "salary": 7000
+            },
+            {
+              "emp_id": 4,
+              "emp_name": "Jordon",
+              "salary": 8000
+            },
+            {
+              "emp_id": 5,
+              "emp_name": "Green",
+              "salary": 14000
+            },
+            {
+              "emp_id": 6,
+              "emp_name": "Brewis",
+              "salary": 6000
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "emp_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "emp_name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "salary",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "grade",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "emp_id": 1,
+            "emp_name": "Jhon",
+            "salary": 4000,
+            "grade": "C"
+          },
+          {
+            "emp_id": 2,
+            "emp_name": "Tim David",
+            "salary": 12000,
+            "grade": "A"
+          },
+          {
+            "emp_id": 3,
+            "emp_name": "Json Bhrendroff",
+            "salary": 7000,
+            "grade": "B"
+          },
+          {
+            "emp_id": 4,
+            "emp_name": "Jordon",
+            "salary": 8000,
+            "grade": "B"
+          },
+          {
+            "emp_id": 5,
+            "emp_name": "Green",
+            "salary": 14000,
+            "grade": "A"
+          },
+          {
+            "emp_id": 6,
+            "emp_name": "Brewis",
+            "salary": 6000,
+            "grade": "B"
+          }
+        ]
+      }
+    },
+    {
+      "name": "shuffled input",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "emp_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "emp_name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "salary",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "emp_id": 6,
+              "emp_name": "Brewis",
+              "salary": 6000
+            },
+            {
+              "emp_id": 5,
+              "emp_name": "Green",
+              "salary": 14000
+            },
+            {
+              "emp_id": 4,
+              "emp_name": "Jordon",
+              "salary": 8000
+            },
+            {
+              "emp_id": 3,
+              "emp_name": "Json Bhrendroff",
+              "salary": 7000
+            },
+            {
+              "emp_id": 2,
+              "emp_name": "Tim David",
+              "salary": 12000
+            },
+            {
+              "emp_id": 1,
+              "emp_name": "Jhon",
+              "salary": 4000
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "emp_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "emp_name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "salary",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "grade",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "emp_id": 1,
+            "emp_name": "Jhon",
+            "salary": 4000,
+            "grade": "C"
+          },
+          {
+            "emp_id": 2,
+            "emp_name": "Tim David",
+            "salary": 12000,
+            "grade": "A"
+          },
+          {
+            "emp_id": 3,
+            "emp_name": "Json Bhrendroff",
+            "salary": 7000,
+            "grade": "B"
+          },
+          {
+            "emp_id": 4,
+            "emp_name": "Jordon",
+            "salary": 8000,
+            "grade": "B"
+          },
+          {
+            "emp_id": 5,
+            "emp_name": "Green",
+            "salary": 14000,
+            "grade": "A"
+          },
+          {
+            "emp_id": 6,
+            "emp_name": "Brewis",
+            "salary": 6000,
+            "grade": "B"
+          }
+        ]
+      }
+    },
+    {
+      "name": "both grade boundaries",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "emp_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "emp_name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "salary",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "emp_id": 8,
+              "emp_name": "low",
+              "salary": 4999
+            },
+            {
+              "emp_id": 9,
+              "emp_name": "boundary1",
+              "salary": 5000
+            },
+            {
+              "emp_id": 10,
+              "emp_name": "boundary2",
+              "salary": 10000
+            },
+            {
+              "emp_id": 11,
+              "emp_name": "high",
+              "salary": 10001
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "emp_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "emp_name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "salary",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "grade",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "emp_id": 8,
+            "emp_name": "low",
+            "salary": 4999,
+            "grade": "C"
+          },
+          {
+            "emp_id": 9,
+            "emp_name": "boundary1",
+            "salary": 5000,
+            "grade": "B"
+          },
+          {
+            "emp_id": 10,
+            "emp_name": "boundary2",
+            "salary": 10000,
+            "grade": "B"
+          },
+          {
+            "emp_id": 11,
+            "emp_name": "high",
+            "salary": 10001,
+            "grade": "A"
+          }
+        ]
+      }
+    },
+    {
+      "name": "empty input",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "emp_id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "emp_name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "salary",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": []
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "emp_id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "emp_name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "salary",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "grade",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": []
+      }
+    }
+  ]
+}

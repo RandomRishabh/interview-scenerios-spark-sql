@@ -1,0 +1,2302 @@
+{
+  "id": "19",
+  "title": "Flatten nested feed events",
+  "slug": "flatten_feed_events",
+  "topic": "Nested JSON",
+  "difficulty": "Hard",
+  "prompt": "Explode multiMedia: one output row per element; records with an empty/null media array produce no rows. Flatten likeDislike into dislikes, likes, userAction and media fields into top-level columns. On collisions, media description/id/mediatype/name replace the parent fields. Keep all other parent columns and drop likeDislike/multiMedia. Inspect the expected schema.",
+  "cases": [
+    {
+      "name": "sample",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "code",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "commentCount",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "createdAt",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "description",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "feedsComment",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "imagePaths",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "images",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "isdeleted",
+                "type": "boolean",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "lat",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "likeDislike",
+                "type": {
+                  "type": "struct",
+                  "fields": [
+                    {
+                      "name": "dislikes",
+                      "type": "long",
+                      "nullable": true,
+                      "metadata": {}
+                    },
+                    {
+                      "name": "likes",
+                      "type": "long",
+                      "nullable": true,
+                      "metadata": {}
+                    },
+                    {
+                      "name": "userAction",
+                      "type": "long",
+                      "nullable": true,
+                      "metadata": {}
+                    }
+                  ]
+                },
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "lng",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "location",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "mediatype",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "msg",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "multiMedia",
+                "type": {
+                  "type": "array",
+                  "elementType": {
+                    "type": "struct",
+                    "fields": [
+                      {
+                        "name": "createAt",
+                        "type": "string",
+                        "nullable": true,
+                        "metadata": {}
+                      },
+                      {
+                        "name": "description",
+                        "type": "string",
+                        "nullable": true,
+                        "metadata": {}
+                      },
+                      {
+                        "name": "id",
+                        "type": "long",
+                        "nullable": true,
+                        "metadata": {}
+                      },
+                      {
+                        "name": "likeCount",
+                        "type": "long",
+                        "nullable": true,
+                        "metadata": {}
+                      },
+                      {
+                        "name": "mediatype",
+                        "type": "long",
+                        "nullable": true,
+                        "metadata": {}
+                      },
+                      {
+                        "name": "name",
+                        "type": "string",
+                        "nullable": true,
+                        "metadata": {}
+                      },
+                      {
+                        "name": "place",
+                        "type": "string",
+                        "nullable": true,
+                        "metadata": {}
+                      },
+                      {
+                        "name": "url",
+                        "type": "string",
+                        "nullable": true,
+                        "metadata": {}
+                      }
+                    ]
+                  },
+                  "containsNull": true
+                },
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "profilePicture",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "title",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "userId",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "videoUrl",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "totalFeed",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "code": 1234,
+              "commentCount": 5,
+              "createdAt": "2023-05-30T10:30:00",
+              "description": "Example description",
+              "feedsComment": "Example comment",
+              "id": 1,
+              "imagePaths": "/path/to/images",
+              "images": "image1.jpg,image2.jpg,image3.jpg",
+              "isdeleted": false,
+              "lat": 123456789,
+              "likeDislike": {
+                "dislikes": 10,
+                "likes": 20,
+                "userAction": 1
+              },
+              "lng": 987654321,
+              "location": "Example location",
+              "mediatype": 1,
+              "msg": "Example message",
+              "multiMedia": [
+                {
+                  "createAt": "2023-05-30T12:00:00",
+                  "description": "Media description",
+                  "id": 1001,
+                  "likeCount": 50,
+                  "mediatype": 1,
+                  "name": "Media name",
+                  "place": "Media place",
+                  "url": "https://example.com/media1"
+                },
+                {
+                  "createAt": "2023-05-30T13:30:00",
+                  "description": "Another media description",
+                  "id": 1002,
+                  "likeCount": 30,
+                  "mediatype": 2,
+                  "name": "Another media name",
+                  "place": "Another media place",
+                  "url": "https://example.com/media2"
+                }
+              ],
+              "name": "John Doe",
+              "profilePicture": "/path/to/profile_picture.jpg",
+              "title": "Example title",
+              "userId": 123,
+              "videoUrl": "https://example.com/video",
+              "totalFeed": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "code",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "commentCount",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "createdAt",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "description",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "feedsComment",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "imagePaths",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "images",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "isdeleted",
+              "type": "boolean",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "lat",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "lng",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "location",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "mediatype",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "msg",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "profilePicture",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "title",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "userId",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "videoUrl",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "totalFeed",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "dislikes",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "likes",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "userAction",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "createAt",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "likeCount",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "place",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "url",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "code": 1234,
+            "commentCount": 5,
+            "createdAt": "2023-05-30T10:30:00",
+            "description": "Media description",
+            "feedsComment": "Example comment",
+            "id": 1001,
+            "imagePaths": "/path/to/images",
+            "images": "image1.jpg,image2.jpg,image3.jpg",
+            "isdeleted": false,
+            "lat": 123456789,
+            "lng": 987654321,
+            "location": "Example location",
+            "mediatype": 1,
+            "msg": "Example message",
+            "name": "Media name",
+            "profilePicture": "/path/to/profile_picture.jpg",
+            "title": "Example title",
+            "userId": 123,
+            "videoUrl": "https://example.com/video",
+            "totalFeed": 100,
+            "dislikes": 10,
+            "likes": 20,
+            "userAction": 1,
+            "createAt": "2023-05-30T12:00:00",
+            "likeCount": 50,
+            "place": "Media place",
+            "url": "https://example.com/media1"
+          },
+          {
+            "code": 1234,
+            "commentCount": 5,
+            "createdAt": "2023-05-30T10:30:00",
+            "description": "Another media description",
+            "feedsComment": "Example comment",
+            "id": 1002,
+            "imagePaths": "/path/to/images",
+            "images": "image1.jpg,image2.jpg,image3.jpg",
+            "isdeleted": false,
+            "lat": 123456789,
+            "lng": 987654321,
+            "location": "Example location",
+            "mediatype": 2,
+            "msg": "Example message",
+            "name": "Another media name",
+            "profilePicture": "/path/to/profile_picture.jpg",
+            "title": "Example title",
+            "userId": 123,
+            "videoUrl": "https://example.com/video",
+            "totalFeed": 100,
+            "dislikes": 10,
+            "likes": 20,
+            "userAction": 1,
+            "createAt": "2023-05-30T13:30:00",
+            "likeCount": 30,
+            "place": "Another media place",
+            "url": "https://example.com/media2"
+          }
+        ]
+      }
+    },
+    {
+      "name": "shuffled input",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "code",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "commentCount",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "createdAt",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "description",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "feedsComment",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "imagePaths",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "images",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "isdeleted",
+                "type": "boolean",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "lat",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "likeDislike",
+                "type": {
+                  "type": "struct",
+                  "fields": [
+                    {
+                      "name": "dislikes",
+                      "type": "long",
+                      "nullable": true,
+                      "metadata": {}
+                    },
+                    {
+                      "name": "likes",
+                      "type": "long",
+                      "nullable": true,
+                      "metadata": {}
+                    },
+                    {
+                      "name": "userAction",
+                      "type": "long",
+                      "nullable": true,
+                      "metadata": {}
+                    }
+                  ]
+                },
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "lng",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "location",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "mediatype",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "msg",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "multiMedia",
+                "type": {
+                  "type": "array",
+                  "elementType": {
+                    "type": "struct",
+                    "fields": [
+                      {
+                        "name": "createAt",
+                        "type": "string",
+                        "nullable": true,
+                        "metadata": {}
+                      },
+                      {
+                        "name": "description",
+                        "type": "string",
+                        "nullable": true,
+                        "metadata": {}
+                      },
+                      {
+                        "name": "id",
+                        "type": "long",
+                        "nullable": true,
+                        "metadata": {}
+                      },
+                      {
+                        "name": "likeCount",
+                        "type": "long",
+                        "nullable": true,
+                        "metadata": {}
+                      },
+                      {
+                        "name": "mediatype",
+                        "type": "long",
+                        "nullable": true,
+                        "metadata": {}
+                      },
+                      {
+                        "name": "name",
+                        "type": "string",
+                        "nullable": true,
+                        "metadata": {}
+                      },
+                      {
+                        "name": "place",
+                        "type": "string",
+                        "nullable": true,
+                        "metadata": {}
+                      },
+                      {
+                        "name": "url",
+                        "type": "string",
+                        "nullable": true,
+                        "metadata": {}
+                      }
+                    ]
+                  },
+                  "containsNull": true
+                },
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "profilePicture",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "title",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "userId",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "videoUrl",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "totalFeed",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "code": 1234,
+              "commentCount": 5,
+              "createdAt": "2023-05-30T10:30:00",
+              "description": "Example description",
+              "feedsComment": "Example comment",
+              "id": 1,
+              "imagePaths": "/path/to/images",
+              "images": "image1.jpg,image2.jpg,image3.jpg",
+              "isdeleted": false,
+              "lat": 123456789,
+              "likeDislike": {
+                "dislikes": 10,
+                "likes": 20,
+                "userAction": 1
+              },
+              "lng": 987654321,
+              "location": "Example location",
+              "mediatype": 1,
+              "msg": "Example message",
+              "multiMedia": [
+                {
+                  "createAt": "2023-05-30T12:00:00",
+                  "description": "Media description",
+                  "id": 1001,
+                  "likeCount": 50,
+                  "mediatype": 1,
+                  "name": "Media name",
+                  "place": "Media place",
+                  "url": "https://example.com/media1"
+                },
+                {
+                  "createAt": "2023-05-30T13:30:00",
+                  "description": "Another media description",
+                  "id": 1002,
+                  "likeCount": 30,
+                  "mediatype": 2,
+                  "name": "Another media name",
+                  "place": "Another media place",
+                  "url": "https://example.com/media2"
+                }
+              ],
+              "name": "John Doe",
+              "profilePicture": "/path/to/profile_picture.jpg",
+              "title": "Example title",
+              "userId": 123,
+              "videoUrl": "https://example.com/video",
+              "totalFeed": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "code",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "commentCount",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "createdAt",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "description",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "feedsComment",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "imagePaths",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "images",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "isdeleted",
+              "type": "boolean",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "lat",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "lng",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "location",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "mediatype",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "msg",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "profilePicture",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "title",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "userId",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "videoUrl",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "totalFeed",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "dislikes",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "likes",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "userAction",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "createAt",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "likeCount",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "place",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "url",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "code": 1234,
+            "commentCount": 5,
+            "createdAt": "2023-05-30T10:30:00",
+            "description": "Media description",
+            "feedsComment": "Example comment",
+            "id": 1001,
+            "imagePaths": "/path/to/images",
+            "images": "image1.jpg,image2.jpg,image3.jpg",
+            "isdeleted": false,
+            "lat": 123456789,
+            "lng": 987654321,
+            "location": "Example location",
+            "mediatype": 1,
+            "msg": "Example message",
+            "name": "Media name",
+            "profilePicture": "/path/to/profile_picture.jpg",
+            "title": "Example title",
+            "userId": 123,
+            "videoUrl": "https://example.com/video",
+            "totalFeed": 100,
+            "dislikes": 10,
+            "likes": 20,
+            "userAction": 1,
+            "createAt": "2023-05-30T12:00:00",
+            "likeCount": 50,
+            "place": "Media place",
+            "url": "https://example.com/media1"
+          },
+          {
+            "code": 1234,
+            "commentCount": 5,
+            "createdAt": "2023-05-30T10:30:00",
+            "description": "Another media description",
+            "feedsComment": "Example comment",
+            "id": 1002,
+            "imagePaths": "/path/to/images",
+            "images": "image1.jpg,image2.jpg,image3.jpg",
+            "isdeleted": false,
+            "lat": 123456789,
+            "lng": 987654321,
+            "location": "Example location",
+            "mediatype": 2,
+            "msg": "Example message",
+            "name": "Another media name",
+            "profilePicture": "/path/to/profile_picture.jpg",
+            "title": "Example title",
+            "userId": 123,
+            "videoUrl": "https://example.com/video",
+            "totalFeed": 100,
+            "dislikes": 10,
+            "likes": 20,
+            "userAction": 1,
+            "createAt": "2023-05-30T13:30:00",
+            "likeCount": 30,
+            "place": "Another media place",
+            "url": "https://example.com/media2"
+          }
+        ]
+      }
+    },
+    {
+      "name": "empty media array",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "code",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "commentCount",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "createdAt",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "description",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "feedsComment",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "imagePaths",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "images",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "isdeleted",
+                "type": "boolean",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "lat",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "likeDislike",
+                "type": {
+                  "type": "struct",
+                  "fields": [
+                    {
+                      "name": "dislikes",
+                      "type": "long",
+                      "nullable": true,
+                      "metadata": {}
+                    },
+                    {
+                      "name": "likes",
+                      "type": "long",
+                      "nullable": true,
+                      "metadata": {}
+                    },
+                    {
+                      "name": "userAction",
+                      "type": "long",
+                      "nullable": true,
+                      "metadata": {}
+                    }
+                  ]
+                },
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "lng",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "location",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "mediatype",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "msg",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "multiMedia",
+                "type": {
+                  "type": "array",
+                  "elementType": {
+                    "type": "struct",
+                    "fields": [
+                      {
+                        "name": "createAt",
+                        "type": "string",
+                        "nullable": true,
+                        "metadata": {}
+                      },
+                      {
+                        "name": "description",
+                        "type": "string",
+                        "nullable": true,
+                        "metadata": {}
+                      },
+                      {
+                        "name": "id",
+                        "type": "long",
+                        "nullable": true,
+                        "metadata": {}
+                      },
+                      {
+                        "name": "likeCount",
+                        "type": "long",
+                        "nullable": true,
+                        "metadata": {}
+                      },
+                      {
+                        "name": "mediatype",
+                        "type": "long",
+                        "nullable": true,
+                        "metadata": {}
+                      },
+                      {
+                        "name": "name",
+                        "type": "string",
+                        "nullable": true,
+                        "metadata": {}
+                      },
+                      {
+                        "name": "place",
+                        "type": "string",
+                        "nullable": true,
+                        "metadata": {}
+                      },
+                      {
+                        "name": "url",
+                        "type": "string",
+                        "nullable": true,
+                        "metadata": {}
+                      }
+                    ]
+                  },
+                  "containsNull": true
+                },
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "profilePicture",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "title",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "userId",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "videoUrl",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "totalFeed",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "code": 1234,
+              "commentCount": 5,
+              "createdAt": "2023-05-30T10:30:00",
+              "description": "Example description",
+              "feedsComment": "Example comment",
+              "id": 1,
+              "imagePaths": "/path/to/images",
+              "images": "image1.jpg,image2.jpg,image3.jpg",
+              "isdeleted": false,
+              "lat": 123456789,
+              "likeDislike": {
+                "dislikes": 10,
+                "likes": 20,
+                "userAction": 1
+              },
+              "lng": 987654321,
+              "location": "Example location",
+              "mediatype": 1,
+              "msg": "Example message",
+              "multiMedia": [],
+              "name": "John Doe",
+              "profilePicture": "/path/to/profile_picture.jpg",
+              "title": "Example title",
+              "userId": 123,
+              "videoUrl": "https://example.com/video",
+              "totalFeed": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "code",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "commentCount",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "createdAt",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "description",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "feedsComment",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "imagePaths",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "images",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "isdeleted",
+              "type": "boolean",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "lat",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "lng",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "location",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "mediatype",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "msg",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "profilePicture",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "title",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "userId",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "videoUrl",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "totalFeed",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "dislikes",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "likes",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "userAction",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "createAt",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "likeCount",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "place",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "url",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": []
+      }
+    },
+    {
+      "name": "single media record",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "code",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "commentCount",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "createdAt",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "description",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "feedsComment",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "imagePaths",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "images",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "isdeleted",
+                "type": "boolean",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "lat",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "likeDislike",
+                "type": {
+                  "type": "struct",
+                  "fields": [
+                    {
+                      "name": "dislikes",
+                      "type": "long",
+                      "nullable": true,
+                      "metadata": {}
+                    },
+                    {
+                      "name": "likes",
+                      "type": "long",
+                      "nullable": true,
+                      "metadata": {}
+                    },
+                    {
+                      "name": "userAction",
+                      "type": "long",
+                      "nullable": true,
+                      "metadata": {}
+                    }
+                  ]
+                },
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "lng",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "location",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "mediatype",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "msg",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "multiMedia",
+                "type": {
+                  "type": "array",
+                  "elementType": {
+                    "type": "struct",
+                    "fields": [
+                      {
+                        "name": "createAt",
+                        "type": "string",
+                        "nullable": true,
+                        "metadata": {}
+                      },
+                      {
+                        "name": "description",
+                        "type": "string",
+                        "nullable": true,
+                        "metadata": {}
+                      },
+                      {
+                        "name": "id",
+                        "type": "long",
+                        "nullable": true,
+                        "metadata": {}
+                      },
+                      {
+                        "name": "likeCount",
+                        "type": "long",
+                        "nullable": true,
+                        "metadata": {}
+                      },
+                      {
+                        "name": "mediatype",
+                        "type": "long",
+                        "nullable": true,
+                        "metadata": {}
+                      },
+                      {
+                        "name": "name",
+                        "type": "string",
+                        "nullable": true,
+                        "metadata": {}
+                      },
+                      {
+                        "name": "place",
+                        "type": "string",
+                        "nullable": true,
+                        "metadata": {}
+                      },
+                      {
+                        "name": "url",
+                        "type": "string",
+                        "nullable": true,
+                        "metadata": {}
+                      }
+                    ]
+                  },
+                  "containsNull": true
+                },
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "profilePicture",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "title",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "userId",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "videoUrl",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "totalFeed",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "code": 999,
+              "commentCount": 5,
+              "createdAt": "2023-05-30T10:30:00",
+              "description": "Example description",
+              "feedsComment": "Example comment",
+              "id": 1,
+              "imagePaths": "/path/to/images",
+              "images": "image1.jpg,image2.jpg,image3.jpg",
+              "isdeleted": false,
+              "lat": 123456789,
+              "likeDislike": {
+                "dislikes": 10,
+                "likes": 20,
+                "userAction": 1
+              },
+              "lng": 987654321,
+              "location": "Example location",
+              "mediatype": 1,
+              "msg": "Example message",
+              "multiMedia": [
+                {
+                  "createAt": "2023-05-30T13:30:00",
+                  "description": "Another media description",
+                  "id": 1002,
+                  "likeCount": 30,
+                  "mediatype": 2,
+                  "name": "Another media name",
+                  "place": "Another media place",
+                  "url": "https://example.com/media2"
+                }
+              ],
+              "name": "John Doe",
+              "profilePicture": "/path/to/profile_picture.jpg",
+              "title": "Example title",
+              "userId": 123,
+              "videoUrl": "https://example.com/video",
+              "totalFeed": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "code",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "commentCount",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "createdAt",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "description",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "feedsComment",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "imagePaths",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "images",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "isdeleted",
+              "type": "boolean",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "lat",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "lng",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "location",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "mediatype",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "msg",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "profilePicture",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "title",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "userId",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "videoUrl",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "totalFeed",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "dislikes",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "likes",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "userAction",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "createAt",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "likeCount",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "place",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "url",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "code": 999,
+            "commentCount": 5,
+            "createdAt": "2023-05-30T10:30:00",
+            "description": "Another media description",
+            "feedsComment": "Example comment",
+            "id": 1002,
+            "imagePaths": "/path/to/images",
+            "images": "image1.jpg,image2.jpg,image3.jpg",
+            "isdeleted": false,
+            "lat": 123456789,
+            "lng": 987654321,
+            "location": "Example location",
+            "mediatype": 2,
+            "msg": "Example message",
+            "name": "Another media name",
+            "profilePicture": "/path/to/profile_picture.jpg",
+            "title": "Example title",
+            "userId": 123,
+            "videoUrl": "https://example.com/video",
+            "totalFeed": 100,
+            "dislikes": 10,
+            "likes": 20,
+            "userAction": 1,
+            "createAt": "2023-05-30T13:30:00",
+            "likeCount": 30,
+            "place": "Another media place",
+            "url": "https://example.com/media2"
+          }
+        ]
+      }
+    },
+    {
+      "name": "empty input",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "code",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "commentCount",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "createdAt",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "description",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "feedsComment",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "id",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "imagePaths",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "images",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "isdeleted",
+                "type": "boolean",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "lat",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "likeDislike",
+                "type": {
+                  "type": "struct",
+                  "fields": [
+                    {
+                      "name": "dislikes",
+                      "type": "long",
+                      "nullable": true,
+                      "metadata": {}
+                    },
+                    {
+                      "name": "likes",
+                      "type": "long",
+                      "nullable": true,
+                      "metadata": {}
+                    },
+                    {
+                      "name": "userAction",
+                      "type": "long",
+                      "nullable": true,
+                      "metadata": {}
+                    }
+                  ]
+                },
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "lng",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "location",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "mediatype",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "msg",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "multiMedia",
+                "type": {
+                  "type": "array",
+                  "elementType": {
+                    "type": "struct",
+                    "fields": [
+                      {
+                        "name": "createAt",
+                        "type": "string",
+                        "nullable": true,
+                        "metadata": {}
+                      },
+                      {
+                        "name": "description",
+                        "type": "string",
+                        "nullable": true,
+                        "metadata": {}
+                      },
+                      {
+                        "name": "id",
+                        "type": "long",
+                        "nullable": true,
+                        "metadata": {}
+                      },
+                      {
+                        "name": "likeCount",
+                        "type": "long",
+                        "nullable": true,
+                        "metadata": {}
+                      },
+                      {
+                        "name": "mediatype",
+                        "type": "long",
+                        "nullable": true,
+                        "metadata": {}
+                      },
+                      {
+                        "name": "name",
+                        "type": "string",
+                        "nullable": true,
+                        "metadata": {}
+                      },
+                      {
+                        "name": "place",
+                        "type": "string",
+                        "nullable": true,
+                        "metadata": {}
+                      },
+                      {
+                        "name": "url",
+                        "type": "string",
+                        "nullable": true,
+                        "metadata": {}
+                      }
+                    ]
+                  },
+                  "containsNull": true
+                },
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "name",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "profilePicture",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "title",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "userId",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "videoUrl",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "totalFeed",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": []
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "code",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "commentCount",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "createdAt",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "description",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "feedsComment",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "id",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "imagePaths",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "images",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "isdeleted",
+              "type": "boolean",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "lat",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "lng",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "location",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "mediatype",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "msg",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "profilePicture",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "title",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "userId",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "videoUrl",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "totalFeed",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "dislikes",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "likes",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "userAction",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "createAt",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "likeCount",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "place",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "url",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": []
+      }
+    }
+  ]
+}

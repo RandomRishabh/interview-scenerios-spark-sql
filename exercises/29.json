@@ -1,0 +1,400 @@
+{
+  "id": "29",
+  "title": "Combine IDs except the first set maximum",
+  "slug": "exclude_maximum",
+  "topic": "Set operations",
+  "difficulty": "Medium",
+  "prompt": "Return distinct IDs from either df1.col or df2.col1, excluding the maximum ID found in df1. Inputs contain non-null integers. If df1 is empty, retain all df2 IDs. Output column: col.",
+  "cases": [
+    {
+      "name": "sample",
+      "inputs": {
+        "df1": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "col",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "col": 1
+            },
+            {
+              "col": 2
+            },
+            {
+              "col": 3
+            }
+          ]
+        },
+        "df2": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "col1",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "col1": 1
+            },
+            {
+              "col1": 2
+            },
+            {
+              "col1": 3
+            },
+            {
+              "col1": 4
+            },
+            {
+              "col1": 5
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "col",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "col": 1
+          },
+          {
+            "col": 2
+          },
+          {
+            "col": 4
+          },
+          {
+            "col": 5
+          }
+        ]
+      }
+    },
+    {
+      "name": "shuffled input",
+      "inputs": {
+        "df1": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "col",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "col": 3
+            },
+            {
+              "col": 2
+            },
+            {
+              "col": 1
+            }
+          ]
+        },
+        "df2": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "col1",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "col1": 5
+            },
+            {
+              "col1": 4
+            },
+            {
+              "col1": 3
+            },
+            {
+              "col1": 2
+            },
+            {
+              "col1": 1
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "col",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "col": 1
+          },
+          {
+            "col": 2
+          },
+          {
+            "col": 4
+          },
+          {
+            "col": 5
+          }
+        ]
+      }
+    },
+    {
+      "name": "new ranges",
+      "inputs": {
+        "df1": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "col",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "col": 8
+            },
+            {
+              "col": 9
+            }
+          ]
+        },
+        "df2": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "col1",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "col1": 7
+            },
+            {
+              "col1": 8
+            },
+            {
+              "col1": 9
+            },
+            {
+              "col1": 10
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "col",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "col": 7
+          },
+          {
+            "col": 8
+          },
+          {
+            "col": 10
+          }
+        ]
+      }
+    },
+    {
+      "name": "empty first set",
+      "inputs": {
+        "df1": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "col",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": []
+        },
+        "df2": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "col1",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "col1": 1
+            },
+            {
+              "col1": 2
+            },
+            {
+              "col1": 3
+            },
+            {
+              "col1": 4
+            },
+            {
+              "col1": 5
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "col",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "col": 1
+          },
+          {
+            "col": 2
+          },
+          {
+            "col": 3
+          },
+          {
+            "col": 4
+          },
+          {
+            "col": 5
+          }
+        ]
+      }
+    },
+    {
+      "name": "empty input",
+      "inputs": {
+        "df1": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "col",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": []
+        },
+        "df2": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "col1",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": []
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "col",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": []
+      }
+    }
+  ]
+}

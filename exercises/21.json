@@ -1,0 +1,382 @@
+{
+  "id": "21",
+  "title": "Roundtrip route distances",
+  "slug": "roundtrip_distances",
+  "topic": "Self joins",
+  "difficulty": "Medium",
+  "prompt": "For every route with a reverse route, return one roundtrip row with from lexically smaller than to and roundtrip_dist equal to the sum of both directional distances. Directional routes are unique; ignore one-way routes.",
+  "cases": [
+    {
+      "name": "sample",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "from",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "to",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "dist",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "from": "SEA",
+              "to": "SF",
+              "dist": 300
+            },
+            {
+              "from": "CHI",
+              "to": "SEA",
+              "dist": 2000
+            },
+            {
+              "from": "SF",
+              "to": "SEA",
+              "dist": 300
+            },
+            {
+              "from": "SEA",
+              "to": "CHI",
+              "dist": 2000
+            },
+            {
+              "from": "SEA",
+              "to": "LND",
+              "dist": 500
+            },
+            {
+              "from": "LND",
+              "to": "SEA",
+              "dist": 500
+            },
+            {
+              "from": "LND",
+              "to": "CHI",
+              "dist": 1000
+            },
+            {
+              "from": "CHI",
+              "to": "NDL",
+              "dist": 180
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "from",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "to",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "roundtrip_dist",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "from": "SEA",
+            "to": "SF",
+            "roundtrip_dist": 600
+          },
+          {
+            "from": "CHI",
+            "to": "SEA",
+            "roundtrip_dist": 4000
+          },
+          {
+            "from": "LND",
+            "to": "SEA",
+            "roundtrip_dist": 1000
+          }
+        ]
+      }
+    },
+    {
+      "name": "shuffled input",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "from",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "to",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "dist",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "from": "CHI",
+              "to": "NDL",
+              "dist": 180
+            },
+            {
+              "from": "LND",
+              "to": "CHI",
+              "dist": 1000
+            },
+            {
+              "from": "LND",
+              "to": "SEA",
+              "dist": 500
+            },
+            {
+              "from": "SEA",
+              "to": "LND",
+              "dist": 500
+            },
+            {
+              "from": "SEA",
+              "to": "CHI",
+              "dist": 2000
+            },
+            {
+              "from": "SF",
+              "to": "SEA",
+              "dist": 300
+            },
+            {
+              "from": "CHI",
+              "to": "SEA",
+              "dist": 2000
+            },
+            {
+              "from": "SEA",
+              "to": "SF",
+              "dist": 300
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "from",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "to",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "roundtrip_dist",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "from": "SEA",
+            "to": "SF",
+            "roundtrip_dist": 600
+          },
+          {
+            "from": "CHI",
+            "to": "SEA",
+            "roundtrip_dist": 4000
+          },
+          {
+            "from": "LND",
+            "to": "SEA",
+            "roundtrip_dist": 1000
+          }
+        ]
+      }
+    },
+    {
+      "name": "asymmetric distances and one-way route",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "from",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "to",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "dist",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": [
+            {
+              "from": "A",
+              "to": "B",
+              "dist": 3
+            },
+            {
+              "from": "B",
+              "to": "A",
+              "dist": 5
+            },
+            {
+              "from": "A",
+              "to": "C",
+              "dist": 4
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "from",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "to",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "roundtrip_dist",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": [
+          {
+            "from": "A",
+            "to": "B",
+            "roundtrip_dist": 8
+          }
+        ]
+      }
+    },
+    {
+      "name": "empty input",
+      "inputs": {
+        "input_df": {
+          "kind": "dataframe",
+          "schema": {
+            "type": "struct",
+            "fields": [
+              {
+                "name": "from",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "to",
+                "type": "string",
+                "nullable": true,
+                "metadata": {}
+              },
+              {
+                "name": "dist",
+                "type": "long",
+                "nullable": true,
+                "metadata": {}
+              }
+            ]
+          },
+          "rows": []
+        }
+      },
+      "expected": {
+        "kind": "dataframe",
+        "schema": {
+          "type": "struct",
+          "fields": [
+            {
+              "name": "from",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "to",
+              "type": "string",
+              "nullable": true,
+              "metadata": {}
+            },
+            {
+              "name": "roundtrip_dist",
+              "type": "long",
+              "nullable": true,
+              "metadata": {}
+            }
+          ]
+        },
+        "rows": []
+      }
+    }
+  ]
+}
