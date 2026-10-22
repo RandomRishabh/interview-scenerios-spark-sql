@@ -11,6 +11,10 @@ automatic checker. No practice notebook contains or executes a reference solutio
 4. Write `solve(...)`, returning your result, and run the check cell.
 5. Refresh **00_Progress** to see Not attempted / Attempted / Passed.
 
+Each exercise's first code cell calls the common **practice/_setup** notebook and
+shows the input and expected output. Write the PySpark imports you need yourself;
+`F` and `Window` are not pre-imported.
+
 | Folder | Purpose |
 | --- | --- |
 | [practice/](practice/) | Your notebooks and progress dashboard |
