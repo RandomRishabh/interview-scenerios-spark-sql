@@ -127,12 +127,18 @@ class PracticeTests(unittest.TestCase):
 
     def test_shared_layout_does_not_inject_learning_imports(self):
         import ast
-        for path in (engine.ROOT / "practice").glob("*.ipynb"):
-            notebook = json.loads(path.read_text(encoding="utf-8"))
+        spec = importlib.util.spec_from_file_location("builder", engine.ROOT / "tools/build_practice_notebooks.py")
+        builder = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(builder)
+        shared = json.loads((engine.ROOT / "practice/_setup.ipynb").read_text(encoding="utf-8"))
+        templates = [builder.exercise_notebook(engine.load_exercise(str(i))) for i in range(1, 44)]
+        # Test generated scaffolding, not learner notebooks whose cell IDs may be
+        # rewritten by Databricks and whose solutions legitimately import F/Window.
+        for notebook in templates + [builder.dashboard(), shared]:
             scaffold_ids = {"sample-data", "environment", "shared-environment", "your-progress", "question-list", "summary"}
             code = ["".join(c["source"]) for c in notebook["cells"]
                     if c["cell_type"] == "code" and c.get("id") in scaffold_ids]
-            if path.name != "_setup.ipynb":
+            if notebook is not shared:
                 self.assertTrue(code[0].startswith("%run ./_setup"))
                 self.assertEqual(len(code[0].strip().splitlines()), 1)
             for source in code:
@@ -275,6 +281,20 @@ class SparkTests(unittest.TestCase):
         self.assertEqual(namespace["view_df"].count(), 43)
         self.assertNotIn("F", namespace)
         self.assertNotIn("Window", namespace)
+
+    def test_final_progress_cell_shows_all_questions_in_numeric_order(self):
+        import contextlib
+        import io
+        from practice_tools.notebook_setup import show_progress
+        with tempfile.TemporaryDirectory() as folder, patch.dict(os.environ, {"DE_PRACTICE_PROGRESS_DIR": folder}):
+            progress.record_event("4", "passed")
+            output = io.StringIO()
+            with contextlib.redirect_stdout(output):
+                show_progress("4", self.spark)
+            lines = [line for line in output.getvalue().splitlines() if line.startswith("|")]
+            ids = [line.split("|")[1].strip() for line in lines[1:]]
+            self.assertEqual(ids, list(map(str, range(1, 44))))
+            self.assertIn("Passed", output.getvalue())
 
     def test_nested_structures_materialize_and_field_order_is_relaxed(self):
         from pyspark.sql import functions as F

@@ -28,6 +28,9 @@ It runs the common **practice/_setup** notebook and displays this question's inp
 and expected output immediately. Environment/path setup lives in that shared
 notebook; no initialization boilerplate is repeated in the exercises. Progress
 and dashboard cells also work without your `F` or `Window` imports.
+The final cell of every exercise displays progress for all questions, ordered by
+question number. Its existing `exercise_id` argument is retained for compatibility
+and does not filter the summary.
 
 Scenario 15 uses Python lists and a dictionary, preserving the original exercise.
 Scenario 35 returns a dictionary of three DataFrames, each displayed separately.

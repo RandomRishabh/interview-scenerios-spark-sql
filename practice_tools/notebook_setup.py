@@ -5,8 +5,10 @@ from .progress import mark_attempted, progress_dataframe
 
 
 def show_progress(exercise_id, spark):
+    """Show every question; retain exercise_id for existing notebook calls."""
     frame = progress_dataframe(spark)
-    frame.filter(frame["id"] == exercise_id).show(truncate=False)
+    frame = frame.orderBy(frame["id"].cast("int"))
+    frame.show(frame.count(), truncate=False)
 
 
 def prepare(exercise_id, namespace):

@@ -29,13 +29,15 @@ if _repo_root is None:
     raise RuntimeError("Open this notebook inside the cloned Git folder. If necessary, set "
                        "DE_PRACTICE_ROOT to that folder's absolute /Workspace/... path.")
 sys.path.insert(0, str(_repo_root))
-from practice_tools.notebook_setup import prepare
+from importlib import reload as _reload
+from practice_tools import notebook_setup as _notebook_setup
+prepare = _reload(_notebook_setup).prepare
 
 dbutils.widgets.text("exercise_id", "dashboard")
 prepare(dbutils.widgets.get("exercise_id"), globals())
 '''
 
-LEGACY_BOOTSTRAP = BOOTSTRAP.split("from practice_tools.notebook_setup")[0] + '''from practice_tools import show_sample, check_solution, mark_attempted, progress_dataframe
+LEGACY_BOOTSTRAP = BOOTSTRAP.split("from importlib import reload")[0] + '''from practice_tools import show_sample, check_solution, mark_attempted, progress_dataframe
 
 if "spark" not in globals():
     from pyspark.sql import SparkSession
