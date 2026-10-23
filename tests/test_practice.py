@@ -5,10 +5,25 @@ import json
 import os
 from pathlib import Path
 import tempfile
+from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
 
 from practice_tools import engine, progress
+
+
+def execute_cell(source, namespace):
+    """Emulate only the documented shared %run for local integration testing."""
+    if source.startswith('%run ./_setup $exercise_id="'):
+        ident = source.split('"')[1]
+        namespace["dbutils"] = SimpleNamespace(widgets=SimpleNamespace(
+            text=lambda name, default: None, get=lambda name: ident))
+        shared = json.loads((engine.ROOT / "practice/_setup.ipynb").read_text(encoding="utf-8"))
+        for cell in shared["cells"]:
+            if cell["cell_type"] == "code":
+                exec("".join(cell["source"]), namespace)
+    else:
+        exec(source, namespace)
 
 
 class PracticeTests(unittest.TestCase):
@@ -103,12 +118,68 @@ class PracticeTests(unittest.TestCase):
         spec.loader.exec_module(builder)
         with tempfile.TemporaryDirectory() as folder:
             created, kept = builder.build(folder)
-            self.assertEqual((len(created), len(kept)), (44, 0))
+            self.assertEqual((len(created), len(kept)), (45, 0))
             path = Path(folder) / "37_latest_order.ipynb"
             path.write_text("my saved work", encoding="utf-8")
             created, kept = builder.build(folder)
-            self.assertEqual((len(created), len(kept)), (0, 44))
+            self.assertEqual((len(created), len(kept)), (0, 45))
             self.assertEqual(path.read_text(), "my saved work")
+
+    def test_shared_layout_does_not_inject_learning_imports(self):
+        import ast
+        for path in (engine.ROOT / "practice").glob("*.ipynb"):
+            notebook = json.loads(path.read_text(encoding="utf-8"))
+            scaffold_ids = {"sample-data", "environment", "shared-environment", "your-progress", "question-list", "summary"}
+            code = ["".join(c["source"]) for c in notebook["cells"]
+                    if c["cell_type"] == "code" and c.get("id") in scaffold_ids]
+            if path.name != "_setup.ipynb":
+                self.assertTrue(code[0].startswith("%run ./_setup"))
+                self.assertEqual(len(code[0].strip().splitlines()), 1)
+            for source in code:
+                if source.startswith("%run"):
+                    continue
+                tree = ast.parse(source)
+                for node in ast.walk(tree):
+                    if isinstance(node, ast.ImportFrom):
+                        self.assertFalse(any(a.asname == "F" or a.name == "Window" for a in node.names))
+
+    def test_layout_migration_preserves_solution_and_scratch(self):
+        spec = importlib.util.spec_from_file_location("builder", engine.ROOT / "tools/build_practice_notebooks.py")
+        builder = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(builder)
+        with tempfile.TemporaryDirectory() as folder:
+            builder.build(folder)
+            path = Path(folder) / "37_latest_order.ipynb"
+            content = json.loads(path.read_text(encoding="utf-8"))
+            solution = next(c for c in content["cells"] if c.get("id") == "your-solution")
+            solution.update(source=["def solve(input_df):\n    return input_df\n"], execution_count=9,
+                            outputs=[{"output_type": "stream", "name": "stdout", "text": ["my work\n"]}])
+            scratch = builder.cell("code", "my_notes = 'keep me'\n", "custom-scratch")
+            content["cells"].append(scratch)
+            content["cells"].insert(1, builder.cell("code", builder.LEGACY_BOOTSTRAP, "environment"))
+            sample = next(c for c in content["cells"] if c.get("id") == "sample-data")
+            sample["source"] = ['exercise_id = "37"\n', 'inputs, expected_output = show_sample(exercise_id, spark, globals().get("display"))\n',
+                                'input_df = inputs["input_df"]\n', 'expected_df = expected_output\n']
+            path.write_text(json.dumps(content), encoding="utf-8")
+            updated, skipped = builder.upgrade_layout(folder)
+            self.assertEqual((updated, skipped), ([path.name], []))
+            after = json.loads(path.read_text(encoding="utf-8"))
+            self.assertEqual(next(c for c in after["cells"] if c.get("id") == "your-solution"), solution)
+            self.assertEqual(after["cells"][-1], scratch)
+            self.assertFalse(any(c.get("id") == "environment" for c in after["cells"]))
+            self.assertEqual(builder.upgrade_layout(folder), ([], []))
+
+    def test_customized_bootstrap_is_not_overwritten(self):
+        spec = importlib.util.spec_from_file_location("builder", engine.ROOT / "tools/build_practice_notebooks.py")
+        builder = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(builder)
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "37_latest_order.ipynb"
+            content = builder.notebook([builder.cell("code", "my_custom_setup()\n", "environment")])
+            path.write_text(json.dumps(content), encoding="utf-8")
+            before = path.read_bytes()
+            self.assertEqual(builder.upgrade_layout(folder), ([], [path.name]))
+            self.assertEqual(path.read_bytes(), before)
 
 
 @unittest.skipUnless(os.environ.get("SPARK_INTEGRATION") == "1", "Set SPARK_INTEGRATION=1 to run Spark tests")
@@ -174,12 +245,36 @@ class SparkTests(unittest.TestCase):
         namespace = {"spark": self.spark}
         for cell in notebook["cells"]:
             if cell["cell_type"] == "code":
-                exec("".join(cell["source"]), namespace)
+                execute_cell("".join(cell["source"]), namespace)
+        self.assertNotIn("F", namespace)
+        self.assertNotIn("Window", namespace)
         self.assertTrue(namespace["check_report"]["unimplemented"])
         spec = engine.load_exercise("35")["cases"][0]["expected"]
         expected = engine.expected_value(self.spark, spec)
         self.assertFalse(engine.compare_output(expected, expected, spec))
         self.assertTrue(engine.compare_output({"adults": expected["adults"]}, expected, spec))
+
+    def test_shared_setup_single_input_python_and_dashboard(self):
+        from practice_tools.notebook_setup import prepare
+        for ident in ("1", "15", "dashboard"):
+            namespace = {"spark": self.spark, "display": lambda value: None}
+            prepare(ident, namespace)
+            self.assertNotIn("F", namespace)
+            self.assertNotIn("Window", namespace)
+            if ident == "1":
+                self.assertIn("input_df", namespace)
+                self.assertIn("expected_df", namespace)
+            elif ident == "15":
+                self.assertEqual(namespace["l1"], [2, 3, 4, 5])
+                self.assertNotIn("expected_df", namespace)
+        dashboard = json.loads((engine.ROOT / "practice/00_Progress.ipynb").read_text(encoding="utf-8"))
+        namespace = {"spark": self.spark, "display": lambda value: None}
+        for cell in dashboard["cells"]:
+            if cell["cell_type"] == "code":
+                execute_cell("".join(cell["source"]), namespace)
+        self.assertEqual(namespace["view_df"].count(), 43)
+        self.assertNotIn("F", namespace)
+        self.assertNotIn("Window", namespace)
 
     def test_nested_structures_materialize_and_field_order_is_relaxed(self):
         from pyspark.sql import functions as F

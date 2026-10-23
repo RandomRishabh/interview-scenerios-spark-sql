@@ -2,6 +2,7 @@
 
 import ast
 import json
+import re
 from pathlib import Path
 
 import nbformat
@@ -23,7 +24,13 @@ def main():
                 for cell in notebook['cells'] if cell['cell_type'] == 'code'
             ]
             for index, source in enumerate(source_blocks, 1):
-                compile(source, f'{path.name}:cell{index}', 'exec')
+                if source.lstrip().startswith('%run'):
+                    if not re.fullmatch(r'%run ./_setup \$exercise_id="(?:dashboard|[1-9][0-9]*)"\s*', source):
+                        raise ValueError('Unrecognized shared-setup magic')
+                    if not (path.parent / '_setup.ipynb').is_file():
+                        raise ValueError('Missing shared setup notebook')
+                else:
+                    compile(source, f'{path.name}:cell{index}', 'exec')
             code_cells += len(source_blocks)
         except (ValueError, SyntaxError, nbformat.ValidationError) as exc:
             errors.append(f'{path.name}: {exc}')

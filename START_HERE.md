@@ -14,8 +14,20 @@ SparkContext, DBFS mount, or solution notebook execution is needed there.
 
 Run setup to display input and expected output, write your transformation in
 `solve(...)`, then run the checker. **Return** your result: `.show()` and `display()`
-return `None`. `F` (PySpark functions), `Window`, and `spark` are available.
+return `None`. `spark` is available. Write your own imports for PySpark functions
+and window utilities; setup does not automatically define `F` or `Window`.
 Function parameter names match the displayed inputs. Add scratch cells freely.
+
+The first code cell is a single line, for example:
+
+```python
+%run ./_setup $exercise_id="1"
+```
+
+It runs the common **practice/_setup** notebook and displays this question's input
+and expected output immediately. Environment/path setup lives in that shared
+notebook; no initialization boilerplate is repeated in the exercises. Progress
+and dashboard cells also work without your `F` or `Window` imports.
 
 Scenario 15 uses Python lists and a dictionary, preserving the original exercise.
 Scenario 35 returns a dictionary of three DataFrames, each displayed separately.
@@ -104,12 +116,23 @@ python tools/build_practice_notebooks.py
 ```
 
 Creates only missing notebooks; preserves **every** existing file, including
-answers, scratch cells and outputs. There is no overwrite flag. Preview revised
+answers, scratch cells and outputs. Preview revised
 templates in a different folder:
 
 ```text
 python tools/build_practice_notebooks.py --destination preview_notebooks
 ```
+
+To migrate older two-cell setup layouts to the shared setup:
+
+```text
+python tools/build_practice_notebooks.py --upgrade-layout
+```
+
+This opt-in migration changes only recognized generated setup/progress cells and
+their instructions. It preserves solution cells, their outputs, scratch cells,
+other notebook metadata, dashboard filters, and all progress history. Customized
+initialization code is skipped for manual review. Commit your work before migrating.
 
 To intentionally reset an exercise, back up and remove that specific notebook,
 then rebuild. Rebuilding never deletes progress.
@@ -119,6 +142,15 @@ then rebuild. Rebuilding never deletes progress.
 Use Python 3.11 and Java 17 for the pinned Spark 4.0.1 test runtime. Install into
 a virtual environment and select its Python kernel in VS Code/Jupyter. VS Code
 may also request its Python/Jupyter extensions. Databricks needs no local installs.
+
+The one-line `%run` cell uses Databricks notebook/widget syntax. In a local Jupyter
+or VS Code Python kernel, replace only that cell with the Python entry point below
+(the repository root must be on your Python import path):
+
+```python
+from practice_tools.notebook_setup import prepare
+prepare("1", globals())  # Use this notebook's scenario ID; use "dashboard" for 00_Progress.
+```
 
 The pinned Spark version has a documented Windows/Python 3.12+ worker issue
 ([SPARK-53759](https://issues.apache.org/jira/browse/SPARK-53759)); use Python 3.11
@@ -144,7 +176,7 @@ and representative solutions, not the correctness of every original reference.
 
 ## File paths on Serverless
 
-Setup locates the Git root using notebook context and Python's import path;
+The shared setup locates the Git root using notebook context and Python's import path;
 Serverless current working directories are not guaranteed. If needed, set
 `DE_PRACTICE_ROOT` to the absolute cloned repo path. Python reads the small JSON
 fixtures and passes rows to Spark; executors never read workspace files.
