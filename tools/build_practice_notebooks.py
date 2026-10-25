@@ -65,21 +65,11 @@ def exercise_notebook(exercise):
     names = list(exercise["cases"][0]["inputs"])
     return notebook([
         cell("markdown", f'# {int(ident):02d}. {exercise["title"]}\n\n'
-             f'**{exercise["topic"]} · {exercise["difficulty"]}**\n\n{exercise["prompt"]}\n\n'
-             '**Workflow:** run setup, inspect the inputs/expected output, edit `solve`, then run the check cell. '
-             'The checker uses fresh inputs for every case and never reads your `expected_df`. '
-             'No reference solution is executed or included here.\n', "question"),
+             f'**{exercise["topic"]} · {exercise["difficulty"]}**\n\n{exercise["prompt"]}\n', "question"),
         cell("code", f'%run ./_setup $exercise_id="{ident}"\n', "sample-data"),
-        cell("markdown", '## Your attempt\n\nReturn your result from `solve`; do not end with `.show()` or `display()`, '
-             'which return `None`. Add scratch cells freely. `spark` is available; write your own imports '
-             'for the PySpark functions and window utilities you need. '
-             'For SQL, register the function inputs as temporary views **inside** `solve` on each call.\n\n'
-             'Checking records one attempt for the whole case suite. Opening/running setup alone does not count. '
-             'To record work before checking, run `mark_attempted(exercise_id, spark)` in a scratch cell.\n', "attempt-guide"),
+        cell("markdown", '**Your solution:** add imports and return your result from `solve`.\n', "attempt-guide"),
         cell("code", f'def solve({", ".join(names)}):\n    # Write your solution here.\n    return None\n', "your-solution"),
-        cell("markdown", '## Check every case\n\nRows and column positions are ignored; duplicates count. '
-             'Column names and types matter (integer widths/nullability are relaxed). Arrays retain order unless '
-             'the question says otherwise. Failure output shows missing/unexpected rows.\n', "check-guide"),
+        cell("markdown", '**Check:** run below to test all cases and save progress.\n', "check-guide"),
         cell("code", 'check_report = check_solution(exercise_id, solve, spark)\n', "check-answer"),
         cell("code", 'show_progress(exercise_id, spark)\n', "your-progress"),
     ])
