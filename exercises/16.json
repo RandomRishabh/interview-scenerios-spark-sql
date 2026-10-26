@@ -1,10 +1,10 @@
 {
   "id": "16",
-  "title": "Deterministic deduplication by name",
+  "title": "One employee record per name",
   "slug": "deduplicate_names",
   "topic": "Deduplication and windows",
   "difficulty": "Medium",
-  "prompt": "Keep exactly one row per name: the row with the smallest id. IDs are unique. Keep all input columns. This makes the original dropDuplicates example deterministic.",
+  "prompt": "Keep exactly one row per name: the row with the smallest id. IDs are unique. Keep all input columns.",
   "cases": [
     {
       "name": "sample",

@@ -4,7 +4,7 @@
   "slug": "latest_commission",
   "topic": "Dates and windows",
   "difficulty": "Medium",
-  "prompt": "Return each employee latest commission by parsing monthlastdate as dd-MMM-yyyy. Keep the original string in the output. Dates are unique per employee. Corrected from the upstream sample: December is later than October; string max is not chronological max.",
+  "prompt": "Return each employee latest commission by calendar date. monthlastdate uses dd-MMM-yyyy format. Keep the original string in the output. Dates are unique per employee.",
   "cases": [
     {
       "name": "sample",

@@ -4,7 +4,7 @@
   "slug": "second_salary_lookup",
   "topic": "Joins and ranking",
   "difficulty": "Hard",
-  "prompt": "Join employees.dept_id to departments.dept_id1. Return every employee with the second-highest distinct salary in their department, including salary ties. Departments with fewer than two salary levels yield no rows. Return emp_id, name, dept_name, salary.",
+  "prompt": "employees.dept_id identifies the department listed as departments.dept_id1. Return every employee with the second-highest distinct salary in their department, including salary ties. Departments with fewer than two salary levels yield no rows. Return emp_id, name, dept_name, salary.",
   "cases": [
     {
       "name": "sample",

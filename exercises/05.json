@@ -1,10 +1,10 @@
 {
   "id": "5",
-  "title": "Union and validate employee records",
+  "title": "Combine and validate employee records",
   "slug": "union_email_validation",
   "topic": "ETL and schema alignment",
   "difficulty": "Medium",
-  "prompt": "Add salary=1000 to df1, append df2, and retain rows whose non-null email contains @. Return id, name, age, email, salary. Optional ungraded Spark tasks: inspect observed partition IDs; explain partitionBy(salary) when writing. No filesystem writes are required for the checked task.",
+  "prompt": "Add salary=1000 to df1, append df2, and retain rows whose non-null email contains @. Return id, name, age, email, salary.",
   "cases": [
     {
       "name": "sample",

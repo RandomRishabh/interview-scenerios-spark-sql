@@ -1,6 +1,6 @@
 {
   "id": "31",
-  "title": "Unpivot string columns into rows",
+  "title": "Convert string columns into rows",
   "slug": "unpivot_strings",
   "topic": "Reshaping",
   "difficulty": "Medium",

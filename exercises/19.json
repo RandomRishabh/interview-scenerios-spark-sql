@@ -4,7 +4,7 @@
   "slug": "flatten_feed_events",
   "topic": "Nested JSON",
   "difficulty": "Hard",
-  "prompt": "Explode multiMedia: one output row per element; records with an empty/null media array produce no rows. Flatten likeDislike into dislikes, likes, userAction and media fields into top-level columns. On collisions, media description/id/mediatype/name replace the parent fields. Keep all other parent columns and drop likeDislike/multiMedia. Inspect the expected schema.",
+  "prompt": "Return one output row for each element of multiMedia; records with an empty/null media array produce no rows. Flatten likeDislike into dislikes, likes, userAction and media fields into top-level columns. On collisions, media description/id/mediatype/name replace the parent fields. Keep all other parent columns and drop likeDislike/multiMedia. Inspect the expected schema.",
   "cases": [
     {
       "name": "sample",

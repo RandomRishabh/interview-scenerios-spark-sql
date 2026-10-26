@@ -4,7 +4,7 @@
   "slug": "student_data_quality",
   "topic": "Data quality pipeline",
   "difficulty": "Hard",
-  "prompt": "Return a dictionary of three DataFrames: null_counts (one row counting nulls in each original students column; empty input gives zeros), quarantined (original student rows whose age is null), and adults. To form adults, inner-join all students to cities by unique id, fill null age using the mean of non-null ages from the original students input rounded to nearest integer with .5 rounded up, then retain age >=18. If every age is null, leave nulls unfilled. adults columns: id,name,age,city,code. Quarantined rows remain eligible for imputation.",
+  "prompt": "Return a dictionary of three DataFrames: null_counts (one row counting nulls in each original students column; empty input gives zeros), quarantined (original student rows whose age is null), and adults. To form adults, include students with a matching city record by unique id, fill null age using the mean of non-null ages from the original students input rounded to nearest integer with .5 rounded up, then retain age >=18. If every age is null, leave nulls unfilled. adults columns: id,name,age,city,code. Quarantined rows remain eligible for imputation.",
   "cases": [
     {
       "name": "sample",

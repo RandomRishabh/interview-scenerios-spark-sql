@@ -65,7 +65,7 @@ def exercise_notebook(exercise):
     names = list(exercise["cases"][0]["inputs"])
     return notebook([
         cell("markdown", f'# {int(ident):02d}. {exercise["title"]}\n\n'
-             f'**{exercise["topic"]} · {exercise["difficulty"]}**\n\n{exercise["prompt"]}\n', "question"),
+             f'**{exercise["difficulty"]}**\n\n{exercise["prompt"]}\n', "question"),
         cell("code", f'%run ./_setup $exercise_id="{ident}"\n', "sample-data"),
         cell("markdown", '**Your solution:** add imports and return your result from `solve`.\n', "attempt-guide"),
         cell("code", f'def solve({", ".join(names)}):\n    # Write your solution here.\n    return None\n', "your-solution"),
