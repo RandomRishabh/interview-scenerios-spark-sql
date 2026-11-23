@@ -8,6 +8,8 @@ import uuid
 
 from .engine import ROOT
 
+DEFAULT_ROUND_START = os.environ.get("DE_PRACTICE_SINCE", "2026-11-20T00:00:00+00:00")
+
 
 def progress_directory(spark=None):
     override = os.environ.get("DE_PRACTICE_PROGRESS_DIR")
@@ -75,8 +77,10 @@ def read_events(*, spark=None, directory=None):
     return sorted(events, key=lambda e: (e["timestamp_utc"], e["event_id"]))
 
 
-def progress_rows(*, spark=None, directory=None):
+def progress_rows(*, spark=None, directory=None, since=DEFAULT_ROUND_START):
     events = read_events(spark=spark, directory=directory)
+    if since and since != "all":
+        events = [e for e in events if e.get("timestamp_utc", "") >= since]
     rows = []
     for path in sorted((ROOT / "exercises").glob("[0-9][0-9].json")):
         exercise = json.loads(path.read_text(encoding="utf-8"))
@@ -92,8 +96,8 @@ def progress_rows(*, spark=None, directory=None):
     return rows
 
 
-def progress_dataframe(spark, *, directory=None):
-    rows = progress_rows(spark=spark, directory=directory)
+def progress_dataframe(spark, *, directory=None, since=DEFAULT_ROUND_START):
+    rows = progress_rows(spark=spark, directory=directory, since=since)
     schema = ("id STRING, question STRING, topic STRING, difficulty STRING, status STRING, "
               "checks LONG, last_result STRING, last_attempt_utc STRING, notebook STRING")
     return spark.createDataFrame(rows, schema)
@@ -104,12 +108,12 @@ def mark_attempted(exercise_id, spark=None):
     print(f"Scenario {event['exercise_id']} marked attempted; previous history preserved.")
 
 
-def export_progress(path, *, spark=None):
+def export_progress(path, *, spark=None, since="all"):
     """Create a new backup containing raw history and dashboard rows; never overwrite."""
     target = Path(path)
     target.parent.mkdir(parents=True, exist_ok=True)
     payload = {"version": 1, "events": read_events(spark=spark),
-               "questions": progress_rows(spark=spark)}
+               "questions": progress_rows(spark=spark, since=since)}
     with target.open("x", encoding="utf-8") as stream:
         json.dump(payload, stream, indent=2)
     return str(target)
